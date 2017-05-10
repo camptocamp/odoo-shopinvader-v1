@@ -12,11 +12,13 @@
  'category': 'Generic Modules',
  'depends': [
      'shopinvader',
+     'connector_search_engine',
  ],
  'data': [
      'views/backend_view.xml',
  ],
  'demo': [
+     'demo/backend_demo.xml',
  ],
  'installable': True,
  'application': True,
