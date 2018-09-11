@@ -25,7 +25,6 @@ class CustomerService(Component):
 
     # pylint: disable=W8106
     def create(self, **params):
-        params['is_company'] = True
         vals = self._prepare_params(params)
         binding = self.env['shopinvader.partner'].create(vals)
         self.work.partner = binding.record_id
