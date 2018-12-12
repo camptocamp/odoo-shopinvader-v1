@@ -34,6 +34,7 @@
         "sale_discount_display_amount",
         "onchange_helper",
         'queue_job',
+        'sale_automatic_workflow',
     ],
     "data": [
         'security/shopinvader_security.xml',
