@@ -68,12 +68,11 @@ class ShopinvaderImageMixin(models.AbstractModel):
         :return: datetime
         """
         images_relation = self[self._image_field]
-        timestamps = [
-            *images_relation.mapped("write_date"),
-            *images_relation.mapped("image_id.write_date"),
+        timestamps = [x.write_date for x in images_relation] + [
+            x.image_id.write_date for x in images_relation
         ]
         if "tag_id" in images_relation._fields:
-            timestamps += images_relation.mapped("tag_id.write_date")
+            timestamps += [x.tag_id.write_date for x in images_relation if x.tag_id]
         return max(timestamps) if timestamps else False
 
     def _get_images_store_hash_tuple(self):
