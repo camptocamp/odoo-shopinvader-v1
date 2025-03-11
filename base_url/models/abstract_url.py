@@ -229,7 +229,7 @@ class AbstractUrl(models.AbstractModel):
                 [("model_id", "=", get_model_ref(record))]
             )
             urls.unlink()
-        self.flush()
+        self.flush_recordset()
         return super().unlink()
 
     def action_view_redirect_url(self):
