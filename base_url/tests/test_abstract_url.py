@@ -5,10 +5,10 @@ from unittest import mock
 from odoo_test_helper import FakeModelLoader
 
 from odoo.exceptions import ValidationError
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class TestAbstractUrl(SavepointCase, FakeModelLoader):
+class TestAbstractUrl(TransactionCase, FakeModelLoader):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -86,31 +86,37 @@ class TestAbstractUrl(SavepointCase, FakeModelLoader):
         self._check_url_key(my_partner, "partner-name")
         manual_url_key = "manual-url key"
         my_partner.write({"url_builder": "manual", "manual_url_key": manual_url_key})
-        url_keys = set(my_partner.mapped("url_url_ids.url_key"))
-        self.assertSetEqual(url_keys, {manual_url_key, self.auto_key})
+        my_partner.invalidate_recordset()
+        url_keys = sorted(my_partner.mapped("url_url_ids.url_key"))
+        self.assertEqual(url_keys, sorted([manual_url_key, self.auto_key]))
         # if we reset the auto key, no new url.url should be created
         my_partner.write({"url_builder": "auto"})
-        self.assertEqual(2, len(my_partner.url_url_ids))
-        url_keys = set(my_partner.mapped("url_url_ids.url_key"))
-        self.assertSetEqual(url_keys, {manual_url_key, self.auto_key})
+        my_partner.invalidate_recordset()
+        self.assertEqual(len(my_partner.url_url_ids), 2)
+        url_keys = sorted(my_partner.mapped("url_url_ids.url_key"))
+        self.assertEqual(url_keys, sorted([manual_url_key, self.auto_key]))
 
     def test_write_launching_automatic_url_key(self):
         my_partner = self._create_auto()
+        my_partner.invalidate_recordset()
+        self.assertEqual(len(my_partner.url_url_ids), 1)
         # call flush to force to apply the recompute
-        my_partner.flush()
         my_partner.name = "my new name"
-        self.assertEqual(2, len(my_partner.url_url_ids))
-        url_keys = set(my_partner.mapped("url_url_ids.url_key"))
-        self.assertSetEqual(url_keys, {"my-new-name", self.auto_key})
+        my_partner.invalidate_recordset()
+        self.assertEqual(len(my_partner.url_url_ids), 2)
+        url_keys = sorted(my_partner.mapped("url_url_ids.url_key"))
+        self.assertEqual(url_keys, sorted(["my-new-name", self.auto_key]))
 
     def test_write_on_related_record_launching_automatic_url_key(self):
         my_partner = self._create_auto()
         # call flush to force to apply the recompute
-        my_partner.flush()
+        my_partner.invalidate_recordset()
+        self.assertEqual(len(my_partner.url_url_ids), 1)
         my_partner.record_id.name = "my new name"
-        self.assertEqual(2, len(my_partner.url_url_ids))
-        url_keys = set(my_partner.mapped("url_url_ids.url_key"))
-        self.assertSetEqual(url_keys, {"my-new-name", self.auto_key})
+        my_partner.invalidate_recordset()
+        self.assertEqual(len(my_partner.url_url_ids), 2)
+        url_keys = sorted(my_partner.mapped("url_url_ids.url_key"))
+        self.assertEqual(url_keys, sorted(["my-new-name", self.auto_key]))
 
     def test_write_inactive(self):
         my_partner = self._create_auto()
@@ -120,5 +126,5 @@ class TestAbstractUrl(SavepointCase, FakeModelLoader):
         ) as mocked_redirect:
             my_partner.active = False
             # call flush to force to apply the recompute
-            my_partner.flush()
+            my_partner.flush_recordset()
             mocked_redirect.assert_called_once()

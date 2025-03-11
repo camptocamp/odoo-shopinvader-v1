@@ -29,15 +29,15 @@ class AbstractUrl(models.AbstractModel):
     )
     automatic_url_key = fields.Char(compute="_compute_automatic_url_key", store=True)
     manual_url_key = fields.Char()
-    url_key = fields.Char(string="Url key", compute="_compute_url_key", store=True)
+    url_key = fields.Char(compute="_compute_url_key", store=True)
     url_url_ids = fields.One2many(
         compute="_compute_url_url_ids", comodel_name="url.url"
     )
     redirect_url_url_ids = fields.One2many(
         compute="_compute_redirect_url_url_ids", comodel_name="url.url"
     )
-    lang_id = fields.Many2one("res.lang", string="Lang", required=True)
-    active = fields.Boolean(string="Active", default=True)
+    lang_id = fields.Many2one("res.lang", required=True)
+    active = fields.Boolean(default=True)
 
     @api.constrains("url_builder", "manual_url_key")
     def _check_manual_url_key(self):
@@ -56,8 +56,8 @@ class AbstractUrl(models.AbstractModel):
                 self.manual_url_key = url
                 return {
                     "warning": {
-                        "title": "Adapt text rules",
-                        "message": "it will be adapted to %s" % url,
+                        "title": self.env._("Adapt text rules"),
+                        "message": self.env._("It will be adapted to %(url)s", url=url),
                     }
                 }
 
@@ -128,7 +128,7 @@ class AbstractUrl(models.AbstractModel):
 
     @api.depends("url_key")
     def _compute_redirect_url_url_ids(self):
-        self.flush()
+        self.env["url.url"].flush_model()
         for record in self:
             record.redirect_url_url_ids = record.env["url.url"].search(
                 record._redirect_url_domain()
@@ -142,7 +142,7 @@ class AbstractUrl(models.AbstractModel):
 
     @api.depends("url_key")
     def _compute_url_url_ids(self):
-        self.flush()
+        self.env["url.url"].flush_model()
         for record in self:
             record.url_url_ids = record.env["url.url"].search(
                 [("model_id", "=", get_model_ref(record))]
@@ -184,16 +184,16 @@ class AbstractUrl(models.AbstractModel):
                     self._reuse_url(existing_url)
                 else:
                     raise UserError(
-                        _(
+                        self.env._(
                             "Url_key already exist in other model"
-                            "\n- name: %s\n - id: %s\n"
-                            "- url_key: %s\n - url_key_id %s"
-                        )
-                        % (
-                            existing_url.model_id.name,
-                            existing_url.model_id.id,
-                            existing_url.url_key,
-                            existing_url.id,
+                            "\n- name: %(model_name)s"
+                            "\n- id: %(model_id)s"
+                            "\n- url_key: %(url_key)s"
+                            "\n- url_key_id %(url_id)s",
+                            model_name=existing_url.model_id.name,
+                            model_id=existing_url.model_id.id,
+                            url_key=existing_url.url_key,
+                            url_id=existing_url.id,
                         )
                     )
             else:
@@ -213,7 +213,7 @@ class AbstractUrl(models.AbstractModel):
         # we must explicitly invalidate the cache since there is no depends
         # defined on this computed fields and this field could have already
         # been loaded into the cache
-        self.invalidate_cache(fnames=["url_url_ids"], ids=self.ids)
+        self.invalidate_recordset(fnames=["url_url_ids"])
 
     def _redirect_existing_url(self):
         """

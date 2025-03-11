@@ -26,6 +26,9 @@ class ResPartnerAddressableFake(models.Model):
     _inherits = {"res.partner": "record_id"}
     _description = "Fake partner addressable"
 
+    record_id = fields.Many2one(
+        comodel_name="res.partner", required=True, ondelete="cascade"
+    )
     backend_id = fields.Many2one(comodel_name="url.backend.fake")
     special_code = fields.Char()
 

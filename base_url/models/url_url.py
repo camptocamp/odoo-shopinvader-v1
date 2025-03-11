@@ -30,7 +30,6 @@ class UrlUrl(models.Model):
         compute="_compute_related_fields",
         store=True,
         help="Backend linked to this URL",
-        string="Backend",
     )
     lang_id = fields.Many2one(
         "res.lang", "Lang", compute="_compute_related_fields", store=True
