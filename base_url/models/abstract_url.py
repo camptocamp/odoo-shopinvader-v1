@@ -17,7 +17,7 @@ except ImportError:
 
 
 def get_model_ref(record):
-    return "{},{}".format(record._name, record.id)
+    return f"{record._name},{record.id}"
 
 
 class AbstractUrl(models.AbstractModel):
@@ -230,7 +230,7 @@ class AbstractUrl(models.AbstractModel):
             )
             urls.unlink()
         self.flush()
-        return super(AbstractUrl, self).unlink()
+        return super().unlink()
 
     def action_view_redirect_url(self):
         self.ensure_one()

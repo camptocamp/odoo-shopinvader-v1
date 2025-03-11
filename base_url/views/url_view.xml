@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record id="url_view_form" model="ir.ui.view">
         <field name="model">url.url</field>
         <field name="arch" type="xml">
@@ -21,28 +20,28 @@
     <record id="url_view_tree" model="ir.ui.view">
         <field name="model">url.url</field>
         <field name="arch" type="xml">
-          <tree string="">
-              <field name="url_key" />
-              <field name="model_id" />
-              <field name="redirect" />
-          </tree>
+            <tree string="">
+                <field name="url_key" />
+                <field name="model_id" />
+                <field name="redirect" />
+            </tree>
         </field>
     </record>
 
     <record id="url_view_search" model="ir.ui.view">
         <field name="model">url.url</field>
         <field name="arch" type="xml">
-          <search string="">
-              <field name="url_key" />
-              <field name="model_id" />
-              <group expand="0" string="Group By">
-                  <filter
+            <search string="">
+                <field name="url_key" />
+                <field name="model_id" />
+                <group expand="0" string="Group By">
+                    <filter
                         string="Record"
                         name="groupby_model_id"
                         context="{'group_by': 'model_id'}"
                     />
-              </group>
-          </search>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -50,13 +49,12 @@
         <field name="name">url list Viewer</field>
         <field name="res_model">url.url</field>
         <field name="view_mode">tree,form</field>
-     </record>
-        <!-- This Menu Item Must have a parent -->
+    </record>
+    <!-- This Menu Item Must have a parent -->
     <menuitem
         id="url_menu_view"
         name="Url_rewrite"
         parent="base.next_id_9"
         action="base_url_action_view"
     />
-
 </odoo>

@@ -5,12 +5,12 @@
 
 {
     "name": "Base Url",
-    "version": "14.0.1.0.2",
+    "version": "18.0.1.0.0",
     "category": "tools",
     "license": "AGPL-3",
     "summary": "keep history of url for products & categories  ",
-    "author": "Akretion, ACSONE SA/NV",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "author": "Akretion, ACSONE SA/NV, Camptocamp",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     # any module necessary for this one to work correctly
     "depends": ["base"],
     "external_dependencies": {"python": ["python-slugify"]},

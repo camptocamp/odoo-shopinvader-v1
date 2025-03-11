@@ -1,11 +1,10 @@
 # Copyright 2018 Simone Orsi - Camptocamp SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from operator import attrgetter
+from unittest import mock
 
-import mock
 
-
-class TestMixin(object):
+class TestMixin:
     """Mixin to setup fake models for tests.
 
     Usage - the model:

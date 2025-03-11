@@ -12,7 +12,6 @@ _logger = logging.getLogger(__name__)
 
 
 class UrlUrl(models.Model):
-
     _name = "url.url"
     _description = "Url"
 
