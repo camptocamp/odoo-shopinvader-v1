@@ -7,14 +7,11 @@
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
                 <field name="typology" invisible="True" />
-                <field
-                    name="current_step_id"
-                    attrs="{'invisible': [('typology', '!=', 'cart')]}"
-                />
+                <field name="current_step_id" invisible="typology != 'cart'" />
                 <field
                     name="done_step_ids"
                     widget="many2many_tags"
-                    attrs="{'invisible': [('typology', '!=', 'cart')]}"
+                    invisible="typology != 'cart'"
                 />
             </field>
         </field>
