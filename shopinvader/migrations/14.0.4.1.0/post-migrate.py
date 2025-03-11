@@ -19,7 +19,7 @@ def _fix_multicompany_ir_rules(env):
         "shopinvader_variant_comp_rule",
     ]
     for ref in refs:
-        xmlid = "shopinvader.{}".format(ref)
+        xmlid = f"shopinvader.{ref}"
         rule = env.ref(xmlid, raise_if_not_found=False)
         if not rule:
             continue

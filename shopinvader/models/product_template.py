@@ -35,7 +35,7 @@ class ProductTemplate(models.Model):
         for record in self:
             # TODO we should propose to redirect the old url
             record.shopinvader_bind_ids.unlink()
-        return super(ProductTemplate, self).unlink()
+        return super().unlink()
 
     @api.model
     def create(self, vals):

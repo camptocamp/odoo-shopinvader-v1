@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="ir_exp_shopinvader_variant" model="ir.exports">
         <field name="name">ShopInvader Product Export</field>
         <field name="resource">shopinvader.variant</field>
@@ -124,5 +123,4 @@
         <field name="name">price</field>
         <field name="export_id" ref="ir_exp_shopinvader_variant" />
     </record>
-
 </odoo>

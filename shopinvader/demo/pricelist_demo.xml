@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo noupdate="1">
-
     <record id="pricelist_1" model="product.pricelist">
         <field name="name">Business Pricelist</field>
         <field name="currency_id" ref="base.USD" />
@@ -21,16 +20,14 @@
         we reassign the item_ids....
     -->
     <function model="product.pricelist" name="write">
-      <value
+        <value
             model="product.pricelist"
             eval="obj().env.ref('shopinvader.pricelist_1').ids"
         />
-      <value
+        <value
             eval="{
           'item_ids': [(6, 0, [ref('shopinvader.item_1')])],
           }"
         />
     </function>
-
-
 </odoo>

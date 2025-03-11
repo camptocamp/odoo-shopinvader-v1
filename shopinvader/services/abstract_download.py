@@ -114,5 +114,5 @@ class AbstractDownload(AbstractComponent):
             report_name = safe_eval(
                 report.print_report_name, {"object": target, "time": time}
             )
-            return "{}.{}".format(report_name, extension)
-        return "{}.{}".format(report.name, extension)
+            return f"{report_name}.{extension}"
+        return f"{report.name}.{extension}"

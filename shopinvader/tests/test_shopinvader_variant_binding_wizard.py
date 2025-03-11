@@ -10,7 +10,7 @@ from odoo.addons.component.tests.common import SavepointComponentCase
 class TestShopinvaderVariantBindingWizard(SavepointComponentCase):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderVariantBindingWizard, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,

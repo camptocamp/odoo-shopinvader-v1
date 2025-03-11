@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="backend_1" model="shopinvader.backend">
         <field name="name">Demo Shopinvader Website</field>
         <field name="lang_ids" eval="[(6, 0, [ref('base.lang_en')])]" />
@@ -24,5 +23,4 @@
         />
         <field name="currency_ids" eval="[(6, 0, [ref('base.USD'),ref('base.EUR')])]" />
     </record>
-
 </odoo>

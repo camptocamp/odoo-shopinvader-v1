@@ -79,8 +79,7 @@
                                     <field name="website_unique_key" />
                                     <field name="frontend_data_source" required="1" />
                                 </group>
-                                <group name="auth" colspan="2" col="2">
-                                </group>
+                                <group name="auth" colspan="2" col="2" />
                             </group>
                         </page>
                         <page
@@ -165,9 +164,8 @@
                         </page>
                         <page name="delivery" string="Delivery">
                             <group name="allowed_country" string="Countries">
-                                <span
-                                >Allowed countries in delivery addresses</span><newline
-                                />
+                                <span>Allowed countries in delivery addresses</span>
+                                <newline />
                                 <field name="allowed_country_ids" nolabel="1" />
                             </group>
                         </page>
@@ -207,20 +205,22 @@
                                     col="10"
                                     colspan="4"
                                 >
-                                    <field name="category_root_binding_level" /><newline
-                                    />
-                                    <field name="category_binding_level" /><newline />
+                                    <field name="category_root_binding_level" />
+                                    <newline />
+                                    <field name="category_binding_level" />
+                                    <newline />
                                     <span
-                                    >Levels of categories to automatically bind such as:</span><newline
-                                    />
-                                    <span>- 0: none</span><newline />
-                                    <span>- 1: parent_category1</span><newline />
+                                    >Levels of categories to automatically bind such as:</span>
+                                    <newline />
+                                    <span>- 0: none</span>
+                                    <newline />
+                                    <span>- 1: parent_category1</span>
+                                    <newline />
+                                    <span>- 2: parent_category1/child_category2</span>
+                                    <newline />
                                     <span
-                                    >- 2: parent_category1/child_category2</span><newline
-                                    />
-                                    <span
-                                    >- 3: parent_category1/child_category2/child_category3</span><newline
-                                    />
+                                    >- 3: parent_category1/child_category2/child_category3</span>
+                                    <newline />
                                     <button
                                         name="bind_all_category"
                                         string="Bind all category"
@@ -265,5 +265,4 @@
         parent="menu_shopinvader_root"
         action="action_shopinvader_backend"
     />
-
 </odoo>

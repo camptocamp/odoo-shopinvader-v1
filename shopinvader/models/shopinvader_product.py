@@ -144,14 +144,14 @@ class ShopinvaderProduct(models.Model):
 
     @api.model
     def create(self, vals):
-        binding = super(ShopinvaderProduct, self).create(vals)
+        binding = super().create(vals)
         if self.env.context.get("map_children"):
             binding._create_shopinvader_variant()
         return binding
 
     def _get_url_keywords(self):
         self.ensure_one()
-        keywords = super(ShopinvaderProduct, self)._get_url_keywords()
+        keywords = super()._get_url_keywords()
         if self.default_code:
             keywords.append(self.default_code)
         return keywords
@@ -162,7 +162,7 @@ class ShopinvaderProduct(models.Model):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(ShopinvaderProduct, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         if "backend_id" in fields_list:
             backend = self.env["shopinvader.backend"].search([], limit=1)
             res["backend_id"] = backend.id
@@ -184,7 +184,7 @@ class ShopinvaderProduct(models.Model):
                 record.url_url_ids.write(
                     {
                         "redirect": True,
-                        "model_id": "{},{}".format(categ._name, categ.id),
+                        "model_id": f"{categ._name},{categ.id}",
                     }
                 )
         return True
@@ -193,4 +193,4 @@ class ShopinvaderProduct(models.Model):
         # Call unlink manually to be sure to trigger
         # shopinvader variant unlink constraint
         self.mapped("shopinvader_variant_ids").unlink()
-        return super(ShopinvaderProduct, self).unlink()
+        return super().unlink()

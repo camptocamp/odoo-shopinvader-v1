@@ -18,7 +18,7 @@ class ShopinvaderCategoryUnbindingWizard(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(ShopinvaderCategoryUnbindingWizard, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         shopinvader_category_ids = self.env.context.get("active_ids", False)
         if shopinvader_category_ids:
             res["shopinvader_category_ids"] = [(6, 0, shopinvader_category_ids)]

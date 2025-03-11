@@ -98,7 +98,7 @@ class SaleService(Component):
         :param record: target record
         :return: str
         """
-        result = super(SaleService, self)._get_email_notification_type(record)
+        result = super()._get_email_notification_type(record)
         if getattr(self, "_ask_email_invoice", False):
             result = "invoice_send_email"
         return result
@@ -113,10 +113,10 @@ class SaleService(Component):
         """
         if notif_type == "invoice_send_email":
             target = target.invoice_ids
-        return super(SaleService, self)._launch_notification(target, notif_type)
+        return super()._launch_notification(target, notif_type)
 
     def _convert_one_sale(self, sale):
-        res = super(SaleService, self)._convert_one_sale(sale)
+        res = super()._convert_one_sale(sale)
         res["invoices"] = self._convert_invoices(self._get_invoices(sale))
         return res
 

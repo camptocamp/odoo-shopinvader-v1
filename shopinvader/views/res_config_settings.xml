@@ -6,7 +6,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record id="res_config_settings_view_form" model="ir.ui.view">
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form" />
@@ -59,5 +58,4 @@
         <field name="action" ref="shopinvader_config_settings_act_window" />
         <field name="sequence" eval="-1" />
     </record>
-
 </odoo>

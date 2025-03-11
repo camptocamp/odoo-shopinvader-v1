@@ -15,7 +15,7 @@ class CartCase(CommonCase):
     """
 
     def setUp(self):
-        super(CartCase, self).setUp()
+        super().setUp()
         self.registry.enter_test_mode(self.env.cr)
         self.address = self.env.ref("shopinvader.partner_1_address_1")
         self.fposition = self.env.ref("shopinvader.fiscal_position_2")
@@ -35,10 +35,10 @@ class CartCase(CommonCase):
 
     def tearDown(self):
         self.registry.leave_test_mode()
-        super(CartCase, self).tearDown()
+        super().tearDown()
 
 
-class CartClearTest(object):
+class CartClearTest:
     """
     Test class who implements checks to ensure the clear cart service
     is working correctly.
@@ -96,7 +96,7 @@ class CartClearTest(object):
 
 class AnonymousCartCase(CartCase, CartClearTest):
     def setUp(self, *args, **kwargs):
-        super(AnonymousCartCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.cart = self.env.ref("shopinvader.sale_order_1")
         self.shopinvader_session = {"cart_id": self.cart.id}
         self.partner = self.backend.anonymous_partner_id
@@ -134,7 +134,7 @@ class AnonymousCartCase(CartCase, CartClearTest):
         now = fields.Date.today()
         self.service.dispatch("ask_email", self.cart.id)
         notif = "cart_send_email"
-        description = "Notify {} for {},{}".format(notif, self.cart._name, self.cart.id)
+        description = f"Notify {notif} for {self.cart._name},{self.cart.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         # It should not create any queue job because the user is not logged
         self.assertEqual(self.env["queue.job"].search_count(domain), 0)
@@ -286,7 +286,7 @@ class CommonConnectedCartCase(CartCase):
     """
 
     def setUp(self, *args, **kwargs):
-        super(CommonConnectedCartCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.cart = self.env.ref("shopinvader.sale_order_2")
         self.shopinvader_session = {"cart_id": self.cart.id}
         self.partner = self.env.ref("shopinvader.partner_1")
@@ -372,7 +372,7 @@ class ConnectedCartCase(CommonConnectedCartCase, CartClearTest):
         now = fields.Datetime.now()
         self.service.dispatch("ask_email", self.cart.id)
         notif = "cart_send_email"
-        description = "Notify {} for {},{}".format(notif, self.cart._name, self.cart.id)
+        description = f"Notify {notif} for {self.cart._name},{self.cart.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         self.assertEqual(self.env["queue.job"].search_count(domain), 1)
 
@@ -388,7 +388,7 @@ class ConnectedCartCase(CommonConnectedCartCase, CartClearTest):
         now = fields.Datetime.now()
         self.service.dispatch("ask_email", self.cart.id)
         notif = "cart_send_email"
-        description = "Notify {} for {},{}".format(notif, self.cart._name, self.cart.id)
+        description = f"Notify {notif} for {self.cart._name},{self.cart.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         self.assertEqual(self.env["queue.job"].search_count(domain), 0)
 
@@ -404,7 +404,7 @@ class ConnectedCartCase(CommonConnectedCartCase, CartClearTest):
         self.cart.write({"partner_id": self.partner.copy({}).id})
         self.service.dispatch("ask_email", self.cart.id)
         notif = "cart_send_email"
-        description = "Notify {} for {},{}".format(notif, self.cart._name, self.cart.id)
+        description = f"Notify {notif} for {self.cart._name},{self.cart.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         self.assertEqual(self.env["queue.job"].search_count(domain), 0)
 
@@ -461,7 +461,7 @@ class ConnectedCartCase(CommonConnectedCartCase, CartClearTest):
 
 class ConnectedCartNoTaxCase(CartCase):
     def setUp(self, *args, **kwargs):
-        super(ConnectedCartNoTaxCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.cart = self.env.ref("shopinvader.sale_order_3")
         self.shopinvader_session = {"cart_id": self.cart.id}
         self.partner = self.env.ref("shopinvader.partner_2")

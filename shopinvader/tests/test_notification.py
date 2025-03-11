@@ -11,7 +11,7 @@ from .test_address import CommonAddressCase
 class NotificationCartCase(CommonCase, NotificationCaseMixin):
     @classmethod
     def setUpClass(cls):
-        super(NotificationCartCase, cls).setUpClass()
+        super().setUpClass()
         cls.cart = cls.env.ref("shopinvader.sale_order_2")
 
     def test_cart_notification(self):
@@ -44,7 +44,7 @@ class NotificationCartCase(CommonCase, NotificationCaseMixin):
 
 class NotificationCustomerCase(CommonAddressCase, NotificationCaseMixin):
     def setUp(self, *args, **kwargs):
-        super(NotificationCustomerCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(
             partner=None, shopinvader_session=self.shopinvader_session
         ) as work:

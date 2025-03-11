@@ -7,7 +7,7 @@ from .common import CommonCase, CommonTestDownload
 class TestInvoice(CommonCase, CommonTestDownload):
     @classmethod
     def setUpClass(cls):
-        super(TestInvoice, cls).setUpClass()
+        super().setUpClass()
         cls.register_payments_obj = cls.env["account.payment.register"]
         cls.journal_obj = cls.env["account.journal"]
         cls.sale = cls.env.ref("shopinvader.sale_order_2")
@@ -28,7 +28,7 @@ class TestInvoice(CommonCase, CommonTestDownload):
         ).id
 
     def setUp(self, *args, **kwargs):
-        super(TestInvoice, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.sale_service = work.component(usage="sales")
             self.invoice_service = work.component(usage="invoices")
@@ -184,6 +184,6 @@ class TestInvoice(CommonCase, CommonTestDownload):
 
 class DeprecatedTestInvoice(TestInvoice):
     def setUp(self, *args, **kwargs):
-        super(DeprecatedTestInvoice, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.invoice_service = work.component(usage="invoice")

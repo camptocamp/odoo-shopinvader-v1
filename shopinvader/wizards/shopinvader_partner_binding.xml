@@ -53,5 +53,4 @@
             eval="[(4, ref('shopinvader.group_shopinvader_partner_binding'))]"
         />
     </record>
-
 </odoo>

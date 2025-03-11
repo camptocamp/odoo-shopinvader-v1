@@ -9,7 +9,7 @@ from .test_cart import CommonConnectedCartCase
 class TestCartCopy(CommonConnectedCartCase):
     @classmethod
     def setUpClass(cls):
-        super(TestCartCopy, cls).setUpClass()
+        super().setUpClass()
         cls.product_copy = cls.env.ref("product.product_product_24")
         cls.product_copy.list_price = 500.0
 

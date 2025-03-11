@@ -10,7 +10,7 @@ from odoo.tools import mute_logger
 from .common import CommonCase
 
 
-class ItemCaseMixin(object):
+class ItemCaseMixin:
     @classmethod
     def _setup_products(cls):
         cls.product_1 = cls.env.ref("product.product_product_4b")
@@ -51,7 +51,7 @@ class ItemCaseMixin(object):
 class AbstractItemCase(ItemCaseMixin):
     @classmethod
     def setUpClass(cls):
-        super(AbstractItemCase, cls).setUpClass()
+        super().setUpClass()
         cls._setup_products()
 
     def test_add_item_without_cart(self):
@@ -205,12 +205,12 @@ class AbstractItemCase(ItemCaseMixin):
 class AnonymousItemCase(AbstractItemCase, CommonCase):
     @classmethod
     def setUpClass(cls):
-        super(AnonymousItemCase, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.backend.anonymous_partner_id
         cls.cart = cls.env.ref("shopinvader.sale_order_1")
 
     def setUp(self, *args, **kwargs):
-        super(AnonymousItemCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.shopinvader_session = {"cart_id": self.cart.id}
         with self.work_on_services(
             partner=None, shopinvader_session=self.shopinvader_session
@@ -225,12 +225,12 @@ class AnonymousItemCase(AbstractItemCase, CommonCase):
 class ConnectedItemCase(AbstractItemCase, CommonCase):
     @classmethod
     def setUpClass(cls):
-        super(ConnectedItemCase, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.env.ref("shopinvader.partner_1")
         cls.cart = cls.env.ref("shopinvader.sale_order_2")
 
     def setUp(self, *args, **kwargs):
-        super(ConnectedItemCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.shopinvader_session = {"cart_id": self.cart.id}
         with self.work_on_services(
             partner=self.partner, shopinvader_session=self.shopinvader_session

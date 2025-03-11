@@ -8,7 +8,7 @@ from .common import CommonMixin
 class TestShopinvaderCategoryBase(SavepointComponentCase, CommonMixin):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderCategoryBase, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.backend = cls.env.ref("shopinvader.backend_1")
         cls.backend2 = cls.env.ref("shopinvader.backend_2")
@@ -29,7 +29,7 @@ class TestShopinvaderCategoryBase(SavepointComponentCase, CommonMixin):
 class TestShopinvaderCategory(TestShopinvaderCategoryBase):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderCategory, cls).setUpClass()
+        super().setUpClass()
         cls.binding_l1 = cls._create_binding(cls.cat_level1)
         cls.binding_l2 = cls._create_binding(cls.cat_level2)
         cls.binding_l3 = cls._create_binding(cls.cat_level3)

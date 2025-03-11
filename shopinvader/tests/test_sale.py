@@ -96,7 +96,7 @@ class SaleCase(CommonSaleCase, CommonTestDownload):
         for line in self.sale.order_line:
             line.write({"qty_delivered": line.product_uom_qty})
         invoice = self.sale._create_invoices()
-        description = "Notify {} for {},{}".format(notif, invoice._name, invoice.id)
+        description = f"Notify {notif} for {invoice._name},{invoice.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         self.service.dispatch("ask_email_invoice", self.sale.id)
         self.assertEqual(self.env["queue.job"].search_count(domain), 1)

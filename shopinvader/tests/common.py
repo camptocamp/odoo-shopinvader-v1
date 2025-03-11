@@ -4,8 +4,7 @@
 # pylint: disable=method-required-super
 
 from contextlib import contextmanager
-
-import mock
+from unittest import mock
 
 from odoo import fields
 from odoo.exceptions import MissingError
@@ -35,7 +34,7 @@ def _install_lang_odoo(env, lang_xml_id, full_install=False):
     return lang
 
 
-class UtilsMixin(object):
+class UtilsMixin:
     def _bind_products(self, products, backend=None):
         backend = backend or self.backend
         bind_wizard_model = self.env["shopinvader.variant.binding.wizard"]
@@ -138,13 +137,12 @@ class CommonMixin(RegistryMixin, ComponentMixin, UtilsMixin):
 
 
 class CommonCase(SavepointCase, CommonMixin):
-
     # by default disable tracking suite-wise, it's a time saver :)
     tracking_disable = True
 
     @classmethod
     def setUpClass(cls):
-        super(CommonCase, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(cls.env.context, tracking_disable=cls.tracking_disable)
         )
@@ -227,14 +225,14 @@ class ProductCommonCase(CommonCase):
 
 class ShopinvaderRestCase(BaseRestCase):
     def setUp(self, *args, **kwargs):
-        super(ShopinvaderRestCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.backend = self.env.ref("shopinvader.backend_1")
         # To ensure multi-backend works correctly, we just have to create
         # a new one on the same company.
         self.backend_copy = self.env.ref("shopinvader.backend_2")
 
 
-class CommonTestDownload(object):
+class CommonTestDownload:
     """
     Dedicated class to test the download service.
     Into your test class, just inherit this one (python mode) and call
@@ -321,7 +319,7 @@ class CommonTestDownload(object):
         register_payments._create_payments()
 
 
-class NotificationCaseMixin(object):
+class NotificationCaseMixin:
     def _check_notification(self, notif_type, record):
         notif = self.env["shopinvader.notification"].search(
             [

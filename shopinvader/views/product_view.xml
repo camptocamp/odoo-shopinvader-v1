@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="view_product_template_form" model="ir.ui.view">
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view" />
@@ -15,7 +14,6 @@
                             decoration-danger="active != True"
                             decoration-success="active == True"
                         >
-
                             <field name="backend_id" />
                             <field name="lang_id" />
                             <field name="sync_date" />
@@ -51,5 +49,4 @@
             </field>
         </field>
     </record>
-
 </odoo>

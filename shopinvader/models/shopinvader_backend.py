@@ -640,4 +640,4 @@ class ShopinvaderBackend(models.Model):
         if "website_unique_key" in values:
             self._get_id_from_website_unique_key.clear_cache(self.env[self._name])
         with self._keep_binding_sync_with_langs():
-            return super(ShopinvaderBackend, self).write(values)
+            return super().write(values)

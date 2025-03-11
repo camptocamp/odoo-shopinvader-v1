@@ -76,7 +76,7 @@ class ShopinvaderPartner(models.Model):
     @api.model
     def create(self, vals):
         vals = self._prepare_create_params(vals)
-        return super(ShopinvaderPartner, self).create(vals)
+        return super().create(vals)
 
     @api.model
     def _prepare_create_params(self, vals):

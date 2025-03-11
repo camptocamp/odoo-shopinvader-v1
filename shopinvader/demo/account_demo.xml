@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-
     <record id="tax_1" model="account.tax">
         <field name="name">Tax inc</field>
         <field eval="15" name="amount" />

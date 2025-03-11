@@ -201,7 +201,7 @@ class BaseShopinvaderService(AbstractComponent):
         return record._fields.get(field).convert_to_export(record[field], record)
 
     def _get_openapi_default_parameters(self):
-        defaults = super(BaseShopinvaderService, self)._get_openapi_default_parameters()
+        defaults = super()._get_openapi_default_parameters()
         defaults.append(
             {
                 "name": "WEBSITE-UNIQUE-KEY",

@@ -137,7 +137,7 @@ class ShopinvaderVariant(models.Model):
         :return: bool
         """
         with self._action_product_toggle_active():
-            result = super(ShopinvaderVariant, self).write(vals)
+            result = super().write(vals)
         return result
 
     def _build_seo_title(self):

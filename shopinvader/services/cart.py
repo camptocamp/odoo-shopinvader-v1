@@ -416,7 +416,7 @@ class CartService(Component):
                 "store_cache": {"cart": {}},
                 "set_session": {"cart_id": 0},
             }
-        res = super(CartService, self)._to_json(cart)[0]
+        res = super()._to_json(cart)[0]
 
         return {
             "data": res,
@@ -526,7 +526,7 @@ class CartService(Component):
         return self.env["sale.order"].browse(record_id)
 
     def _get_openapi_default_parameters(self):
-        defaults = super(CartService, self)._get_openapi_default_parameters()
+        defaults = super()._get_openapi_default_parameters()
         defaults.append(
             {
                 "name": "SESS-CART-ID",

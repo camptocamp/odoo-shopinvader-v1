@@ -74,11 +74,11 @@ class ProductCategory(models.Model):
                             (
                                 "name",
                                 operator,
-                                " / ".join(category_names[-1 - i:]),
+                                " / ".join(category_names[-1 - i :]),
                             )
                         ],
                         # fmt: on
-                        domain
+                        domain,
                     ]
                     if operator in expression.NEGATIVE_TERM_OPERATORS:
                         domain = expression.AND(domain)

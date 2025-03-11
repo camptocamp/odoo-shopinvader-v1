@@ -5,7 +5,6 @@
     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record id="view_shop_quotation_tree" model="ir.ui.view">
         <field name="model">sale.order</field>
         <field name="mode">primary</field>
@@ -94,5 +93,4 @@
         parent="menu_shopinvader_orders"
         sequence="20"
     />
-
 </odoo>

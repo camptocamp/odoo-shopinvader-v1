@@ -34,7 +34,7 @@ class ShopinvaderCategoryBindingWizard(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        result = super(ShopinvaderCategoryBindingWizard, self).default_get(fields_list)
+        result = super().default_get(fields_list)
         backend_id = self.env.context.get("active_id")
         if backend_id:
             backend = self.env["shopinvader.backend"].browse(backend_id)

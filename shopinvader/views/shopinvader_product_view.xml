@@ -6,7 +6,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_product_search_view">
         <field name="model">shopinvader.product</field>
         <field name="arch" type="xml">
@@ -147,13 +146,12 @@
                                         <field name="url_key" string="Redirect Url" />
                                     </tree>
                                 </field>
-                              <button
+                                <button
                                     name="action_view_redirect_url"
                                     type="object"
                                     string="Manage redirects"
                                     class="oe_inline"
                                 />
-
                             </group>
                         </page>
                         <page name="variant" string="Variant">
@@ -201,8 +199,8 @@
                                     <field name="name" />
                                 </strong>
                                 <t t-if="record.default_code.value">[<field
-                                        name="default_code"
-                                    />]</t>
+                                    name="default_code"
+                                />]</t>
                                 <div name="backend" class="mt-1">
                                     <field name="backend_id" widget="badge" />
                                     <field name="lang_id" widget="badge" />
@@ -230,5 +228,4 @@
         <field name="action" ref="shopinvader_product_act_window" />
         <field name="sequence" eval="10" />
     </record>
-
 </odoo>

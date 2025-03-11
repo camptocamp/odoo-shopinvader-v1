@@ -11,7 +11,7 @@ class TestShopinvaderPartnerBinding(CommonCase):
     """
 
     def setUp(self):
-        super(TestShopinvaderPartnerBinding, self).setUp()
+        super().setUp()
         self.binding_wiz_obj = self.env["shopinvader.partner.binding"]
         self.partner = self.env.ref("base.res_partner_2")
 

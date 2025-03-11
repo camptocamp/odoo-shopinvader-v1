@@ -5,7 +5,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <menuitem
         id="menu_shopinvader_root"
         name="Shopinvader"
@@ -64,5 +63,4 @@
         parent="menu_shopinvader_config"
         sequence="1000"
     />
-
 </odoo>

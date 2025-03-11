@@ -53,7 +53,7 @@ class ShopinvaderServiceContextProvider(Component):
         return self.env["shopinvader.backend"].browse()
 
     def _get_component_context(self):
-        res = super(ShopinvaderServiceContextProvider, self)._get_component_context()
+        res = super()._get_component_context()
         res.update(
             {
                 "shopinvader_session": self._get_shopinvader_session(),

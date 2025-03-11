@@ -113,7 +113,7 @@ class ResPartner(models.Model):
                 partner.address_type = "profile"
 
     def write(self, vals):
-        super(ResPartner, self).write(vals)
+        super().write(vals)
         if "country_id" in vals:
             carts = (
                 self.env["sale.order"]
