@@ -8,7 +8,6 @@ from cerberus import Validator
 from werkzeug.exceptions import NotFound
 
 from odoo.exceptions import UserError
-from odoo.tools.translate import _
 
 from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
@@ -138,7 +137,12 @@ class CartService(Component):
             self._get_validator_cart_by_id_domain(value)
         )
         if len(cart) != 1:
-            error(field, _("The cart does not exists or does not belong to you!"))
+            error(
+                field,
+                self.env.self.env._(
+                    "The cart does not exists or does not belong to you!"
+                ),
+            )
 
     def _validator_copy(self):
         return {
@@ -281,12 +285,12 @@ class CartService(Component):
         :return: sale.order recordset
         """
         clear_option = self.shopinvader_backend.clear_cart_options
-        do_clear = "_do_clear_cart_%s" % clear_option
+        do_clear = f"{clear_option}_do_clear_cart_%s"
         if hasattr(self, do_clear):
             cart = getattr(self, do_clear)(cart)
         else:
             _logger.error("The %s function doesn't exists.", do_clear)
-            raise NotImplementedError(_("Missing feature to clear the cart!"))
+            raise NotImplementedError(self.env._("Missing feature to clear the cart!"))
         return cart
 
     def _check_allowed_product(self, cart, params):
@@ -294,7 +298,7 @@ class CartService(Component):
         if not product._add_to_cart_allowed(
             self.shopinvader_backend, partner=self.partner
         ):
-            raise UserError(_("Product %s is not allowed") % product.name)
+            raise UserError(self.env._("Product %s is not allowed") % product.name)
 
     def _add_item(self, cart, params):
         self._check_allowed_product(cart, params)
@@ -352,7 +356,7 @@ class CartService(Component):
             add_item_params["item_qty"] = params["item_qty"]
             self._add_item(cart, add_item_params)
             return params["item_qty"]
-        raise NotFound("No cart item found with id %s" % params["item_id"])
+        raise NotFound(f"No cart item found with id {params['item_id']}")
 
     def _delete_item(self, cart, params):
         item = self._get_cart_item(cart, params, raise_if_not_found=False)
@@ -405,7 +409,7 @@ class CartService(Component):
     def _get_step_from_code(self, code):
         step = self.env["shopinvader.cart.step"].search([("code", "=", code)])
         if not step:
-            raise UserError(_("Invalid step code %s") % code)
+            raise UserError(self.env._("Invalid step code %s") % code)
         else:
             return step
 
@@ -492,17 +496,17 @@ class CartService(Component):
         # end user (untrusted data) and the cart id by the
         # locomotive server (trusted data)
         item = cart.mapped("order_line").filtered(
-            lambda l, id_=params["item_id"]: l.id == id_
+            lambda x, id_=params["item_id"]: x.id == id_
         )
         if not item and raise_if_not_found:
-            raise NotFound("No cart item found with id %s" % params["item_id"])
+            raise NotFound(f"No cart item found with id {params['item_id']}")
         return item
 
     def _check_existing_cart_item(self, cart, params):
         product_id = params["product_id"]
         order_lines = cart.order_line
         return order_lines.filtered(
-            lambda l, p=product_id: l.product_id.id == product_id
+            lambda x, p=product_id: x.product_id.id == product_id
         )
 
     def _prepare_cart_item(self, params, cart):

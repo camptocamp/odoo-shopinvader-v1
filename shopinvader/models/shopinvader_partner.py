@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class ShopinvaderPartner(models.Model):
@@ -179,7 +179,7 @@ class ShopinvaderPartner(models.Model):
         )
         view = self.env.ref(form_xid)
         return {
-            "name": _("Edit %s") % self.name,
+            "name": self.env._("Edit %(name)s", name=self.name),
             "type": "ir.actions.act_window",
             "view_type": "form",
             "res_model": self._name,

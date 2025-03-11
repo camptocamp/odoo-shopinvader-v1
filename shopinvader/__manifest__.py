@@ -5,17 +5,18 @@
 {
     "name": "Shopinvader",
     "summary": "Shopinvader",
-    "version": "14.0.5.25.0",
+    "version": "18.0.1.0.0",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
-    "author": "Akretion",
+    "author": "Akretion, Camptocamp",
     "license": "AGPL-3",
     "application": True,
-    "installable": False,
+    "installable": True,
     "external_dependencies": {"python": ["cerberus", "unidecode"], "bin": []},
     "depends": [
         "base_rest",
         "jsonifier",
+        # TODO: still needed?
         "base_sparse_field_list_support",
         "base_url",
         "base_vat",

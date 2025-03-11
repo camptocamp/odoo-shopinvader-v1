@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="anonymous" model="res.partner">
-            <field name="property_product_pricelist" ref="product.list0" />
+            <field name="property_product_pricelist" ref="pricelist_0" />
         </record>
     </data>
 
@@ -14,7 +14,7 @@
             <field name="city">Aurec sur Loire</field>
             <field name="zip">43110</field>
             <field name="country_id" ref="base.fr" />
-            <field name="property_product_pricelist" ref="product.list0" />
+            <field name="property_product_pricelist" ref="pricelist_0" />
         </record>
 
         <record id="shopinvader_partner_1" model="shopinvader.partner">

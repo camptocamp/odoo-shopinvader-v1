@@ -46,7 +46,7 @@
         <field name="name">shopinvader.product.tree (in shopinvader)</field>
         <field name="model">shopinvader.product</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="backend_id" />
                 <field name="lang_id" optional="show" />
@@ -58,7 +58,7 @@
                     optional="show"
                 />
                 <field name="sync_date" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -142,9 +142,9 @@
                                     nolabel="1"
                                     colspan="4"
                                 >
-                                    <tree>
+                                    <list>
                                         <field name="url_key" string="Redirect Url" />
-                                    </tree>
+                                    </list>
                                 </field>
                                 <button
                                     name="action_view_redirect_url"
@@ -161,7 +161,7 @@
                                     nolabel="1"
                                     readonly="1"
                                 >
-                                    <tree>
+                                    <list>
                                         <field name="id" />
                                         <field name="default_code" />
                                         <field name="record_id" />
@@ -169,7 +169,7 @@
                                             name="shopinvader_backend_ids"
                                             widget="many2many_tags"
                                         />
-                                    </tree>
+                                    </list>
                                 </field>
                             </group>
                         </page>
@@ -216,7 +216,7 @@
     <record model="ir.actions.act_window" id="shopinvader_product_act_window">
         <field name="name">Shopinvader Product</field>
         <field name="res_model">shopinvader.product</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
         <field name="groups_id" eval="[(4, ref('group_shopinvader_manager'))]" />

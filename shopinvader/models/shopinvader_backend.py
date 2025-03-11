@@ -9,7 +9,7 @@ import os
 from collections import defaultdict
 from contextlib import contextmanager
 
-from odoo import _, api, fields, models, tools
+from odoo import api, fields, models, tools
 from odoo.osv import expression
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
@@ -233,7 +233,7 @@ class ShopinvaderBackend(models.Model):
         (
             "unique_website_unique_key",
             "unique(website_unique_key)",
-            _("This website unique key already exists in database"),
+            "This website unique key already exists in database",
         )
     ]
 
@@ -243,7 +243,8 @@ class ShopinvaderBackend(models.Model):
 
     @api.model
     def _default_pricelist_id(self):
-        return self.env.ref("product.list0")
+        # FIXME: do somethign or trash
+        return None
 
     @api.model
     def _default_partner_title_ids(self):
@@ -399,7 +400,9 @@ class ShopinvaderBackend(models.Model):
             ]
         )
         for backend in backends:
-            shopinv_variants = all_products.filtered(lambda p: p.backend_id == backend)
+            shopinv_variants = all_products.filtered(
+                lambda p, b=backend: p.backend_id == b
+            )
             products = shopinv_variants.mapped("record_id")
             categories = backend._get_related_categories(products)
             if categories:
@@ -502,7 +505,9 @@ class ShopinvaderBackend(models.Model):
             ]
         )
         for lang in langs:
-            shopinvader_product = bound_templates.filtered(lambda x: x.lang_id == lang)
+            shopinvader_product = bound_templates.filtered(
+                lambda x, lang=lang: x.lang_id == lang
+            )
             if not shopinvader_product:
                 # fmt: off
                 data = {
@@ -526,7 +531,7 @@ class ShopinvaderBackend(models.Model):
         bound_variants = shopinvader_product.shopinvader_variant_ids
         for variant in variants:
             shopinvader_variant = bound_variants.filtered(
-                lambda p: p.record_id == variant
+                lambda p, v=variant: p.record_id == v
             )
             if not shopinvader_variant:
                 # fmt: off
@@ -551,10 +556,11 @@ class ShopinvaderBackend(models.Model):
                 ("notification_type", "=", notification),
             ]
         )
-        description = _("Notify %s for %s,%s") % (
-            notification,
-            record._name,
-            record.id,
+        description = self.env._(
+            "Notify %(notif)s for %(rec_name)s,%(rec_id)s",
+            notif=notification,
+            rec_name=record._name,
+            rec_id=record.id,
         )
         for notif in notifs:
             notif.with_delay(description=description).send(record.id)
@@ -638,6 +644,6 @@ class ShopinvaderBackend(models.Model):
 
     def write(self, values):
         if "website_unique_key" in values:
-            self._get_id_from_website_unique_key.clear_cache(self.env[self._name])
+            self.env.registry.clear_cache()
         with self._keep_binding_sync_with_langs():
             return super().write(values)

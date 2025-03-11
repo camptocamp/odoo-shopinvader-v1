@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import mimetypes
 
-from odoo import _
 from odoo.exceptions import MissingError
 from odoo.http import content_disposition, request
 from odoo.tools.safe_eval import safe_eval, time
@@ -53,7 +52,7 @@ class AbstractDownload(AbstractComponent):
         target = self._get(_id)
         headers, content = self._get_binary_content(target, params=params)
         if not content:
-            raise MissingError(_("No content found for %s") % _id)
+            raise MissingError(self.env._("No content found for %(_id)s", _id=_id))
         response = request.make_response(content, headers)
         response.status_code = 200
         return response

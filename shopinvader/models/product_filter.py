@@ -60,9 +60,8 @@ class ProductFilter(models.Model):
         if self.based_on == "field":
             return self.path or self.field_id.name
         elif self.based_on == "variant_attribute":
-            return "variant_attributes.%s" % sanitize_attr_name(
-                self.variant_attribute_id
-            )
+            attr_name = sanitize_attr_name(self.variant_attribute_id)
+            return f"variant_attributes.{attr_name}"
 
     @api.depends_context("lang")
     def _compute_display_name(self):

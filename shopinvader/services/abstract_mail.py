@@ -28,7 +28,7 @@ class AbstractMailService(AbstractComponent):
         :return: str
         """
         if hasattr(self, "_usage") and self._usage:
-            return "%s_send_email" % self._usage
+            return f"{self._usage}_send_email"
         return ""
 
     def _load_target_email(self, record_id):

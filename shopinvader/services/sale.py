@@ -4,7 +4,6 @@
 from odoo.exceptions import UserError
 from odoo.osv import expression
 from odoo.tools.float_utils import float_is_zero
-from odoo.tools.translate import _
 
 from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
@@ -135,13 +134,15 @@ class SaleService(Component):
                 line.qty_delivered, precision_digits=precision
             ) or not float_is_zero(line.qty_invoiced, precision_digits=precision):
                 raise UserError(
-                    _("Orders that have been delivered or invoiced cannot be edited.")
+                    self.env._(
+                        "Orders that have been delivered or invoiced cannot be edited."
+                    )
                 )
         return True
 
     def _cancel(self, sale, reset_to_cart=False):
         if not self._is_cancel_allowed(sale):
-            raise UserError(_("This order cannot be cancelled"))
+            raise UserError(self.env._("This order cannot be cancelled"))
         sale.action_cancel()
         if reset_to_cart:
             sale.action_draft()

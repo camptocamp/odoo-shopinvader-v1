@@ -4,7 +4,7 @@
 # Simone Orsi <simone.orsi@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # pylint: disable=consider-merging-classes-inherited,method-required-super
-from odoo import _, fields
+from odoo import fields
 from odoo.exceptions import UserError
 
 from odoo.addons.component.core import Component
@@ -41,12 +41,12 @@ class CustomerService(Component):
     def update(self, _id, **params):
         # We get the binding from the partner
         if not self._is_logged_in():
-            raise UserError(_("You must provide a partner"))
+            raise UserError(self.env._("You must provide a partner"))
 
         partner = self._get(_id)
         binding = partner._get_invader_partner(self.shopinvader_backend)
         if not binding:
-            raise UserError(_("Partner %s is not a customer") % partner.id)
+            raise UserError(self.env._("Partner %s is not a customer") % partner.id)
 
         vals = self._prepare_params(params, mode="update")
         binding.write(vals)

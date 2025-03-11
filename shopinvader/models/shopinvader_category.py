@@ -44,13 +44,15 @@ class ShopinvaderCategory(models.Model):
         "Shopinvader Childs",
         compute="_compute_child_category",
     )
-    level = fields.Integer(compute="_compute_level")
+    level = fields.Integer(compute="_compute_level", recursive=True)
     active = fields.Boolean(
         default=True,
         compute="_compute_active",
         store=True,
         readonly=False,
     )
+    # just make it recursive to avoid errors
+    automatic_url_key = fields.Char(recursive=True)
 
     _sql_constraints = [
         (

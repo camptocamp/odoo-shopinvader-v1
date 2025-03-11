@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import api, fields, models
-from odoo.tools.translate import _
 
 
 class ShopinvaderNotification(models.Model):
@@ -13,7 +12,6 @@ class ShopinvaderNotification(models.Model):
     backend_id = fields.Many2one("shopinvader.backend", "Backend", required=False)
     notification_type = fields.Selection(
         selection="_selection_notification_type",
-        string="Notification Type",
         required=True,
     )
     model_id = fields.Many2one("ir.model", "Model", required=True, ondelete="cascade")
@@ -26,43 +24,43 @@ class ShopinvaderNotification(models.Model):
     def _get_all_notification(self):
         return {
             "cart_confirmation": {
-                "name": _("Cart Confirmation"),
+                "name": self.env._("Cart Confirmation"),
                 "model": "sale.order",
             },
             "cart_send_email": {
-                "name": _("Cart ask by email"),
+                "name": self.env._("Cart ask by email"),
                 "model": "sale.order",
             },
             "sale_send_email": {
-                "name": _("Sale ask by email"),
+                "name": self.env._("Sale ask by email"),
                 "model": "sale.order",
             },
             "sale_confirmation": {
-                "name": _("Sale Confirmation"),
+                "name": self.env._("Sale Confirmation"),
                 "model": "sale.order",
             },
             "invoice_open": {
-                "name": _("Invoice Validated"),
+                "name": self.env._("Invoice Validated"),
                 "model": "account.move",
             },
             "invoice_send_email": {
-                "name": _("Invoice send email"),
+                "name": self.env._("Invoice send email"),
                 "model": "account.move",
             },
             "new_customer_welcome": {
-                "name": _("New customer Welcome"),
+                "name": self.env._("New customer Welcome"),
                 "model": "res.partner",
             },
             "customer_updated": {
-                "name": _("Customer updated"),
+                "name": self.env._("Customer updated"),
                 "model": "res.partner",
             },
             "address_created": {
-                "name": _("Address created"),
+                "name": self.env._("Address created"),
                 "model": "res.partner",
             },
             "address_updated": {
-                "name": _("Address updated"),
+                "name": self.env._("Address updated"),
                 "model": "res.partner",
             },
         }
