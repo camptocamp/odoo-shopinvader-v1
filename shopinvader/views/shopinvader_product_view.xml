@@ -68,12 +68,11 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <field name="active" invisible="1" />
                     <widget
                         name="web_ribbon"
                         text="Archived"
                         bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}"
+                        invisible="active"
                     />
                     <div class="oe_title">
                         <h1>
@@ -102,7 +101,7 @@
                             <field name="use_shopinvader_product_name" invisible="1" />
                             <group
                                 name="name"
-                                attrs="{'invisible': [('use_shopinvader_product_name', '!=', True)]}"
+                                invisible="not use_shopinvader_product_name"
                             >
                                 <field name="shopinvader_name" />
                             </group>
@@ -127,13 +126,12 @@
                                 <field name="url_builder" />
                                 <field
                                     name="manual_url_key"
-                                    attrs="{
-                                                'invisible': [('url_builder', '!=', 'manual')],
-                                                'required': [('url_builder', '=', 'manual')]}"
+                                    invisible="url_builder != 'manual'"
+                                    required="url_builder == 'manual'"
                                 />
                                 <field
                                     name="url_key"
-                                    attrs="{'invisible': [('url_builder', '=', 'manual')]}"
+                                    invisible="url_builder == 'manual'"
                                 />
                             </group>
                             <group name="redirect_url">

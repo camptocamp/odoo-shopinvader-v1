@@ -85,7 +85,7 @@
                         <page
                             name="search_eng"
                             string="Search engine"
-                            attrs="{'invisible': [('frontend_data_source', '!=', 'search_engine')]}"
+                            invisible="frontend_data_source != 'search_engine'"
                         >
                             <group name="website_name">
                                 <field name="website_public_name" />
