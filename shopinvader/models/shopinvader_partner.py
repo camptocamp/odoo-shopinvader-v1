@@ -73,29 +73,30 @@ class ShopinvaderPartner(models.Model):
     def _get_role(self):
         return self.backend_id.customer_default_role
 
-    @api.model
-    def create(self, vals):
-        vals = self._prepare_create_params(vals)
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        vals_list = self._prepare_create_params(vals_list)
+        return super().create(vals_list)
 
     @api.model
-    def _prepare_create_params(self, vals):
-        # The new partner should be marked as customer
-        # Exactly when a partner is created from Sale menu
-        # The partner is marked as customer via the action's context
-        vals.update({"customer_rank": 1})
-        # As we want to have a SQL contraint on customer email
-        # we have to set it manually to avoid to raise the constraint
-        # at the creation of the element
-        if not vals.get("partner_email"):
-            vals["partner_email"] = vals.get("email")
-        if not vals.get("partner_email") and vals.get("record_id"):
-            vals["partner_email"] = (
-                self.env["res.partner"].browse(vals["record_id"]).email
-            )
-        if not vals.get("record_id"):
-            vals["record_id"] = self._get_or_create_partner(vals).id
-        return vals
+    def _prepare_create_params(self, vals_list):
+        for vals in vals_list:
+            # The new partner should be marked as customer
+            # Exactly when a partner is created from Sale menu
+            # The partner is marked as customer via the action's context
+            vals.update({"customer_rank": 1})
+            # As we want to have a SQL contraint on customer email
+            # we have to set it manually to avoid to raise the constraint
+            # at the creation of the element
+            if not vals.get("partner_email"):
+                vals["partner_email"] = vals.get("email")
+            if not vals.get("partner_email") and vals.get("record_id"):
+                vals["partner_email"] = (
+                    self.env["res.partner"].browse(vals["record_id"]).email
+                )
+            if not vals.get("record_id"):
+                vals["record_id"] = self._get_or_create_partner(vals).id
+        return vals_list
 
     @api.model
     def _get_or_create_partner(self, vals):
