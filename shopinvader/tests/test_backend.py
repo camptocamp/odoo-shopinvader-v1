@@ -12,8 +12,8 @@ class BackendCase(CommonCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.lang_fr = cls._install_lang(cls, "base.lang_fr")
-        cls.env = cls.env(context=dict(cls.env.context, test_queue_job_no_delay=True))
-        cls.backend = cls.backend.with_context(test_queue_job_no_delay=True)
+        cls.env = cls.env(context=dict(cls.env.context, queue_job__no_delay=True))
+        cls.backend = cls.backend.with_context(queue_job__no_delay=True)
 
     def _all_products_count(self):
         return self.env["product.template"].search_count([("sale_ok", "=", True)])
@@ -139,7 +139,8 @@ class BackendCase(CommonCase):
         self._bind_all_category()
         binded_variants_count = self.env["shopinvader.variant"].search_count([])
         binded_categories_count = self.env["shopinvader.category"].search_count([])
-        self.backend.write({"lang_ids": [(4, self.lang_fr.id)]})
+        backend = self.backend.with_context(bind_products_immediately=True)
+        backend.write({"lang_ids": [(4, self.lang_fr.id)]})
         self.assertEqual(
             self.env["shopinvader.variant"].search_count([]),
             binded_variants_count * 2,

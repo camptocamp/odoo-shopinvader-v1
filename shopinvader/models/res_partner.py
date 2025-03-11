@@ -5,7 +5,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools.misc import str2bool
 
@@ -59,7 +59,7 @@ class ResPartner(models.Model):
     def _check_unique_email(self):
         if not self._is_partner_duplicate_prevented():
             return True
-        self.env["res.partner"].flush(["email", "shopinvader_bind_ids"])
+        self.env["res.partner"].flush_recordset(["email", "shopinvader_bind_ids"])
         self.env.cr.execute(
             """
             SELECT
@@ -73,7 +73,10 @@ class ResPartner(models.Model):
                     res_partner rp
                 WHERE rp.email is not null
                     and rp.active = True
-                    and EXISTS (SELECT FROM shopinvader_partner sp WHERE sp.record_id = rp.id)
+                    and EXISTS (
+                        SELECT FROM shopinvader_partner sp
+                        WHERE sp.record_id = rp.id
+                    )
                 ) dups
             WHERE dups.Row > 1;
         """
@@ -82,8 +85,11 @@ class ResPartner(models.Model):
         invalid_emails = [e for e in self.mapped("email") if e in duplicate_emails]
         if invalid_emails:
             raise ValidationError(
-                _("Email must be unique: The following " "mails are not unique: %s")
-                % ", ".join(invalid_emails)
+                self.env._(
+                    "Email must be unique: "
+                    "The following mails are not unique: %(emails)s",
+                    emails=", ".join(invalid_emails),
+                )
             )
 
     @api.depends("is_blacklisted")

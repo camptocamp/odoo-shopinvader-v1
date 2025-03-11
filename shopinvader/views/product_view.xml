@@ -10,7 +10,7 @@
                         name="shopinvader_bind_ids"
                         context="{'hide_record_id': True}"
                     >
-                        <tree
+                        <list
                             decoration-danger="active != True"
                             decoration-success="active == True"
                         >
@@ -18,7 +18,7 @@
                             <field name="lang_id" />
                             <field name="sync_date" />
                             <field name="active" widget="boolean_toggle" />
-                        </tree>
+                        </list>
                     </field>
                     <group name="shopinvader">
                         <group name="shopinvader_bindings" string="Bindings">

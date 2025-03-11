@@ -3,7 +3,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # pylint: disable=method-required-super, consider-merging-classes-inherited
 
-from odoo import _
 
 from odoo.addons.component.core import AbstractComponent
 
@@ -44,7 +43,7 @@ class PartnerServiceMixin(AbstractComponent):
 
     def _notify_salesman_values(self, partner, mode):
         # TODO: mode is not translated
-        msg = _("{addr_type} {mode} '{name}' needs review").format(
+        msg = self.env._("{addr_type} {mode} '{name}' needs review").format(
             addr_type=partner.addr_type_display(), name=partner.name, mode=mode
         )
         return {

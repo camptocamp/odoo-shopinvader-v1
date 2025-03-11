@@ -8,7 +8,7 @@ from unittest import mock
 
 from odoo import fields
 from odoo.exceptions import MissingError
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 from odoo.addons.base_rest.controllers.main import RestController
 from odoo.addons.base_rest.core import _rest_controllers_per_module
@@ -136,7 +136,7 @@ class CommonMixin(RegistryMixin, ComponentMixin, UtilsMixin):
             self._perform_job(job)
 
 
-class CommonCase(SavepointCase, CommonMixin):
+class CommonCase(TransactionCase, CommonMixin):
     # by default disable tracking suite-wise, it's a time saver :)
     tracking_disable = True
 
@@ -155,10 +155,10 @@ class CommonCase(SavepointCase, CommonMixin):
         # Force service registration by the creation of a fake controller
         cls._ShopinvaderControllerTest = ControllerTest
         CommonMixin._setup_backend(cls)
-        # TODO FIXME
+        # FIXME: likely not needed anymore in v18
         # It seem that setUpComponent / setUpRegistry loose stuff from
         # the cache so we do an explicit flush here to avoid losing data
-        cls.env["base"].flush()
+        # cls.env["base"].flush_recordset()
         cls.setUpComponent()
         cls.setUpRegistry()
 
@@ -168,7 +168,7 @@ class CommonCase(SavepointCase, CommonMixin):
         _rest_controllers_per_module["shopinvader"] = []
 
     def setUp(self):
-        SavepointCase.setUp(self)
+        TransactionCase.setUp(self)
         CommonMixin.setUp(self)
 
         shopinvader_response.set_testmode(True)
@@ -218,7 +218,7 @@ class ProductCommonCase(CommonCase):
             ]
         )
         cls.env.user.company_id.currency_id = cls.env.ref("base.USD")
-        cls.base_pricelist = cls.env.ref("product.list0")
+        cls.base_pricelist = cls.env.ref("shopinvader.pricelist_0")
         cls.base_pricelist.currency_id = cls.env.ref("base.USD")
         cls.shopinvader_variant.record_id.currency_id = cls.env.ref("base.USD")
 
@@ -308,7 +308,7 @@ class CommonTestDownload:
         """
         self._ensure_posted(invoice)
         ctx = {"active_ids": invoice.ids, "active_model": "account.move"}
-        wizard_obj = self.register_payments_obj.with_context(ctx)
+        wizard_obj = self.register_payments_obj.with_context(**ctx)
         register_payments = wizard_obj.create(
             {
                 "payment_date": fields.Date.today(),

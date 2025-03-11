@@ -226,7 +226,7 @@ class AnonymousCartCase(CartCase, CartClearTest):
         sale_order = self.sale_obj.browse(sale_id)
         so_line = fields.first(
             sale_order.order_line.filtered(
-                lambda l, p=self.product_1: l.product_id == p
+                lambda x, p=self.product_1: x.product_id == p
             )
         )
         self.assertEqual(sale_order.pricelist_id, second_pricelist)

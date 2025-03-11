@@ -31,7 +31,7 @@ class TestShopinvaderPartnerBinding(CommonCase):
                 "active_model": self.partner._name,
             }
         )
-        wizard_obj = self.binding_wiz_obj.with_context(context)
+        wizard_obj = self.binding_wiz_obj.with_context(**context)
         fields_list = wizard_obj.fields_get().keys()
         values = wizard_obj.default_get(fields_list)
         values.update({"shopinvader_backend_id": self.backend.id})

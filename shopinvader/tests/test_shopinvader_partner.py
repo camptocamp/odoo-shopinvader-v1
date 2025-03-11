@@ -7,10 +7,10 @@ from psycopg2 import IntegrityError
 
 from odoo.tools import mute_logger
 
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class TestShopinvaderPartner(SavepointComponentCase):
+class TestShopinvaderPartner(TransactionComponentCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

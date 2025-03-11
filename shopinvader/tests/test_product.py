@@ -15,8 +15,8 @@ class ProductCase(ProductCommonCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, test_queue_job_no_delay=True))
-        cls.backend = cls.backend.with_context(test_queue_job_no_delay=True)
+        cls.env = cls.env(context=dict(cls.env.context, queue_job__no_delay=True))
+        cls.backend = cls.backend.with_context(queue_job__no_delay=True)
 
     def test_create_shopinvader_variant(self):
         self.assertEqual(
@@ -29,7 +29,7 @@ class ProductCase(ProductCommonCase):
     #        self.assertEqual(
     #            len(self.shopinvader_variant.shopinvader_categ_ids), 0)
     #        self.backend.bind_all_category()
-    #        self.shopinvader_variant.invalidate_cache()
+    #        self.shopinvader_variant.invalidate_recordset()
     #        self.assertEqual(
     #            len(self.shopinvader_variant.shopinvader_categ_ids), 2)
     #        self.assertEqual(
@@ -47,7 +47,7 @@ class ProductCase(ProductCommonCase):
                 "default": {
                     "discount": 0.0,
                     "original_value": 750.0,
-                    "tax_included": True,
+                    "tax_included": False,
                     "value": 750.0,
                 }
             },
@@ -66,7 +66,7 @@ class ProductCase(ProductCommonCase):
                 "percent_price": 50,
             }
         )
-        self.variant.price = 423.4
+        self.variant.lst_price = 423.4
         self.assertEqual(self.shopinvader_variant.price["default"]["value"], 211.70)
 
     @contextmanager
@@ -79,11 +79,11 @@ class ProductCase(ProductCommonCase):
         shopinv_variant_names = {r: r.name for r in shopinvader_variants}
         shopinv_variant_urls = {r: r.url_url_ids for r in shopinvader_variants}
         yield
-        shopinvader_variants.refresh()
+        shopinvader_variants.invalidate_recordset()
         for shopinv_variant in shopinvader_variants:
             existing_urls = shopinv_variant_urls.get(shopinv_variant)
             new_url = shopinv_variant.url_url_ids.filtered(
-                lambda u: u not in existing_urls
+                lambda u, urls=existing_urls: u not in urls
             )
             if shopinv_variant_names.get(shopinv_variant) != shopinv_variant.name:
                 self.assertEqual(len(new_url), 1)
@@ -311,6 +311,7 @@ class ProductCase(ProductCommonCase):
         self.assertEqual(len(shopinvader_categ), 1)
         self.assertEqual(len(shopinvader_categ.shopinvader_child_ids), len(children))
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_category_child_with_two_lang(self):
         lang = self._install_lang("base.lang_fr")
         self.backend.lang_ids |= lang
@@ -331,6 +332,7 @@ class ProductCase(ProductCommonCase):
             elif binding.lang_id.code == "en_US":
                 self.assertEqual(binding.url_key, "all/saleable")
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_category_with_one_lang(self):
         self.backend.bind_all_category()
         product = self.env.ref("product.product_product_4")
@@ -338,11 +340,12 @@ class ProductCase(ProductCommonCase):
         shopinvader_product = product.shopinvader_bind_ids
         self.assertEqual(len(shopinvader_product.shopinvader_categ_ids), 3)
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_category_with_two_lang(self):
         lang = self._install_lang("base.lang_fr")
         product = self.env.ref("product.product_product_4")
         product.with_context(lang="fr_FR").name = "Bureau Personnalisable"
-        product.flush()
+        product.invalidate_recordset()
         self.backend.lang_ids |= lang
         self.backend.bind_all_category()
         self.backend.bind_all_product()
@@ -353,7 +356,7 @@ class ProductCase(ProductCommonCase):
             if binding.lang_id.code == "fr_FR":
                 self.assertEqual(binding.url_key, "bureau-personnalisable")
             elif binding.lang_id.code == "en_US":
-                self.assertEqual(binding.url_key, "customizable-desk-config")
+                self.assertEqual(binding.url_key, "customizable-desk")
 
     def test_create_product_binding1(self):
         """
@@ -661,6 +664,7 @@ class ProductCase(ProductCommonCase):
         self.assertIn(categ_child, binded_categs)
         self.assertNotIn(categ_grand_parent, binded_categs)
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_category_auto_bind_wizard(self):
         """
         Test if after a product binding, the category is automatically binded
@@ -766,15 +770,16 @@ class ProductCase(ProductCommonCase):
             ]
         )
         self.assertIn(bind_categ, bind_product.shopinvader_categ_ids)
+        bind_product.invalidate_recordset()
         urls = bind_product.url_url_ids
         self.assertEqual(urls.model_id, bind_product)
         bind_product.write({"active": False})
 
-        bind_product.flush()
+        bind_product.invalidate_recordset()
         self.assertEqual(urls.model_id, bind_categ)
         bind_product.write({"active": True})
 
-        bind_product.flush()
+        bind_product.invalidate_recordset()
         self.assertEqual(urls.model_id, bind_product)
 
     def test_product_url2(self):
@@ -830,15 +835,16 @@ class ProductCase(ProductCommonCase):
         )
         self.assertIn(bind_categ_all, bind_product.shopinvader_categ_ids)
         self.assertIn(bind_categ2, bind_product.shopinvader_categ_ids)
+        bind_product.invalidate_recordset()
         urls = bind_product.url_url_ids
         self.assertEqual(urls.model_id, bind_product)
         bind_product.write({"active": False})
 
-        bind_product.flush()
+        bind_product.invalidate_recordset()
         self.assertEqual(urls.model_id, bind_categ2)
         bind_product.write({"active": True})
 
-        bind_product.flush()
+        bind_product.invalidate_recordset()
         self.assertEqual(urls.model_id, bind_product)
 
     @contextmanager
@@ -911,6 +917,7 @@ class ProductCase(ProductCommonCase):
         with self._check_correct_unbind_active(self.shopinvader_variants):
             fields.first(self.shopinvader_variants).write({"active": False})
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_get_invader_variant(self):
         lang = self._install_lang("base.lang_fr")
         self.backend.lang_ids |= lang
@@ -962,7 +969,8 @@ class ProductCase(ProductCommonCase):
         # change order
         tmpl.product_variant_ids[0].default_code = "ZZZZZZZ"
         tmpl.product_variant_ids[0].name = "ZZZZZZ"
-        tmpl.product_variant_ids.invalidate_cache()
+        tmpl.product_variant_ids.invalidate_recordset()
+        invader_variants.invalidate_recordset()
         main_variant1 = tmpl.product_variant_ids[0]
         self.assertNotEqual(main_variant, main_variant1)
         self.assertTrue(
@@ -975,6 +983,7 @@ class ProductCase(ProductCommonCase):
             ),
         )
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_main_product_multi_language(self):
         # Install fr language
         # Create a new product template - so, by default it has only one

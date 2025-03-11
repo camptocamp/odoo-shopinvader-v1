@@ -31,17 +31,17 @@
     <record id="product_filter_view_tree" model="ir.ui.view">
         <field name="model">product.filter</field>
         <field name="arch" type="xml">
-            <tree string="Filter">
+            <list string="Filter">
                 <field name="sequence" widget="handle" />
                 <field name="name" />
-            </tree>
+            </list>
         </field>
     </record>
 
     <record id="product_filter_action" model="ir.actions.act_window">
         <field name="name">Product filter</field>
         <field name="res_model">product.filter</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem

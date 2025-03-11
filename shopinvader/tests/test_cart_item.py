@@ -16,7 +16,7 @@ class ItemCaseMixin:
         cls.product_1 = cls.env.ref("product.product_product_4b")
         cls.product_2 = cls.env.ref("product.product_product_13")
         cls.product_3 = cls.env.ref("product.product_product_11")
-        cls.pricelist = cls.env.ref("product.list0")
+        cls.pricelist = cls.env.ref("shopinvader.pricelist_0")
 
     def extract_cart(self, response):
         self.shopinvader_session["cart_id"] = response["set_session"]["cart_id"]

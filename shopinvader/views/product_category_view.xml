@@ -12,12 +12,12 @@
                     </page>
                     <page name="shopinvader" string="Shopinvader">
                         <field name="shopinvader_bind_ids" nolabel="1">
-                            <tree>
+                            <list>
                                 <field name="backend_id" />
                                 <field name="lang_id" />
                                 <field name="sync_date" />
                                 <field name="external_id" />
-                            </tree>
+                            </list>
                         </field>
                     </page>
                 </notebook>

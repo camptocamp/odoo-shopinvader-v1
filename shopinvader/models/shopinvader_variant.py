@@ -7,9 +7,7 @@ from contextlib import contextmanager
 from itertools import groupby
 
 from odoo import api, fields, models
-from odoo.tools import float_compare, float_is_zero
 
-from ..utils import float_round
 from .tools import sanitize_attr_name
 
 
@@ -155,7 +153,7 @@ class ShopinvaderVariant(models.Model):
         short_name = ", ".join(attributes.mapped("name"))
         full_name = self.shopinvader_display_name
         if short_name:
-            full_name += " (%s)" % short_name
+            full_name += f" ({short_name})"
         return full_name, short_name
 
     def _compute_names(self):
@@ -294,8 +292,10 @@ class ShopinvaderVariant(models.Model):
         return res
 
     def _compute_main_product(self):
-        # Respect same order.
-        order_by = [x.strip() for x in self.env["product.product"]._order.split(",")]
+        # Respect same order (split is to clean the direction eg: `desc` or `asc`)
+        order_by = [
+            x.split()[0].strip() for x in self.env["product.product"]._order.split(",")
+        ]
         backends = self.mapped("backend_id")
         fields_to_read = ["shopinvader_product_id", "backend_id", "lang_id"] + order_by
         product_ids = self.mapped("shopinvader_product_id").ids
