@@ -141,12 +141,13 @@ class ShopinvaderProduct(models.Model):
                 shopinv_variants |= shopinv_variant_obj.create(vals)
         return shopinv_variants
 
-    @api.model
-    def create(self, vals):
-        binding = super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        bindings = super().create(vals_list)
         if self.env.context.get("map_children"):
-            binding._create_shopinvader_variant()
-        return binding
+            for binding in bindings:
+                binding._create_shopinvader_variant()
+        return bindings
 
     def _get_url_keywords(self):
         self.ensure_one()
