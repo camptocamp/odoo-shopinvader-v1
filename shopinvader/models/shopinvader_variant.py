@@ -173,7 +173,7 @@ class ShopinvaderVariant(models.Model):
         pricelist = self.backend_id.pricelist_id
         default_role = self.backend_id.customer_default_role
         if pricelist:
-            res[default_role] = self._get_price(
+            res[default_role] = self.record_id._get_price(
                 pricelist=pricelist, company=self.backend_id.company_id
             )
         return res
@@ -185,111 +185,6 @@ class ShopinvaderVariant(models.Model):
                 sanitized_key = sanitize_attr_name(att_value.attribute_id)
                 variant_attributes[sanitized_key] = att_value.name
             record.variant_attributes = variant_attributes
-
-    def _get_price(
-        self, qty=1.0, pricelist=None, fposition=None, company=None, date=None
-    ):
-        """Computes the product prices
-
-        :param qty:         The product quantity, used to apply pricelist rules.
-        :param pricelist:   Optional. Get prices for a specific pricelist.
-        :param fposition:   Optional. Apply fiscal position to product taxes.
-        :param company:     Optional.
-        :param date:        Optional.
-
-        :returns: dict with the following keys:
-
-            <value>                 The product unitary price
-            <tax_included>          True if product taxes are included in <price>.
-
-            If the pricelist.discount_policy is "without_discount":
-            <original_value>        The original price (before pricelist is applied).
-            <discount>              The discounted percentage.
-        """
-        self.ensure_one()
-        AccountTax = self.env["account.tax"]
-        product = self.record_id
-        # Apply company
-        product = product.with_company(company) if company else product
-        company = company or self.env.company
-        # Always filter taxes by the company
-        taxes = product.taxes_id.filtered(lambda tax: tax.company_id == company)
-        # Apply fiscal position
-        taxes = fposition.map_tax(taxes, product) if fposition else taxes
-        # Set context. Some of the methods used here depend on these values
-        product_context = dict(
-            self.env.context,
-            quantity=qty,
-            pricelist=pricelist.id if pricelist else None,
-            fiscal_position=fposition,
-            date=date,
-        )
-        product = product.with_context(**product_context)
-        pricelist = pricelist.with_context(**product_context) if pricelist else None
-        # If we have a pricelist, use product.price as it already accounts
-        # for pricelist rules and quantity (in context)
-        price_unit = product.price if pricelist else product.lst_price
-        price_unit = AccountTax._fix_tax_included_price_company(
-            price_unit, product.taxes_id, taxes, company
-        )
-        price_dp = self.env["decimal.precision"].precision_get("Product Price")
-        price_unit = float_round(price_unit, price_dp)
-        res = {
-            "value": price_unit,
-            "tax_included": any(tax.price_include for tax in taxes),
-            # Default values in case price.discount_policy != "without_discount"
-            "original_value": price_unit,
-            "discount": 0.0,
-        }
-        # Handle pricelists.discount_policy == "without_discount"
-        if pricelist and pricelist.discount_policy == "without_discount":
-            # Get the price rule
-            price_unit, rule_id = pricelist.get_product_price_rule(
-                product, qty, None, date=date
-            )
-            # Get the price before applying the pricelist
-            SaleOrderLine = self.env["sale.order.line"].with_context(**product_context)
-            original_price_unit, currency = SaleOrderLine._get_real_price_currency(
-                product, rule_id, qty, product.uom_id, pricelist.id
-            )
-            price_dp = self.env["decimal.precision"].precision_get("Product Price")
-            # Convert currency if necessary
-            if (
-                not float_is_zero(original_price_unit, precision_digits=price_dp)
-                and pricelist.currency_id != currency
-            ):
-                original_price_unit = currency._convert(
-                    original_price_unit,
-                    pricelist.currency_id,
-                    company or self.env.company,
-                    fields.Date.today(),
-                )
-            # Compute discount
-            if not float_is_zero(
-                original_price_unit, precision_digits=price_dp
-            ) and float_compare(
-                original_price_unit, price_unit, precision_digits=price_dp
-            ):
-                discount = (
-                    (original_price_unit - price_unit) / original_price_unit * 100
-                )
-                # Apply the right precision on discount
-                discount_dp = self.env["decimal.precision"].precision_get("Discount")
-                discount = float_round(discount, discount_dp)
-            else:
-                discount = 0.00
-            # Compute prices
-            original_price_unit = AccountTax._fix_tax_included_price_company(
-                original_price_unit, product.taxes_id, taxes, company
-            )
-            original_price_unit = float_round(original_price_unit, price_dp)
-            res.update(
-                {
-                    "original_value": original_price_unit,
-                    "discount": discount,
-                }
-            )
-        return res
 
     def _compute_main_product(self):
         # Respect same order (split is to clean the direction eg: `desc` or `asc`)
