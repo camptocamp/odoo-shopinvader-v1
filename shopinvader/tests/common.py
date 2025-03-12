@@ -155,10 +155,10 @@ class CommonCase(TransactionCase, CommonMixin):
         # Force service registration by the creation of a fake controller
         cls._ShopinvaderControllerTest = ControllerTest
         CommonMixin._setup_backend(cls)
-        # FIXME: likely not needed anymore in v18
+        # TODO FIXME
         # It seem that setUpComponent / setUpRegistry loose stuff from
         # the cache so we do an explicit flush here to avoid losing data
-        # cls.env["base"].flush_recordset()
+        cls.env["base"].flush_model()
         cls.setUpComponent()
         cls.setUpRegistry()
 
@@ -313,7 +313,7 @@ class CommonTestDownload:
             {
                 "payment_date": fields.Date.today(),
                 "journal_id": self.bank_journal_euro.id,
-                "payment_method_id": self.payment_method_manual_in.id,
+                "payment_method_line_id": self.payment_method_line_manual_in.id,
             }
         )
         register_payments._create_payments()

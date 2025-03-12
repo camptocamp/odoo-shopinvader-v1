@@ -23,6 +23,12 @@ class CartCase(CommonCase):
         self.product_1 = self.env.ref("product.product_product_4b")
         templates = self.env["product.template"].search([])
         templates.write({"taxes_id": [(6, 0, [self.env.ref("shopinvader.tax_1").id])]})
+        self.env["account.fiscal.position"].search(
+            [
+                ("auto_apply", "=", True),
+                ("id", "not in", [self.fposition.id, self.default_fposition.id]),
+            ]
+        ).auto_apply = False
 
     def _create_notification_config(self):
         template = self.env.ref("account.email_template_edi_invoice")
@@ -186,7 +192,7 @@ class AnonymousCartCase(CartCase, CartClearTest):
                         "price_surcharge": -100,
                         "base_pricelist_id": first_pricelist.id,
                         "date_start": fields.Date.today(),
-                        "date_end": fields.Date.today(),
+                        "date_end": fields.Date.add(fields.Date.today(), days=1),
                     },
                 )
             ],
