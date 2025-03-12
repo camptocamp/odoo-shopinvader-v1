@@ -58,9 +58,12 @@
         <field name="tax_dest_id" ref="tax_3" />
     </record>
 
+    <record id="account_analytic_plan_0" model="account.analytic.plan">
+        <field name="name">ShopInvader Analytic Plan</field>
+    </record>
+
     <record id="account_analytic_0" model="account.analytic.account">
         <field name="name">ShopInvader Analytic</field>
-        <!-- TODO: anything better here? -->
-        <field name="plan_id" ref="analytic.analytic_plan_projects" />
+        <field name="plan_id" ref="shopinvader.account_analytic_plan_0" />
     </record>
 </odoo>

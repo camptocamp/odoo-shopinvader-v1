@@ -124,7 +124,7 @@ class TestShopinvaderPartner(TransactionComponentCase):
             }
         )
         self.assertEqual(partner, binding.record_id)
-        partner.refresh()
+        partner.invalidate_recordset()
         self.assertTrue(partner.child_ids)
         self.assertEqual(1, len(partner.child_ids))
         child = partner.child_ids

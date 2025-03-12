@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- oca-hooks:disable=xml-duplicate-record-id -->
 <odoo noupdate="1">
     <record id="pricelist_0" model="product.pricelist">
         <field name="name">Default Pricelist</field>
@@ -24,15 +25,7 @@
         To be sure that only our new item is assigned to the price list
         we reassign the item_ids....
     -->
-    <function model="product.pricelist" name="write">
-        <value
-            model="product.pricelist"
-            eval="obj().env.ref('shopinvader.pricelist_1').ids"
-        />
-        <value
-            eval="{
-          'item_ids': [(6, 0, [ref('shopinvader.item_1')])],
-          }"
-        />
-    </function>
+    <record id="pricelist_1" model="product.pricelist">
+        <field name="item_ids" eval="[(6, 0, [ref('shopinvader.item_1')])]" />
+    </record>
 </odoo>

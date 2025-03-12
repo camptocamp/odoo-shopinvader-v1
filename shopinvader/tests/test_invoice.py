@@ -15,9 +15,13 @@ class TestInvoice(CommonCase, CommonTestDownload):
         cls.payment_method_manual_in = cls.env.ref(
             "account.account_payment_method_manual_in"
         )
+        cls.payment_method_line_manual_in = cls.env[
+            "account.payment.method.line"
+        ].search([("payment_method_id", "=", cls.payment_method_manual_in.id)], limit=1)
         cls.bank_journal_euro = cls.journal_obj.create(
             {"name": "Bank", "type": "bank", "code": "BNK627"}
         )
+        cls.payment_method_line_manual_in.journal_id = cls.bank_journal_euro
         cls.invoice_obj = cls.env["account.move"]
         cls.invoice = cls._confirm_and_invoice_sale(cls, cls.sale)
         cls.non_sale_invoice = cls.invoice.copy()
