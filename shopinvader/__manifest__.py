@@ -22,6 +22,7 @@
         "base_url",
         "base_vat",
         "component_event",
+        "product_get_price_helper",
         "sale",
         "sale_discount_display_amount",
         "server_environment",
