@@ -139,9 +139,7 @@ class CartService(Component):
         if len(cart) != 1:
             error(
                 field,
-                self.env.self.env._(
-                    "The cart does not exists or does not belong to you!"
-                ),
+                self.env._("The cart does not exists or does not belong to you!"),
             )
 
     def _validator_copy(self):
@@ -240,13 +238,12 @@ class CartService(Component):
 
     def _upgrade_cart_item_quantity(self, cart, item, params, action="replace"):
         vals = self._upgrade_cart_item_quantity_vals(item, params, action=action)
-        with self.env.norecompute():
-            new_values = item.play_onchanges(vals, vals.keys())
-            # clear cache after play onchange
-            real_line_ids = [line.id for line in cart.order_line if line.id]
-            cart._cache["order_line"] = tuple(real_line_ids)
-            vals.update(new_values)
-            item.order_id.write({"order_line": [(1, item.id, vals)]})
+        new_values = item.play_onchanges(vals, vals.keys())
+        # clear cache after play onchange
+        real_line_ids = [line.id for line in cart.order_line if line.id]
+        cart._cache["order_line"] = tuple(real_line_ids)
+        vals.update(new_values)
+        item.order_id.update({"order_line": [(1, item.id, vals)]})
         cart.flush_recordset()
 
     def _do_clear_cart_cancel(self, cart):
@@ -285,12 +282,14 @@ class CartService(Component):
         :return: sale.order recordset
         """
         clear_option = self.shopinvader_backend.clear_cart_options
-        do_clear = f"{clear_option}_do_clear_cart_%s"
+        do_clear = f"_do_clear_cart_{clear_option}"
         if hasattr(self, do_clear):
             cart = getattr(self, do_clear)(cart)
         else:
             _logger.error("The %s function doesn't exists.", do_clear)
-            raise NotImplementedError(self.env._("Missing feature to clear the cart!"))
+            raise NotImplementedError(
+                self.env._("Missing feature to clear the cart: %s") % clear_option
+            )
         return cart
 
     def _check_allowed_product(self, cart, params):
@@ -306,8 +305,7 @@ class CartService(Component):
         if item:
             self._upgrade_cart_item_quantity(cart, item, params, action="sum")
         else:
-            with self.env.norecompute():
-                item = self._create_cart_line(cart, params)
+            item = self._create_cart_line(cart, params)
             cart.flush_recordset()
         return item
 
@@ -324,7 +322,7 @@ class CartService(Component):
             vals["name"] = self._get_sale_order_line_name(vals)
         existing_lines = cart.order_line
         # A write on the cart itself to trigger changes
-        cart.write({"order_line": [(0, False, vals)]})
+        cart.update({"order_line": [(0, False, vals)]})
         return cart.order_line - existing_lines
 
     def _get_sale_order_line_name(self, vals):
@@ -467,8 +465,9 @@ class CartService(Component):
         vals.update(self.env["sale.order"].play_onchanges(vals, vals.keys()))
         # Set optional default values from backend configuration
         backend = self.shopinvader_backend
-        if "analytic_account_id" not in cart_params and backend.account_analytic_id:
-            vals["analytic_account_id"] = backend.account_analytic_id.id
+        # TODO: analytic account field is not avail anymore on SO. TO CHECK!
+        # if "analytic_account_id" not in cart_params and backend.account_analytic_id:
+        #     vals["analytic_account_id"] = backend.account_analytic_id.id
         if "pricelist_id" not in cart_params:
             pricelist = self._get_pricelist(partner)
             if pricelist:

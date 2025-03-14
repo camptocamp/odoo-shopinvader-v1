@@ -163,3 +163,5 @@ class AddressTestCase:
 
 class AddressCase(CommonAddressCase, AddressTestCase):
     """Test address"""
+
+    allow_inherited_tests_method = True

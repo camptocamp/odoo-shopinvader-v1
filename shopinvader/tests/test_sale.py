@@ -35,6 +35,8 @@ class CommonSaleCase(CommonCase):
 
 
 class SaleCase(CommonSaleCase, CommonTestDownload):
+    allow_inherited_tests_method = True
+
     def _confirm_and_invoice_sale(self):
         self.sale.action_confirm()
         for line in self.sale.order_line:

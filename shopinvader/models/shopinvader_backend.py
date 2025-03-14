@@ -63,6 +63,7 @@ class ShopinvaderBackend(models.Model):
         string="Pricelist",
         default=lambda self: self._default_pricelist_id(),
     )
+    # TODO: analytic account field is not avail anymore on SO. TO CHECK!
     account_analytic_id = fields.Many2one(
         comodel_name="account.analytic.account",
         string="Analytic account",

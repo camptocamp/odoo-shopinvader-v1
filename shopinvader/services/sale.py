@@ -31,16 +31,8 @@ class SaleService(Component):
     def search(self, **params):
         return self._paginate_search(**params)
 
-    def _get_report_action(self, target, params=None):
-        """
-        Get the action/dict to generate the report
-        :param target: recordset
-        :param params: dict
-        :return: dict/action
-        """
-        return self.env.ref("sale.action_report_saleorder").report_action(
-            target, config=False
-        )
+    def _get_report_ref(self, params=None):
+        return self.env.ref("sale.action_report_saleorder")
 
     def ask_email_invoice(self, _id):
         """
@@ -143,7 +135,7 @@ class SaleService(Component):
     def _cancel(self, sale, reset_to_cart=False):
         if not self._is_cancel_allowed(sale):
             raise UserError(self.env._("This order cannot be cancelled"))
-        sale.action_cancel()
+        sale.with_context(disable_cancel_warning=True).action_cancel()
         if reset_to_cart:
             sale.action_draft()
             sale.typology = "cart"

@@ -174,19 +174,17 @@ class TestInvoice(CommonCase, CommonTestDownload):
     def test_report_get(self):
         default_report = self.env.ref("account.account_invoices")
         self.assertEqual(
-            self.invoice_service._get_report_action(self.invoice),
-            default_report.report_action(self.invoice, config=False),
+            self.invoice_service._get_report_ref(self.invoice), default_report
         )
         # set a custom report
         custom = default_report.copy({"name": "My custom report"})
         self.backend.invoice_report_id = custom
-        self.assertEqual(
-            self.invoice_service._get_report_action(self.invoice)["name"],
-            "My custom report",
-        )
+        self.assertEqual(self.invoice_service._get_report_ref(self.invoice), custom)
 
 
 class DeprecatedTestInvoice(TestInvoice):
+    allow_inherited_tests_method = True
+
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:

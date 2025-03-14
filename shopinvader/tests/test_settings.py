@@ -41,7 +41,6 @@ EXPECTED_GET_INDUSTRY = (
     "Water supply",
     "Wholesale/Retail",
 )
-EXPECTED_GET_CURRENCY = ["EUR", "USD"]
 EXPECTED_GET_LANG = ["English (US)"]
 
 
@@ -55,7 +54,7 @@ class SettingsTestCase(CommonCase):
 
     def _check_names_identical(self, to_check, expected_vals):
         actual_vals = {el["name"] for el in to_check}
-        self.assertSetEqual(set(expected_vals), actual_vals)
+        self.assertEqual(sorted(set(expected_vals)), sorted(actual_vals))
 
     def test_country(self):
         res = self.settings_service.dispatch("countries")
@@ -70,8 +69,10 @@ class SettingsTestCase(CommonCase):
         self._check_names_identical(res, EXPECTED_GET_INDUSTRY)
 
     def test_currency(self):
+        self.backend.currency_ids.active = True
+        self.backend.currency_ids.flush_recordset()
         res = self.settings_service.dispatch("currencies")
-        self._check_names_identical(res, EXPECTED_GET_CURRENCY)
+        self._check_names_identical(res, self.backend.currency_ids.mapped("name"))
 
     def test_lang(self):
         res = self.settings_service.dispatch("languages")
@@ -82,5 +83,7 @@ class SettingsTestCase(CommonCase):
         self._check_names_identical(res["countries"], EXPECTED_GET_COUNTRY)
         self._check_names_identical(res["titles"], EXPECTED_GET_TITLE)
         self._check_names_identical(res["industries"], EXPECTED_GET_INDUSTRY)
-        self._check_names_identical(res["currencies"], EXPECTED_GET_CURRENCY)
+        self._check_names_identical(
+            res["currencies"], self.backend.currency_ids.mapped("name")
+        )
         self._check_names_identical(res["languages"], EXPECTED_GET_LANG)
