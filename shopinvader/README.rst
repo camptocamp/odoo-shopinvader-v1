@@ -89,6 +89,7 @@ Authors
 -------
 
 * Akretion
+* Camptocamp
 
 Contributors
 ------------
