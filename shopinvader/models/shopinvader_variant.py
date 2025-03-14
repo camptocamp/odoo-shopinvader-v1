@@ -134,6 +134,7 @@ class ShopinvaderVariant(models.Model):
         :param vals: dict
         :return: bool
         """
+
         with self._action_product_toggle_active():
             result = super().write(vals)
         return result

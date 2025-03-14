@@ -5,8 +5,6 @@ from odoo.tools import mute_logger
 from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-@mute_logger("odoo.models.unlink")
-@mute_logger("odoo.addons.base.models.ir_model")
 class TestShopinvaderVariantBindingWizard(TransactionComponentCase):
     @classmethod
     def setUpClass(cls):
@@ -25,6 +23,7 @@ class TestShopinvaderVariantBindingWizard(TransactionComponentCase):
         cls.unbind_wizard_model = cls.env["shopinvader.variant.unbinding.wizard"]
         cls.product_bind_model = cls.env["shopinvader.variant"]
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_binding(self):
         """
         Select a product and
@@ -141,6 +140,7 @@ class TestShopinvaderVariantBindingWizard(TransactionComponentCase):
 
         self.assertEqual(len(bind_record), 1)
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_inactivation(self):
         """
         Select a product and bind it to a Lengow Catalogue

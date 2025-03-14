@@ -166,22 +166,23 @@ class AbstractItemCase(ItemCaseMixin):
         self.assertEqual(cart.pricelist_id, self.pricelist)
         return cart_data["lines"]["items"][0]["amount"]
 
-    def test_pricelist_product_price_unit_without_discount(self):
-        self.pricelist.discount_policy = "without_discount"
-        amount = self._test_pricelist_product()
-        # into the cart, the price must be the price without discount
-        self.assertEqual(amount["price"], 16.5)
-        # but the total for the line into the cart info must be the price with
-        # discount
-        self.assertEqual(amount["total"], 14.85)
+    # FIXME v18: no discount_policy anymore
+    # def test_pricelist_product_price_unit_without_discount(self):
+    #     self.pricelist.discount_policy = "without_discount"
+    #     amount = self._test_pricelist_product()
+    #     # into the cart, the price must be the price without discount
+    #     self.assertEqual(amount["price"], 16.5)
+    #     # but the total for the line into the cart info must be the price with
+    #     # discount
+    #     self.assertEqual(amount["total"], 14.85)
 
-    def test_pricelist_product_price_unit_with_discount(self):
-        self.pricelist.discount_policy = "with_discount"
-        amount = self._test_pricelist_product()
-        # into the cart, the price must be the price with discount
-        self.assertEqual(amount["price"], 14.85)
-        # same for the total
-        self.assertEqual(amount["total"], 14.85)
+    # def test_pricelist_product_price_unit_with_discount(self):
+    #     self.pricelist.discount_policy = "with_discount"
+    #     amount = self._test_pricelist_product()
+    #     # into the cart, the price must be the price with discount
+    #     self.assertEqual(amount["price"], 14.85)
+    #     # same for the total
+    #     self.assertEqual(amount["total"], 14.85)
 
     def test_upgrade_last_update_date(self):
         last_external_update_date = self._get_last_external_update_date(self.cart)
@@ -203,6 +204,9 @@ class AbstractItemCase(ItemCaseMixin):
 
 
 class AnonymousItemCase(AbstractItemCase, CommonCase):
+    # Mandatory to allow to run the test from AbstractItemCase
+    allow_inherited_tests_method = True
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -223,6 +227,8 @@ class AnonymousItemCase(AbstractItemCase, CommonCase):
 
 
 class ConnectedItemCase(AbstractItemCase, CommonCase):
+    allow_inherited_tests_method = True
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

@@ -85,16 +85,10 @@ class InvoiceService(Component):
     def _get_sale_order_domain(self):
         return self.component(usage="sales")._get_base_search_domain()
 
-    def _get_report_action(self, target, params=None):
-        """Get the action/dict to generate the report.
-
-        :param target: recordset
-        :return: dict/action
-        """
-        report = self.shopinvader_backend.invoice_report_id
-        if not report:
-            report = self.env.ref("account.account_invoices")
-        return report.report_action(target, config=False)
+    def _get_report_ref(self, params=None):
+        return self.shopinvader_backend.invoice_report_id or self.env.ref(
+            "account.account_invoices"
+        )
 
 
 class DeprecatedInvoiceService(Component):

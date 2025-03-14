@@ -8,13 +8,14 @@ from unittest import mock
 
 from odoo import fields
 from odoo.exceptions import MissingError
-from odoo.tests import TransactionCase
+from odoo.tests import RecordCapturer, TransactionCase
 
 from odoo.addons.base_rest.controllers.main import RestController
 from odoo.addons.base_rest.core import _rest_controllers_per_module
 from odoo.addons.base_rest.tests.common import BaseRestCase, RegistryMixin
 from odoo.addons.component.tests.common import ComponentMixin
 from odoo.addons.queue_job.job import Job
+from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.shopinvader.models.track_external_mixin import TrackExternalMixin
 
 from .. import shopinvader_response, utils
@@ -320,42 +321,37 @@ class CommonTestDownload:
 
 
 class NotificationCaseMixin:
-    def _check_notification(self, notif_type, record):
-        notif = self.env["shopinvader.notification"].search(
+    def _get_notification(self, notif_type):
+        return self.env["shopinvader.notification"].search(
             [
                 ("backend_id", "=", self.backend.id),
                 ("notification_type", "=", notif_type),
             ]
         )
-        vals = notif.template_id.generate_email(
-            record.id,
-            [
-                "subject",
-                "body_html",
-                "email_from",
-                "email_to",
-                "partner_to",
-                "email_cc",
-                "reply_to",
-                "scheduled_date",
-            ],
-        )
-        message = self.env["mail.message"].search(
-            [
-                ("subject", "=", vals["subject"]),
-                ("model", "=", record._name),
-                ("res_id", "=", record.id),
-            ]
-        )
-        self.assertEqual(len(message), 1)
 
-    def _find_notification_job(self, **kw):
-        leafs = dict(
-            channel_method_name="<shopinvader.notification>.send",
-            model_name="shopinvader.notification",
-        )
-        leafs.update(kw)
-        domain = []
-        for k, v in leafs.items():
-            domain.append((k, "=", v))
-        return self.env["queue.job"].search(domain, limit=1)
+    @contextmanager
+    def _catpure_notification(
+        self, notif_type, notif_target_model=None, notif_target=None, job_props=None
+    ):
+        """Ensure notification job is scheduled for the given type and notif_target."""
+        notif = self._get_notification(notif_type)
+        if notif_target and not notif_target_model:
+            notif_target_model = notif_target._name
+        with (
+            trap_jobs() as trap,
+            RecordCapturer(self.env[notif_target_model], []) as capt,
+        ):
+            yield
+            notif_target = notif_target or capt.records[0]
+            trap.assert_jobs_count(1)
+            job_props = job_props or {}
+            if job_props.get("description"):
+                job_props["description"] = job_props["description"].format(
+                    partner_id=notif_target.id
+                )
+            trap.assert_enqueued_job(
+                notif.send, args=(notif_target.id,), properties=job_props
+            )
+            with RecordCapturer(self.env["mail.message"], []) as capture_messages:
+                trap.perform_enqueued_jobs()
+                self.assertEqual(len(capture_messages.records), 1)
