@@ -16,7 +16,6 @@
     "depends": [
         "base_rest",
         "jsonifier",
-        # TODO: still needed?
         "base_sparse_field_list_support",
         "base_url",
         "base_vat",
