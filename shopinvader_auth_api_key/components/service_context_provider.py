@@ -32,7 +32,7 @@ class ShopinvaderAuthApiKeyServiceContextProvider(Component):
                 if len(partner) > 1:
                     _logger.warning(
                         "More than one shopinvader.partner found for:"
-                        " backend_id={} email={}".format(backend.id, partner_email)
+                        f" backend_id={backend.id} email={partner_email}"
                     )
                 # Could be because the email is not related to a partner or
                 # because the partner is inactive

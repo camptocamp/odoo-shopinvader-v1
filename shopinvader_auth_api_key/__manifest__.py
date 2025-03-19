@@ -8,7 +8,7 @@
     "version": "14.0.1.1.2",
     "license": "AGPL-3",
     "author": "ACSONE SA/NV",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "depends": ["shopinvader", "base_rest_auth_api_key"],
     "data": ["views/shopinvader_backend_view.xml"],
     "demo": ["demo/auth_api_key_demo.xml", "demo/shopinvader_backend_demo.xml"],
