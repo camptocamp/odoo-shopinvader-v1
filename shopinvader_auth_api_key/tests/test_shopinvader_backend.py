@@ -20,7 +20,7 @@ class TestShopinvaderBackend(common.CommonCase):
                     "auth_api_key_id": backend1.auth_api_key_id.id,
                 }
             )
-            backend2.flush()
+            backend2.flush_recordset()
 
         backend2.write(
             {
@@ -29,4 +29,4 @@ class TestShopinvaderBackend(common.CommonCase):
                 ).id,
             }
         )
-        backend2.flush()
+        backend2.flush_recordset()

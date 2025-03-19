@@ -1,7 +1,7 @@
 # Copyright 2021 ACSONE SA/NV
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
-from odoo import _, api, fields, models, tools
+from odoo import api, fields, models, tools
 
 from odoo.addons.server_environment import serv_config
 
@@ -21,7 +21,7 @@ class ShopinvaderBackend(models.Model):
         (
             "auth_api_key_id_uniq",
             "EXCLUDE (auth_api_key_id WITH =) WHERE (auth_api_key_id is not null)",
-            _("An authentication API Key can be used by only one backend."),
+            "An authentication API Key can be used by only one backend.",
         )
     ]
 
@@ -46,5 +46,5 @@ class ShopinvaderBackend(models.Model):
 
     def write(self, values):
         if "auth_api_key_id" in values:
-            self._get_id_from_auth_api_key.clear_cache(self.env[self._name])
+            self.env.registry.clear_cache()
         return super().write(values)
