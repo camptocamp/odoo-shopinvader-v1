@@ -29,6 +29,7 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
                 "API_KEY": self.backend.auth_api_key_id.key,
                 "PARTNER_EMAIL": "osiris@shopinvader.com",
             },
+            timeout=10,
         )
         self.assertEqual(result.status_code, 200)
         data = result.json()["data"]
@@ -44,6 +45,7 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
                 "API_KEY": self.backend.auth_api_key_id.key,
                 "PARTNER_EMAIL": "osiris@shopinvader.com",
             },
+            timeout=10,
         )
         self.assertEqual(result.status_code, 200)
         data = result.json()["data"]
@@ -64,13 +66,16 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
                 "API_KEY": "WRONG",
                 "PARTNER_EMAIL": "osiris@shopinvader.com",
             },
+            timeout=10,
         )
         self.assertEqual(result.status_code, 403)
         self.assertEqual(result.json(), {"code": 403, "name": "Forbidden"})
 
     def test_get_addresses_without_partner(self):
         result = requests.get(
-            self.url, headers={"API_KEY": self.backend.auth_api_key_id.key}
+            self.url,
+            headers={"API_KEY": self.backend.auth_api_key_id.key},
+            timeout=10,
         )
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.json(), {"data": []})
@@ -86,12 +91,16 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
         :return:
         """
         # This email shouldn't exist
-        email = "%s@random.com" % uuid4()
+        email = f"{uuid4()}@random.com"
         headers = {
             "API_KEY": self.backend.auth_api_key_id.key,
             "PARTNER_EMAIL": email,
         }
-        res = requests.get(self.url, headers=headers)
+        res = requests.get(
+            self.url,
+            headers=headers,
+            timeout=10,
+        )
         self.assertEqual(res.status_code, 404)
 
     @mute_logger(
@@ -110,7 +119,11 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
             "API_KEY": self.backend.auth_api_key_id.key,
             "PARTNER_EMAIL": self.partner.email,
         }
-        res = requests.get(self.url, headers=headers)
+        res = requests.get(
+            self.url,
+            headers=headers,
+            timeout=10,
+        )
         self.assertEqual(res.status_code, 404)
 
     def test_email_not_provided(self):
@@ -122,4 +135,8 @@ class ShopinvaderControllerCase(ShopinvaderRestCase):
         """
         # Do not provide PARTNER_EMAIL key
         headers = {"API_KEY": self.backend.auth_api_key_id.key}
-        requests.get(self.url, headers=headers)
+        requests.get(
+            self.url,
+            headers=headers,
+            timeout=10,
+        )

@@ -46,5 +46,5 @@ class ShopinvaderBackend(models.Model):
 
     def write(self, values):
         if "auth_api_key_id" in values:
-            self._get_id_from_auth_api_key.clear_cache(self.env[self._name])
+            self.env.registry.clear_cache()
         return super().write(values)
