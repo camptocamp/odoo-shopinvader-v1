@@ -5,7 +5,6 @@ from odoo.addons.base_rest.controllers import main
 
 
 class InvaderController(main.RestController):
-
     _root_path = "/shopinvader/"
     _collection_name = "shopinvader.backend"
     _default_auth = "api_key"

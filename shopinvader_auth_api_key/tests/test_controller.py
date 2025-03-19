@@ -16,7 +16,7 @@ from odoo.addons.shopinvader.tests.common import ShopinvaderRestCase
 @unittest.skipIf(os.getenv("SKIP_HTTP_CASE"), "HTTP case disabled.")
 class ShopinvaderControllerCase(ShopinvaderRestCase):
     def setUp(self, *args, **kwargs):
-        super(ShopinvaderControllerCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.url = self.base_url + "/shopinvader/addresses"
         self.partner = self.env.ref("shopinvader.partner_1")
         self.address_1 = self.env.ref("shopinvader.partner_1_address_1")

@@ -7,7 +7,7 @@ class BaseShopinvaderService(AbstractComponent):
     _inherit = "base.shopinvader.service"
 
     def _get_openapi_default_parameters(self):
-        defaults = super(BaseShopinvaderService, self)._get_openapi_default_parameters()
+        defaults = super()._get_openapi_default_parameters()
         defaults.extend(
             [
                 {
