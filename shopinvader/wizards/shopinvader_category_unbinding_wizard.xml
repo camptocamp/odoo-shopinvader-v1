@@ -9,15 +9,15 @@
         <field name="model">shopinvader.category.unbinding.wizard</field>
         <field name="arch" type="xml">
             <form string="Shopinvader Category Unbinding Wizard">
-               <field name='shopinvader_category_ids' />
+                <field name='shopinvader_category_ids' />
                 <footer>
                     <button
-                        string="Unbind Categories"
-                        name="action_unbind_categories"
-                        type="object"
-                        class="oe_highlight"
-                        confirm="Do you really want to unbind these categories ?"
-                    />
+                    string="Unbind Categories"
+                    name="action_unbind_categories"
+                    type="object"
+                    class="oe_highlight"
+                    confirm="Do you really want to unbind these categories ?"
+                />
                     or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
@@ -41,5 +41,4 @@
             eval="[(4, ref('shopinvader.group_shopinvader_manager'))]"
         />
     </record>
-
 </odoo>

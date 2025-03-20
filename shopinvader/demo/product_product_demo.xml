@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="product_template_chair_vortex" model="product.template">
         <field name="name">Vortex Side Chair</field>
         <field name="categ_id" ref="product_category_27" />
@@ -24,8 +23,8 @@
         />
     </record>
 
-     <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_chair_vortex_attribute_color_white',
@@ -37,10 +36,10 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_chair_vortex_white',
@@ -52,7 +51,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_chair_vortex_white" model="product.product">
         <field name="product_tmpl_id" ref="product_template_chair_vortex" />
@@ -87,8 +86,8 @@
         />
     </record>
 
-     <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_armchair_mid_century_attribute_color_blue',
@@ -108,10 +107,10 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_armchair_mid_century_blue',
@@ -131,7 +130,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_armchair_mid_century_blue" model="product.product">
         <field name="product_tmpl_id" ref="product_template_armchair_mid_century" />
@@ -168,7 +167,6 @@
         <field name="type">consu</field>
     </record>
 
-
     <record id="product_template_chair_mid_century" model="product.template">
         <field
             name="name"
@@ -181,7 +179,7 @@
         <field name="type">consu</field>
     </record>
 
-          <!-- the product template attribute lines have to be defined before creating the variants -->
+    <!-- the product template attribute lines have to be defined before creating the variants -->
     <record
         id="product_template_chair_mid_century_product_template_attribute_line_color"
         model="product.template.attribute.line"
@@ -194,8 +192,8 @@
         />
     </record>
 
-     <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_chair_mid_century_attribute_color_blue',
@@ -215,10 +213,10 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_chair_mid_century_blue',
@@ -238,8 +236,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
-
+    </function>
 
     <record id="product_product_chair_mid_century_blue" model="product.product">
         <field name="product_tmpl_id" ref="product_template_chair_mid_century" />
@@ -288,7 +285,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_tv_cabinet_concept_design_attribute_color_white',
@@ -296,10 +293,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_tv_cabinet_concept_design_white',
@@ -307,7 +304,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record
         id="product_product_tv_cabinet_concept_design_white"
@@ -343,7 +340,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_coffee_table_caftman_attribute_color_brown',
@@ -351,10 +348,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_coffee_table_caftman_brown',
@@ -362,7 +359,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_coffee_table_caftman_brown" model="product.product">
         <field name="product_tmpl_id" ref="product_template_coffee_table_caftman" />
@@ -405,7 +402,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_tv_stand_wood_and_glass_attribute_color_blue',
@@ -413,10 +410,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_tv_stand_wood_and_glass_white',
@@ -424,7 +421,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_tv_stand_wood_and_glass_white" model="product.product">
         <field name="product_tmpl_id" ref="product_template_tv_stand_wood_and_glass" />
@@ -468,7 +465,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_tv_cabinet_cmcharper_attribute_color_brown',
@@ -476,10 +473,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_tv_cabinet_cmcharper_brown',
@@ -487,7 +484,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_tv_cabinet_cmcharper_brown" model="product.product">
         <field name="product_tmpl_id" ref="product_template_tv_cabinet_cmcharper" />
@@ -516,7 +513,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_tv_cabinet_shaker_wood_attribute_color_brown',
@@ -528,10 +525,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_tv_cabinet_shaker_wood_brown',
@@ -543,7 +540,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_tv_cabinet_shaker_wood_brown" model="product.product">
         <field name="product_tmpl_id" ref="product_template_tv_cabinet_shaker_wood" />
@@ -565,7 +562,7 @@
         <field name="type">consu</field>
     </record>
 
-     <record
+    <record
         id="product_template_tv_cabinet_mid_century_product_template_attribute_line_color"
         model="product.template.attribute.line"
     >
@@ -578,7 +575,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_tv_cabinet_mid_century_attribute_color_brown',
@@ -586,10 +583,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_tv_cabinet_mid_century_brown',
@@ -597,7 +594,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_tv_cabinet_mid_century_brown" model="product.product">
         <field name="product_tmpl_id" ref="product_template_tv_cabinet_mid_century" />
@@ -627,7 +624,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_round_table_mid_century_attribute_color_blue',
@@ -635,10 +632,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_round_table_mid_century_white',
@@ -646,7 +643,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_round_table_mid_century_white" model="product.product">
         <field name="product_tmpl_id" ref="product_template_round_table_mid_century" />
@@ -676,7 +673,7 @@
     </record>
 
     <function model="ir.model.data" name="_update_xmlids">
-            <value
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_template_thelma_attribute_color_red',
@@ -692,10 +689,10 @@
                 'noupdate': True,
             }]"
         />
-        </function>
+    </function>
 
-        <function model="ir.model.data" name="_update_xmlids">
-            <value
+    <function model="ir.model.data" name="_update_xmlids">
+        <value
             model="base"
             eval="[{
                 'xml_id': 'shopinvader.product_product_thelma_red',
@@ -711,7 +708,7 @@
                 'noupdate': True,
             },]"
         />
-        </function>
+    </function>
 
     <record id="product_product_thelma_red" model="product.product">
         <field name="product_tmpl_id" ref="product_template_thelma" />
@@ -727,5 +724,4 @@
         <field name="product_tmpl_id" ref="product_template_thelma" />
         <field name="default_code">THELMA-BLACK</field>
     </record>
-
 </odoo>

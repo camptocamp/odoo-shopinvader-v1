@@ -58,7 +58,7 @@ class SaleOrder(models.Model):
             record.shopinvader_state = record._get_shopinvader_state()
 
     def _prepare_invoice(self):
-        res = super(SaleOrder, self)._prepare_invoice()
+        res = super()._prepare_invoice()
         res["shopinvader_backend_id"] = self.shopinvader_backend_id.id
         return res
 
@@ -75,7 +75,7 @@ class SaleOrder(models.Model):
         return True
 
     def action_confirm(self):
-        res = super(SaleOrder, self).action_confirm()
+        res = super().action_confirm()
         for record in self:
             if record.state != "draft" and record.shopinvader_backend_id:
                 # If we confirm a cart directly we change the typology
@@ -129,5 +129,5 @@ class SaleOrderLine(models.Model):
 
     def reset_price_tax(self):
         for line in self:
-            line.product_id_change()
-            line._onchange_discount()
+            line._compute_tax_id()
+            line._compute_discount()

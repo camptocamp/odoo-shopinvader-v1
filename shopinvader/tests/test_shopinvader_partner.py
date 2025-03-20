@@ -7,13 +7,13 @@ from psycopg2 import IntegrityError
 
 from odoo.tools import mute_logger
 
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class TestShopinvaderPartner(SavepointComponentCase):
+class TestShopinvaderPartner(TransactionComponentCase):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderPartner, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.backend = cls.env.ref("shopinvader.backend_1")
         cls.unique_email = datetime.now().isoformat() + "@test.com"
@@ -124,7 +124,7 @@ class TestShopinvaderPartner(SavepointComponentCase):
             }
         )
         self.assertEqual(partner, binding.record_id)
-        partner.refresh()
+        partner.invalidate_recordset()
         self.assertTrue(partner.child_ids)
         self.assertEqual(1, len(partner.child_ids))
         child = partner.child_ids

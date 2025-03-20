@@ -73,4 +73,4 @@ class ProductProduct(models.Model):
         # Call unlink manually to be sure to trigger
         # shopinvader variant unlink constraint
         self.mapped("shopinvader_bind_ids").unlink()
-        return super(ProductProduct, self).unlink()
+        return super().unlink()

@@ -44,13 +44,15 @@ class ShopinvaderCategory(models.Model):
         "Shopinvader Childs",
         compute="_compute_child_category",
     )
-    level = fields.Integer(compute="_compute_level")
+    level = fields.Integer(compute="_compute_level", recursive=True)
     active = fields.Boolean(
         default=True,
         compute="_compute_active",
         store=True,
         readonly=False,
     )
+    # just make it recursive to avoid errors
+    automatic_url_key = fields.Char(recursive=True)
 
     _sql_constraints = [
         (
@@ -92,7 +94,7 @@ class ShopinvaderCategory(models.Model):
             )
 
     def _post_process_url_key(self, key):
-        path_bits = [super(ShopinvaderCategory, self)._post_process_url_key(key)]
+        path_bits = [super()._post_process_url_key(key)]
         if self.parent_id and self.shopinvader_parent_id.active:
             parent_key = self.shopinvader_parent_id.automatic_url_key
             if parent_key:

@@ -2,12 +2,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 from uuid import uuid4
 
-from odoo.tools import mute_logger
-
 from .common import ProductCommonCase
 
 
-@mute_logger("odoo.models.unlink")
 class TestShopinvaderVariantTest(ProductCommonCase):
     """
     Tests for shopinvader.variant about seo_title field
@@ -46,7 +43,7 @@ class TestShopinvaderVariantTest(ProductCommonCase):
             self.assertEqual(variant.seo_title, title)
             self.assertEqual(variant.manual_seo_title, title)
         # Invalidate cache to ensure data stay in memory
-        self.shopinvader_variants.invalidate_cache()
+        self.shopinvader_variants.invalidate_recordset()
         self._check_expected_seo_name(self.backend, self.shopinvader_variants)
 
     def test_public_name_normal(self):

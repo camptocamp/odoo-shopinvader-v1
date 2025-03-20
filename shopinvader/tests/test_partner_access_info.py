@@ -5,6 +5,8 @@ from .common import CommonCase
 
 
 class TestPartnerAccessInfo(CommonCase):
+    allow_inherited_tests_method = True
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

@@ -197,7 +197,7 @@ class AbstractUrl(models.AbstractModel):
                         )
                     )
             else:
-                existing_url.write({"redirect": False})
+                existing_url.update({"redirect": False})
         else:
             # no existing key creating one if not empty
             self.env["url.url"].create(self._prepare_url(url_key))
@@ -209,7 +209,7 @@ class AbstractUrl(models.AbstractModel):
                 ("redirect", "=", False),
             ]
         )
-        redirect_urls.write({"redirect": True})
+        redirect_urls.update({"redirect": True})
         # we must explicitly invalidate the cache since there is no depends
         # defined on this computed fields and this field could have already
         # been loaded into the cache
@@ -229,7 +229,7 @@ class AbstractUrl(models.AbstractModel):
                 [("model_id", "=", get_model_ref(record))]
             )
             urls.unlink()
-        self.flush()
+        self.flush_recordset()
         return super().unlink()
 
     def action_view_redirect_url(self):

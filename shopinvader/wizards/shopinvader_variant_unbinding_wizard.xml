@@ -2,7 +2,6 @@
 <!-- Copyright 2017 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_variant_unbinding_wizard_form_view">
         <field
             name="name"
@@ -10,15 +9,15 @@
         <field name="model">shopinvader.variant.unbinding.wizard</field>
         <field name="arch" type="xml">
             <form string="Shopinvader Variant Unbinding Wizard">
-               <field name='shopinvader_variant_ids' />
+                <field name='shopinvader_variant_ids' />
                 <footer>
                     <button
-                        string="Unbind Products"
-                        name="unbind_products"
-                        type="object"
-                        class="oe_highlight"
-                        confirm="Do you really want to unbind these products ?"
-                    />
+                    string="Unbind Products"
+                    name="unbind_products"
+                    type="object"
+                    class="oe_highlight"
+                    confirm="Do you really want to unbind these products ?"
+                />
                     or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
@@ -42,5 +41,4 @@
             eval="[(4, ref('shopinvader.group_shopinvader_manager'))]"
         />
     </record>
-
 </odoo>

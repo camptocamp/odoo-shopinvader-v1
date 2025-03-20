@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="product_attribute_value_color_blue" model="product.attribute.value">
         <field name="name">blue</field>
         <field name="attribute_id" ref="product.product_attribute_2" />
@@ -30,5 +29,4 @@
         <field name="name">white</field>
         <field name="attribute_id" ref="product.product_attribute_2" />
     </record>
-
 </odoo>

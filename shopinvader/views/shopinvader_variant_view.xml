@@ -2,7 +2,6 @@
 <!-- Copyright 2017 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_variant_search_view">
         <field name="name">shopinvader.variant.search (in shopinvader)</field>
         <field name="model">shopinvader.variant</field>
@@ -57,7 +56,7 @@
         <field name="name">shopinvader.variant.tree (in shopinvader)</field>
         <field name="model">shopinvader.variant</field>
         <field name="arch" type="xml">
-             <tree string="Product" create="0">
+            <list string="Product" create="0">
                 <field name="default_code" optional="show" />
                 <field name="name" />
                 <field name="backend_id" />
@@ -70,7 +69,7 @@
                     groups="base.group_multi_company"
                     optional="show"
                 />
-             </tree>
+            </list>
         </field>
     </record>
 
@@ -85,7 +84,7 @@
                         name="web_ribbon"
                         text="Archived"
                         bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}"
+                        invisible="active"
                     />
                     <div class="oe_title">
                         <h1>
@@ -136,8 +135,8 @@
                                     <field name="name" />
                                 </strong>
                                 <t t-if="record.default_code.value">[<field
-                                        name="default_code"
-                                    />]</t>
+                                    name="default_code"
+                                />]</t>
                                 <div name="backend" class="mt-1">
                                     <field name="backend_id" widget="badge" />
                                     <field name="lang_id" widget="badge" />
@@ -153,7 +152,7 @@
     <record model="ir.actions.act_window" id="shopinvader_variant_act_window">
         <field name="name">Shopinvader Variants</field>
         <field name="res_model">shopinvader.variant</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
         <field name="groups_id" eval="[(4, ref('group_shopinvader_manager'))]" />
@@ -167,10 +166,10 @@
     </record>
 
     <record id="shopinvader_urls_act_window" model="ir.actions.act_window">
-      <field name="name">URLs</field>
-      <field name="res_model">url.url</field>
-      <field name="view_mode">tree,form</field>
-      <field name="domain">[('model_id', 'like', 'shopinvader.%')]</field>
+        <field name="name">URLs</field>
+        <field name="res_model">url.url</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('model_id', 'like', 'shopinvader.%')]</field>
     </record>
 
     <record model="ir.ui.menu" id="menu_shopinvader_urls">
@@ -179,5 +178,4 @@
         <field name="action" ref="shopinvader_urls_act_window" />
         <field name="sequence" eval="999" />
     </record>
-
 </odoo>

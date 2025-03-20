@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="res_partner_view_form" model="ir.ui.view">
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
@@ -9,7 +8,7 @@
                 <page name="shopinvader" string="Shopinvader">
                     <separator string="Shopinvader users" />
                     <field name="shopinvader_bind_ids" nolabel="1">
-                        <tree editable="bottom">
+                        <list editable="bottom">
                             <field name="backend_id" />
                             <field name="external_id" readonly="True" />
                             <field name="create_date" readonly="True" />
@@ -20,7 +19,7 @@
                                 title="Edit in form"
                                 icon="fa-pencil"
                             />
-                        </tree>
+                        </list>
                     </field>
                     <group name="shopinvader_options">
                         <!-- empty group for other modules to add subgroups into -->
@@ -49,5 +48,4 @@
             </filter>
         </field>
     </record>
-
 </odoo>

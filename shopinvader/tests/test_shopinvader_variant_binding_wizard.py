@@ -2,20 +2,18 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.tools import mute_logger
 
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-@mute_logger("odoo.models.unlink")
-@mute_logger("odoo.addons.base.models.ir_model")
-class TestShopinvaderVariantBindingWizard(SavepointComponentCase):
+class TestShopinvaderVariantBindingWizard(TransactionComponentCase):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderVariantBindingWizard, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,
                 tracking_disable=True,
-                test_queue_job_no_delay=True,
+                queue_job__no_delay=True,
             )
         )
         cls.backend = cls.env.ref("shopinvader.backend_1")
@@ -25,6 +23,7 @@ class TestShopinvaderVariantBindingWizard(SavepointComponentCase):
         cls.unbind_wizard_model = cls.env["shopinvader.variant.unbinding.wizard"]
         cls.product_bind_model = cls.env["shopinvader.variant"]
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_binding(self):
         """
         Select a product and
@@ -141,6 +140,7 @@ class TestShopinvaderVariantBindingWizard(SavepointComponentCase):
 
         self.assertEqual(len(bind_record), 1)
 
+    @mute_logger("odoo.addons.queue_job.utils")
     def test_product_inactivation(self):
         """
         Select a product and bind it to a Lengow Catalogue

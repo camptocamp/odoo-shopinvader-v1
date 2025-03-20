@@ -2,7 +2,6 @@
 <!-- Copyright 2018 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_category_binding_wizard_form_view">
         <field
             name="name"
@@ -19,11 +18,11 @@
                 </group>
                 <footer>
                     <button
-                        string="Bind Categories"
-                        name="action_bind_categories"
-                        type="object"
-                        class="oe_highlight"
-                    />
+                    string="Bind Categories"
+                    name="action_bind_categories"
+                    type="object"
+                    class="oe_highlight"
+                />
                     or
                     <button string="Cancel" class="oe_link" special="cancel" />
                 </footer>
@@ -46,5 +45,4 @@
             eval="[(4, ref('shopinvader.group_shopinvader_manager'))]"
         />
     </record>
-
 </odoo>

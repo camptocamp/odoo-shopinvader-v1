@@ -5,7 +5,6 @@
 
 import logging
 
-from odoo import _
 from odoo.exceptions import MissingError, UserError
 from odoo.osv import expression
 from odoo.tools import frozendict
@@ -97,7 +96,9 @@ class BaseShopinvaderService(AbstractComponent):
                 domain.append((key, op, value))
             return domain
         except Exception as e:
-            raise UserError(_("Invalid scope %s, error: %s") % (str(scope), str(e)))
+            raise UserError(
+                self.env._("Invalid scope %s, error: %s") % (str(scope), str(e))
+            ) from e
 
     # Validator
     def _default_validator_search(self):
@@ -171,7 +172,8 @@ class BaseShopinvaderService(AbstractComponent):
         record = self._exposed_model.search(domain)
         if not record:
             raise MissingError(
-                _("The record %s %s does not exist") % (self._expose_model, _id)
+                self.env._("The record %s %s does not exist")
+                % (self._expose_model, _id)
             )
         else:
             return record
@@ -201,7 +203,7 @@ class BaseShopinvaderService(AbstractComponent):
         return record._fields.get(field).convert_to_export(record[field], record)
 
     def _get_openapi_default_parameters(self):
-        defaults = super(BaseShopinvaderService, self)._get_openapi_default_parameters()
+        defaults = super()._get_openapi_default_parameters()
         defaults.append(
             {
                 "name": "WEBSITE-UNIQUE-KEY",

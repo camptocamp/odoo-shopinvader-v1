@@ -7,7 +7,7 @@ from .test_shopinvader_category import TestShopinvaderCategoryBase
 class TestShopinvaderCategoryBindingWizard(TestShopinvaderCategoryBase):
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderCategoryBindingWizard, cls).setUpClass()
+        super().setUpClass()
         cls.bind_wizard_model = cls.env["shopinvader.category.binding.wizard"]
         cls.unbind_wizard_model = cls.env["shopinvader.category.unbinding.wizard"]
 

@@ -5,7 +5,6 @@ from odoo import api, fields, models
 
 
 class ShopinvaderVariantUnbindingWizard(models.TransientModel):
-
     _name = "shopinvader.variant.unbinding.wizard"
     _description = "Wizard to unbind products from a shopinvader backend"
 
@@ -18,7 +17,7 @@ class ShopinvaderVariantUnbindingWizard(models.TransientModel):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(ShopinvaderVariantUnbindingWizard, self).default_get(fields_list)
+        res = super().default_get(fields_list)
         shopinvader_variant_ids = self.env.context.get("active_ids", False)
         if shopinvader_variant_ids:
             res["shopinvader_variant_ids"] = [(6, 0, shopinvader_variant_ids)]

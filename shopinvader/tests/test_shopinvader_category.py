@@ -1,14 +1,18 @@
 # Copyright 2020 Camptocamp (http://www.camptocamp.com).
 # @author Simone Orsi <simahawk@gmail.com>
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.tests import tagged
+
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 from .common import CommonMixin
 
 
-class TestShopinvaderCategoryBase(SavepointComponentCase, CommonMixin):
+class TestShopinvaderCategoryBase(TransactionComponentCase, CommonMixin):
+    post_install = True
+
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderCategoryBase, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.backend = cls.env.ref("shopinvader.backend_1")
         cls.backend2 = cls.env.ref("shopinvader.backend_2")
@@ -26,13 +30,17 @@ class TestShopinvaderCategoryBase(SavepointComponentCase, CommonMixin):
         cls.cat_level1._parent_store_compute()
 
 
+@tagged("post_install", "-at_install")
 class TestShopinvaderCategory(TestShopinvaderCategoryBase):
+    post_install = True
+
     @classmethod
     def setUpClass(cls):
-        super(TestShopinvaderCategory, cls).setUpClass()
+        super().setUpClass()
         cls.binding_l1 = cls._create_binding(cls.cat_level1)
         cls.binding_l2 = cls._create_binding(cls.cat_level2)
         cls.binding_l3 = cls._create_binding(cls.cat_level3)
+        pass
 
     @classmethod
     def _create_binding(cls, product_category, **kw):

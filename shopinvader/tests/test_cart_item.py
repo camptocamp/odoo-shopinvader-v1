@@ -10,13 +10,13 @@ from odoo.tools import mute_logger
 from .common import CommonCase
 
 
-class ItemCaseMixin(object):
+class ItemCaseMixin:
     @classmethod
     def _setup_products(cls):
         cls.product_1 = cls.env.ref("product.product_product_4b")
         cls.product_2 = cls.env.ref("product.product_product_13")
         cls.product_3 = cls.env.ref("product.product_product_11")
-        cls.pricelist = cls.env.ref("product.list0")
+        cls.pricelist = cls.env.ref("shopinvader.pricelist_0")
 
     def extract_cart(self, response):
         self.shopinvader_session["cart_id"] = response["set_session"]["cart_id"]
@@ -51,7 +51,7 @@ class ItemCaseMixin(object):
 class AbstractItemCase(ItemCaseMixin):
     @classmethod
     def setUpClass(cls):
-        super(AbstractItemCase, cls).setUpClass()
+        super().setUpClass()
         cls._setup_products()
 
     def test_add_item_without_cart(self):
@@ -166,22 +166,23 @@ class AbstractItemCase(ItemCaseMixin):
         self.assertEqual(cart.pricelist_id, self.pricelist)
         return cart_data["lines"]["items"][0]["amount"]
 
-    def test_pricelist_product_price_unit_without_discount(self):
-        self.pricelist.discount_policy = "without_discount"
-        amount = self._test_pricelist_product()
-        # into the cart, the price must be the price without discount
-        self.assertEqual(amount["price"], 16.5)
-        # but the total for the line into the cart info must be the price with
-        # discount
-        self.assertEqual(amount["total"], 14.85)
+    # FIXME v18: no discount_policy anymore
+    # def test_pricelist_product_price_unit_without_discount(self):
+    #     self.pricelist.discount_policy = "without_discount"
+    #     amount = self._test_pricelist_product()
+    #     # into the cart, the price must be the price without discount
+    #     self.assertEqual(amount["price"], 16.5)
+    #     # but the total for the line into the cart info must be the price with
+    #     # discount
+    #     self.assertEqual(amount["total"], 14.85)
 
-    def test_pricelist_product_price_unit_with_discount(self):
-        self.pricelist.discount_policy = "with_discount"
-        amount = self._test_pricelist_product()
-        # into the cart, the price must be the price with discount
-        self.assertEqual(amount["price"], 14.85)
-        # same for the total
-        self.assertEqual(amount["total"], 14.85)
+    # def test_pricelist_product_price_unit_with_discount(self):
+    #     self.pricelist.discount_policy = "with_discount"
+    #     amount = self._test_pricelist_product()
+    #     # into the cart, the price must be the price with discount
+    #     self.assertEqual(amount["price"], 14.85)
+    #     # same for the total
+    #     self.assertEqual(amount["total"], 14.85)
 
     def test_upgrade_last_update_date(self):
         last_external_update_date = self._get_last_external_update_date(self.cart)
@@ -203,14 +204,17 @@ class AbstractItemCase(ItemCaseMixin):
 
 
 class AnonymousItemCase(AbstractItemCase, CommonCase):
+    # Mandatory to allow to run the test from AbstractItemCase
+    allow_inherited_tests_method = True
+
     @classmethod
     def setUpClass(cls):
-        super(AnonymousItemCase, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.backend.anonymous_partner_id
         cls.cart = cls.env.ref("shopinvader.sale_order_1")
 
     def setUp(self, *args, **kwargs):
-        super(AnonymousItemCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.shopinvader_session = {"cart_id": self.cart.id}
         with self.work_on_services(
             partner=None, shopinvader_session=self.shopinvader_session
@@ -223,14 +227,16 @@ class AnonymousItemCase(AbstractItemCase, CommonCase):
 
 
 class ConnectedItemCase(AbstractItemCase, CommonCase):
+    allow_inherited_tests_method = True
+
     @classmethod
     def setUpClass(cls):
-        super(ConnectedItemCase, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.env.ref("shopinvader.partner_1")
         cls.cart = cls.env.ref("shopinvader.sale_order_2")
 
     def setUp(self, *args, **kwargs):
-        super(ConnectedItemCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.shopinvader_session = {"cart_id": self.cart.id}
         with self.work_on_services(
             partner=self.partner, shopinvader_session=self.shopinvader_session

@@ -6,7 +6,6 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_product_search_view">
         <field name="model">shopinvader.product</field>
         <field name="arch" type="xml">
@@ -47,7 +46,7 @@
         <field name="name">shopinvader.product.tree (in shopinvader)</field>
         <field name="model">shopinvader.product</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" />
                 <field name="backend_id" />
                 <field name="lang_id" optional="show" />
@@ -59,7 +58,7 @@
                     optional="show"
                 />
                 <field name="sync_date" />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -69,12 +68,11 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <field name="active" invisible="1" />
                     <widget
                         name="web_ribbon"
                         text="Archived"
                         bg_color="bg-danger"
-                        attrs="{'invisible': [('active', '=', True)]}"
+                        invisible="active"
                     />
                     <div class="oe_title">
                         <h1>
@@ -103,7 +101,7 @@
                             <field name="use_shopinvader_product_name" invisible="1" />
                             <group
                                 name="name"
-                                attrs="{'invisible': [('use_shopinvader_product_name', '!=', True)]}"
+                                invisible="not use_shopinvader_product_name"
                             >
                                 <field name="shopinvader_name" />
                             </group>
@@ -128,13 +126,12 @@
                                 <field name="url_builder" />
                                 <field
                                     name="manual_url_key"
-                                    attrs="{
-                                                'invisible': [('url_builder', '!=', 'manual')],
-                                                'required': [('url_builder', '=', 'manual')]}"
+                                    invisible="url_builder != 'manual'"
+                                    required="url_builder == 'manual'"
                                 />
                                 <field
                                     name="url_key"
-                                    attrs="{'invisible': [('url_builder', '=', 'manual')]}"
+                                    invisible="url_builder == 'manual'"
                                 />
                             </group>
                             <group name="redirect_url">
@@ -143,17 +140,16 @@
                                     nolabel="1"
                                     colspan="4"
                                 >
-                                    <tree>
+                                    <list>
                                         <field name="url_key" string="Redirect Url" />
-                                    </tree>
+                                    </list>
                                 </field>
-                              <button
+                                <button
                                     name="action_view_redirect_url"
                                     type="object"
                                     string="Manage redirects"
                                     class="oe_inline"
                                 />
-
                             </group>
                         </page>
                         <page name="variant" string="Variant">
@@ -163,7 +159,7 @@
                                     nolabel="1"
                                     readonly="1"
                                 >
-                                    <tree>
+                                    <list>
                                         <field name="id" />
                                         <field name="default_code" />
                                         <field name="record_id" />
@@ -171,7 +167,7 @@
                                             name="shopinvader_backend_ids"
                                             widget="many2many_tags"
                                         />
-                                    </tree>
+                                    </list>
                                 </field>
                             </group>
                         </page>
@@ -201,8 +197,8 @@
                                     <field name="name" />
                                 </strong>
                                 <t t-if="record.default_code.value">[<field
-                                        name="default_code"
-                                    />]</t>
+                                    name="default_code"
+                                />]</t>
                                 <div name="backend" class="mt-1">
                                     <field name="backend_id" widget="badge" />
                                     <field name="lang_id" widget="badge" />
@@ -218,7 +214,7 @@
     <record model="ir.actions.act_window" id="shopinvader_product_act_window">
         <field name="name">Shopinvader Product</field>
         <field name="res_model">shopinvader.product</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
         <field name="groups_id" eval="[(4, ref('group_shopinvader_manager'))]" />
@@ -230,5 +226,4 @@
         <field name="action" ref="shopinvader_product_act_window" />
         <field name="sequence" eval="10" />
     </record>
-
 </odoo>

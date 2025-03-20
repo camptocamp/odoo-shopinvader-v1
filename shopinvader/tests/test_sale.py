@@ -20,9 +20,13 @@ class CommonSaleCase(CommonCase):
         cls.payment_method_manual_in = cls.env.ref(
             "account.account_payment_method_manual_in"
         )
+        cls.payment_method_line_manual_in = cls.env[
+            "account.payment.method.line"
+        ].search([("payment_method_id", "=", cls.payment_method_manual_in.id)], limit=1)
         cls.bank_journal_euro = cls.journal_obj.create(
             {"name": "Bank", "type": "bank", "code": "BNK6278"}
         )
+        cls.payment_method_line_manual_in.journal_id = cls.bank_journal_euro
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
@@ -31,6 +35,8 @@ class CommonSaleCase(CommonCase):
 
 
 class SaleCase(CommonSaleCase, CommonTestDownload):
+    allow_inherited_tests_method = True
+
     def _confirm_and_invoice_sale(self):
         self.sale.action_confirm()
         for line in self.sale.order_line:
@@ -96,7 +102,7 @@ class SaleCase(CommonSaleCase, CommonTestDownload):
         for line in self.sale.order_line:
             line.write({"qty_delivered": line.product_uom_qty})
         invoice = self.sale._create_invoices()
-        description = "Notify {} for {},{}".format(notif, invoice._name, invoice.id)
+        description = f"Notify {notif} for {invoice._name},{invoice.id}"
         domain = [("name", "=", description), ("date_created", ">=", now)]
         self.service.dispatch("ask_email_invoice", self.sale.id)
         self.assertEqual(self.env["queue.job"].search_count(domain), 1)

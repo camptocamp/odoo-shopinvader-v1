@@ -8,7 +8,6 @@ from cerberus import Validator
 from werkzeug.exceptions import NotFound
 
 from odoo.exceptions import UserError
-from odoo.tools.translate import _
 
 from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
@@ -138,7 +137,10 @@ class CartService(Component):
             self._get_validator_cart_by_id_domain(value)
         )
         if len(cart) != 1:
-            error(field, _("The cart does not exists or does not belong to you!"))
+            error(
+                field,
+                self.env._("The cart does not exists or does not belong to you!"),
+            )
 
     def _validator_copy(self):
         return {
@@ -236,14 +238,13 @@ class CartService(Component):
 
     def _upgrade_cart_item_quantity(self, cart, item, params, action="replace"):
         vals = self._upgrade_cart_item_quantity_vals(item, params, action=action)
-        with self.env.norecompute():
-            new_values = item.play_onchanges(vals, vals.keys())
-            # clear cache after play onchange
-            real_line_ids = [line.id for line in cart.order_line if line.id]
-            cart._cache["order_line"] = tuple(real_line_ids)
-            vals.update(new_values)
-            item.order_id.write({"order_line": [(1, item.id, vals)]})
-        cart.recompute()
+        new_values = item.play_onchanges(vals, vals.keys())
+        # clear cache after play onchange
+        real_line_ids = [line.id for line in cart.order_line if line.id]
+        cart._cache["order_line"] = tuple(real_line_ids)
+        vals.update(new_values)
+        item.order_id.update({"order_line": [(1, item.id, vals)]})
+        cart.flush_recordset()
 
     def _do_clear_cart_cancel(self, cart):
         """
@@ -281,12 +282,14 @@ class CartService(Component):
         :return: sale.order recordset
         """
         clear_option = self.shopinvader_backend.clear_cart_options
-        do_clear = "_do_clear_cart_%s" % clear_option
+        do_clear = f"_do_clear_cart_{clear_option}"
         if hasattr(self, do_clear):
             cart = getattr(self, do_clear)(cart)
         else:
             _logger.error("The %s function doesn't exists.", do_clear)
-            raise NotImplementedError(_("Missing feature to clear the cart!"))
+            raise NotImplementedError(
+                self.env._("Missing feature to clear the cart: %s") % clear_option
+            )
         return cart
 
     def _check_allowed_product(self, cart, params):
@@ -294,7 +297,7 @@ class CartService(Component):
         if not product._add_to_cart_allowed(
             self.shopinvader_backend, partner=self.partner
         ):
-            raise UserError(_("Product %s is not allowed") % product.name)
+            raise UserError(self.env._("Product %s is not allowed") % product.name)
 
     def _add_item(self, cart, params):
         self._check_allowed_product(cart, params)
@@ -302,9 +305,8 @@ class CartService(Component):
         if item:
             self._upgrade_cart_item_quantity(cart, item, params, action="sum")
         else:
-            with self.env.norecompute():
-                item = self._create_cart_line(cart, params)
-            cart.recompute()
+            item = self._create_cart_line(cart, params)
+            cart.flush_recordset()
         return item
 
     def _create_cart_line(self, cart, params):
@@ -320,7 +322,7 @@ class CartService(Component):
             vals["name"] = self._get_sale_order_line_name(vals)
         existing_lines = cart.order_line
         # A write on the cart itself to trigger changes
-        cart.write({"order_line": [(0, False, vals)]})
+        cart.update({"order_line": [(0, False, vals)]})
         return cart.order_line - existing_lines
 
     def _get_sale_order_line_name(self, vals):
@@ -352,7 +354,7 @@ class CartService(Component):
             add_item_params["item_qty"] = params["item_qty"]
             self._add_item(cart, add_item_params)
             return params["item_qty"]
-        raise NotFound("No cart item found with id %s" % params["item_id"])
+        raise NotFound(f"No cart item found with id {params['item_id']}")
 
     def _delete_item(self, cart, params):
         item = self._get_cart_item(cart, params, raise_if_not_found=False)
@@ -405,7 +407,7 @@ class CartService(Component):
     def _get_step_from_code(self, code):
         step = self.env["shopinvader.cart.step"].search([("code", "=", code)])
         if not step:
-            raise UserError(_("Invalid step code %s") % code)
+            raise UserError(self.env._("Invalid step code %s") % code)
         else:
             return step
 
@@ -416,7 +418,7 @@ class CartService(Component):
                 "store_cache": {"cart": {}},
                 "set_session": {"cart_id": 0},
             }
-        res = super(CartService, self)._to_json(cart)[0]
+        res = super()._to_json(cart)[0]
 
         return {
             "data": res,
@@ -463,8 +465,9 @@ class CartService(Component):
         vals.update(self.env["sale.order"].play_onchanges(vals, vals.keys()))
         # Set optional default values from backend configuration
         backend = self.shopinvader_backend
-        if "analytic_account_id" not in cart_params and backend.account_analytic_id:
-            vals["analytic_account_id"] = backend.account_analytic_id.id
+        # TODO: analytic account field is not avail anymore on SO. TO CHECK!
+        # if "analytic_account_id" not in cart_params and backend.account_analytic_id:
+        #     vals["analytic_account_id"] = backend.account_analytic_id.id
         if "pricelist_id" not in cart_params:
             pricelist = self._get_pricelist(partner)
             if pricelist:
@@ -492,17 +495,17 @@ class CartService(Component):
         # end user (untrusted data) and the cart id by the
         # locomotive server (trusted data)
         item = cart.mapped("order_line").filtered(
-            lambda l, id_=params["item_id"]: l.id == id_
+            lambda x, id_=params["item_id"]: x.id == id_
         )
         if not item and raise_if_not_found:
-            raise NotFound("No cart item found with id %s" % params["item_id"])
+            raise NotFound(f"No cart item found with id {params['item_id']}")
         return item
 
     def _check_existing_cart_item(self, cart, params):
         product_id = params["product_id"]
         order_lines = cart.order_line
         return order_lines.filtered(
-            lambda l, p=product_id: l.product_id.id == product_id
+            lambda x, p=product_id: x.product_id.id == product_id
         )
 
     def _prepare_cart_item(self, params, cart):
@@ -513,6 +516,7 @@ class CartService(Component):
                 "product_uom_qty": params["item_qty"],
                 "order_id": cart.id,
                 "sequence": max(cart.order_line.mapped("sequence"), default=0) + 1,
+                "currency_id": cart.currency_id.id,
             }
         )
         return _params
@@ -526,7 +530,7 @@ class CartService(Component):
         return self.env["sale.order"].browse(record_id)
 
     def _get_openapi_default_parameters(self):
-        defaults = super(CartService, self)._get_openapi_default_parameters()
+        defaults = super()._get_openapi_default_parameters()
         defaults.append(
             {
                 "name": "SESS-CART-ID",

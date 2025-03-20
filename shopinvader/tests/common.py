@@ -4,18 +4,18 @@
 # pylint: disable=method-required-super
 
 from contextlib import contextmanager
-
-import mock
+from unittest import mock
 
 from odoo import fields
 from odoo.exceptions import MissingError
-from odoo.tests import SavepointCase
+from odoo.tests import RecordCapturer, TransactionCase
 
 from odoo.addons.base_rest.controllers.main import RestController
 from odoo.addons.base_rest.core import _rest_controllers_per_module
 from odoo.addons.base_rest.tests.common import BaseRestCase, RegistryMixin
 from odoo.addons.component.tests.common import ComponentMixin
 from odoo.addons.queue_job.job import Job
+from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.shopinvader.models.track_external_mixin import TrackExternalMixin
 
 from .. import shopinvader_response, utils
@@ -35,7 +35,7 @@ def _install_lang_odoo(env, lang_xml_id, full_install=False):
     return lang
 
 
-class UtilsMixin(object):
+class UtilsMixin:
     def _bind_products(self, products, backend=None):
         backend = backend or self.backend
         bind_wizard_model = self.env["shopinvader.variant.binding.wizard"]
@@ -137,14 +137,13 @@ class CommonMixin(RegistryMixin, ComponentMixin, UtilsMixin):
             self._perform_job(job)
 
 
-class CommonCase(SavepointCase, CommonMixin):
-
+class CommonCase(TransactionCase, CommonMixin):
     # by default disable tracking suite-wise, it's a time saver :)
     tracking_disable = True
 
     @classmethod
     def setUpClass(cls):
-        super(CommonCase, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(cls.env.context, tracking_disable=cls.tracking_disable)
         )
@@ -160,7 +159,7 @@ class CommonCase(SavepointCase, CommonMixin):
         # TODO FIXME
         # It seem that setUpComponent / setUpRegistry loose stuff from
         # the cache so we do an explicit flush here to avoid losing data
-        cls.env["base"].flush()
+        cls.env["base"].flush_model()
         cls.setUpComponent()
         cls.setUpRegistry()
 
@@ -170,7 +169,7 @@ class CommonCase(SavepointCase, CommonMixin):
         _rest_controllers_per_module["shopinvader"] = []
 
     def setUp(self):
-        SavepointCase.setUp(self)
+        TransactionCase.setUp(self)
         CommonMixin.setUp(self)
 
         shopinvader_response.set_testmode(True)
@@ -220,21 +219,21 @@ class ProductCommonCase(CommonCase):
             ]
         )
         cls.env.user.company_id.currency_id = cls.env.ref("base.USD")
-        cls.base_pricelist = cls.env.ref("product.list0")
+        cls.base_pricelist = cls.env.ref("shopinvader.pricelist_0")
         cls.base_pricelist.currency_id = cls.env.ref("base.USD")
         cls.shopinvader_variant.record_id.currency_id = cls.env.ref("base.USD")
 
 
 class ShopinvaderRestCase(BaseRestCase):
     def setUp(self, *args, **kwargs):
-        super(ShopinvaderRestCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.backend = self.env.ref("shopinvader.backend_1")
         # To ensure multi-backend works correctly, we just have to create
         # a new one on the same company.
         self.backend_copy = self.env.ref("shopinvader.backend_2")
 
 
-class CommonTestDownload(object):
+class CommonTestDownload:
     """
     Dedicated class to test the download service.
     Into your test class, just inherit this one (python mode) and call
@@ -310,54 +309,49 @@ class CommonTestDownload(object):
         """
         self._ensure_posted(invoice)
         ctx = {"active_ids": invoice.ids, "active_model": "account.move"}
-        wizard_obj = self.register_payments_obj.with_context(ctx)
+        wizard_obj = self.register_payments_obj.with_context(**ctx)
         register_payments = wizard_obj.create(
             {
                 "payment_date": fields.Date.today(),
                 "journal_id": self.bank_journal_euro.id,
-                "payment_method_id": self.payment_method_manual_in.id,
+                "payment_method_line_id": self.payment_method_line_manual_in.id,
             }
         )
         register_payments._create_payments()
 
 
-class NotificationCaseMixin(object):
-    def _check_notification(self, notif_type, record):
-        notif = self.env["shopinvader.notification"].search(
+class NotificationCaseMixin:
+    def _get_notification(self, notif_type):
+        return self.env["shopinvader.notification"].search(
             [
                 ("backend_id", "=", self.backend.id),
                 ("notification_type", "=", notif_type),
             ]
         )
-        vals = notif.template_id.generate_email(
-            record.id,
-            [
-                "subject",
-                "body_html",
-                "email_from",
-                "email_to",
-                "partner_to",
-                "email_cc",
-                "reply_to",
-                "scheduled_date",
-            ],
-        )
-        message = self.env["mail.message"].search(
-            [
-                ("subject", "=", vals["subject"]),
-                ("model", "=", record._name),
-                ("res_id", "=", record.id),
-            ]
-        )
-        self.assertEqual(len(message), 1)
 
-    def _find_notification_job(self, **kw):
-        leafs = dict(
-            channel_method_name="<shopinvader.notification>.send",
-            model_name="shopinvader.notification",
-        )
-        leafs.update(kw)
-        domain = []
-        for k, v in leafs.items():
-            domain.append((k, "=", v))
-        return self.env["queue.job"].search(domain, limit=1)
+    @contextmanager
+    def _catpure_notification(
+        self, notif_type, notif_target_model=None, notif_target=None, job_props=None
+    ):
+        """Ensure notification job is scheduled for the given type and notif_target."""
+        notif = self._get_notification(notif_type)
+        if notif_target and not notif_target_model:
+            notif_target_model = notif_target._name
+        with (
+            trap_jobs() as trap,
+            RecordCapturer(self.env[notif_target_model], []) as capt,
+        ):
+            yield
+            notif_target = notif_target or capt.records[0]
+            trap.assert_jobs_count(1)
+            job_props = job_props or {}
+            if job_props.get("description"):
+                job_props["description"] = job_props["description"].format(
+                    partner_id=notif_target.id
+                )
+            trap.assert_enqueued_job(
+                notif.send, args=(notif_target.id,), properties=job_props
+            )
+            with RecordCapturer(self.env["mail.message"], []) as capture_messages:
+                trap.perform_enqueued_jobs()
+                self.assertEqual(len(capture_messages.records), 1)

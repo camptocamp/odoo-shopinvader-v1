@@ -25,7 +25,7 @@ def _check_partner_data(self, partner, data, skip_keys=None):
 class CommonAddressCase(CommonCase):
     @classmethod
     def setUpClass(cls):
-        super(CommonAddressCase, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.env.ref("shopinvader.partner_1")
         cls.address = cls.env.ref("shopinvader.partner_1_address_1")
         cls.address_2 = cls.env.ref("shopinvader.partner_1_address_2")
@@ -39,7 +39,7 @@ class CommonAddressCase(CommonCase):
         }
 
     def setUp(self, *args, **kwargs):
-        super(CommonAddressCase, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.address_service = work.component(usage="addresses")
 
@@ -79,7 +79,7 @@ class CommonAddressCase(CommonCase):
         return records
 
 
-class AddressTestCase(object):
+class AddressTestCase:
     def test_create_address(self):
         # no email, verify defaults
         params = dict(self.address_params, type="other")
@@ -163,3 +163,5 @@ class AddressTestCase(object):
 
 class AddressCase(CommonAddressCase, AddressTestCase):
     """Test address"""
+
+    allow_inherited_tests_method = True

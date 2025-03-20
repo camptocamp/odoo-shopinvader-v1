@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="shopinvader_notification_cart" model="shopinvader.notification">
         <field name="backend_id" ref="backend_1" />
         <field name="notification_type">cart_confirmation</field>
@@ -61,5 +60,4 @@
         <field name="model_id" ref="base.model_res_partner" />
         <field name="template_id" ref="email_address_updated_notification" />
     </record>
-
 </odoo>

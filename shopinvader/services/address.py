@@ -5,7 +5,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 # pylint: disable=method-required-super, consider-merging-classes-inherited
 
-from odoo import _
 from odoo.exceptions import AccessError
 
 from odoo.addons.base_rest.components.service import to_bool, to_int
@@ -61,7 +60,7 @@ class AddressService(Component):
     def delete(self, _id):
         address = self._get(_id)
         if self.partner == address:
-            raise AccessError(_("Can not delete the partner account"))
+            raise AccessError(self.env._("Can not delete the partner account"))
         address.active = False
         return self.search()
 

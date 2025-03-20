@@ -5,13 +5,13 @@ from datetime import datetime
 
 from odoo.exceptions import ValidationError
 
-from odoo.addons.component.tests.common import SavepointComponentCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class TestResPartner(SavepointComponentCase):
+class TestResPartner(TransactionComponentCase):
     @classmethod
     def setUpClass(cls):
-        super(TestResPartner, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.unique_email = datetime.now().isoformat() + "@test.com"
         cls.backend1 = cls.env.ref("shopinvader.backend_1")

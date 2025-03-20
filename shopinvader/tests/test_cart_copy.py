@@ -9,7 +9,7 @@ from .test_cart import CommonConnectedCartCase
 class TestCartCopy(CommonConnectedCartCase):
     @classmethod
     def setUpClass(cls):
-        super(TestCartCopy, cls).setUpClass()
+        super().setUpClass()
         cls.product_copy = cls.env.ref("product.product_product_24")
         cls.product_copy.list_price = 500.0
 
@@ -24,7 +24,7 @@ class TestCartCopy(CommonConnectedCartCase):
         copy_cart = self.env["sale.order"].browse(new_id)
         self.assertEqual("cart", copy_cart.typology)
         line = copy_cart.order_line.filtered(
-            lambda l: l.product_id == self.product_copy
+            lambda x: x.product_id == self.product_copy
         )
         self.assertEqual(500.0, line.price_unit)
 

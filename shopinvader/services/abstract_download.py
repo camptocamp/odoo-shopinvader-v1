@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import mimetypes
 
-from odoo import _
 from odoo.exceptions import MissingError
 from odoo.http import content_disposition, request
 from odoo.tools.safe_eval import safe_eval, time
@@ -15,31 +14,11 @@ class AbstractDownload(AbstractComponent):
     """
     Class used to define behaviour to generate and download a document.
     You only have to inherit this AbstractComponent and implement the function
-    _get_report_action(...).
+    _get_report_ref(...).
 
-    Example for invoice service:
-    Class InvoiceService(Component):
-        _inherit = [
-            "base.shopinvader.service",
-            "abstract.shopinvader.download",
-        ]
-        _name = "shopinvader.invoice.service"
-
-        def _get_report_action(self, target, params):
-            return target.invoice_print()
     """
 
     _name = "abstract.shopinvader.download"
-
-    # This function should be overwritten
-    def _get_report_action(self, target, params=None):
-        """
-        Get the action/dict to generate the report
-        :param target: recordset
-        :param params: dict
-        :return: dict/action
-        """
-        raise NotImplementedError()
 
     @restapi.method(
         routes=[(["/<int:_id>/download"], "GET")],
@@ -53,7 +32,7 @@ class AbstractDownload(AbstractComponent):
         target = self._get(_id)
         headers, content = self._get_binary_content(target, params=params)
         if not content:
-            raise MissingError(_("No content found for %s") % _id)
+            raise MissingError(self.env._("No content found for %(_id)s", _id=_id))
         response = request.make_response(content, headers)
         response.status_code = 200
         return response
@@ -66,13 +45,11 @@ class AbstractDownload(AbstractComponent):
         :returns: (headers, content)
         """
         # Ensure the report is generated
-        target_report_def = self._get_report_action(target, params=params)
-        report_name = target_report_def.get("report_name")
-        report_type = target_report_def.get("report_type")
-        report = self._get_report(report_name, report_type)
-        content, extension = report._render(
-            target.ids, data={"report_type": report_type}
+        report_ref = self._get_report_ref(params=params)
+        content, extension = self.env["ir.actions.report"]._render(
+            report_ref, target.ids
         )
+        report = self.env["ir.actions.report"]._get_report(report_ref)
         filename = self._get_binary_content_filename(
             target, report, extension, params=params
         )
@@ -87,19 +64,17 @@ class AbstractDownload(AbstractComponent):
         ]
         return headers, content
 
-    def _get_report(self, report_name, report_type, params=None):
+    def _get_report_ref(self, params=None):
         """
-        Load the report recordset
-        :param report_name: str
-        :param report_type: str
-        :param params: dict
-        :return: ir.actions.report recordset
+        Return ref to lookup for the report,
+
+        report_ref: can be one of
+            - ir.actions.report id
+            - ir.actions.report record
+            - ir.model.data reference to ir.actions.report
+            - ir.actions.report report_name
         """
-        domain = [
-            ("report_type", "=", report_type),
-            ("report_name", "=", report_name),
-        ]
-        return self.env["ir.actions.report"].search(domain)
+        raise NotImplementedError()
 
     def _get_binary_content_filename(self, target, report, extension, params=None):
         """
@@ -114,5 +89,5 @@ class AbstractDownload(AbstractComponent):
             report_name = safe_eval(
                 report.print_report_name, {"object": target, "time": time}
             )
-            return "{}.{}".format(report_name, extension)
-        return "{}.{}".format(report.name, extension)
+            return f"{report_name}.{extension}"
+        return f"{report.name}.{extension}"

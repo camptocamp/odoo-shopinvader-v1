@@ -4,7 +4,6 @@
 from odoo.exceptions import UserError
 from odoo.osv import expression
 from odoo.tools.float_utils import float_is_zero
-from odoo.tools.translate import _
 
 from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
@@ -32,16 +31,8 @@ class SaleService(Component):
     def search(self, **params):
         return self._paginate_search(**params)
 
-    def _get_report_action(self, target, params=None):
-        """
-        Get the action/dict to generate the report
-        :param target: recordset
-        :param params: dict
-        :return: dict/action
-        """
-        return self.env.ref("sale.action_report_saleorder").report_action(
-            target, config=False
-        )
+    def _get_report_ref(self, params=None):
+        return self.env.ref("sale.action_report_saleorder")
 
     def ask_email_invoice(self, _id):
         """
@@ -98,7 +89,7 @@ class SaleService(Component):
         :param record: target record
         :return: str
         """
-        result = super(SaleService, self)._get_email_notification_type(record)
+        result = super()._get_email_notification_type(record)
         if getattr(self, "_ask_email_invoice", False):
             result = "invoice_send_email"
         return result
@@ -113,10 +104,10 @@ class SaleService(Component):
         """
         if notif_type == "invoice_send_email":
             target = target.invoice_ids
-        return super(SaleService, self)._launch_notification(target, notif_type)
+        return super()._launch_notification(target, notif_type)
 
     def _convert_one_sale(self, sale):
-        res = super(SaleService, self)._convert_one_sale(sale)
+        res = super()._convert_one_sale(sale)
         res["invoices"] = self._convert_invoices(self._get_invoices(sale))
         return res
 
@@ -135,14 +126,16 @@ class SaleService(Component):
                 line.qty_delivered, precision_digits=precision
             ) or not float_is_zero(line.qty_invoiced, precision_digits=precision):
                 raise UserError(
-                    _("Orders that have been delivered or invoiced cannot be edited.")
+                    self.env._(
+                        "Orders that have been delivered or invoiced cannot be edited."
+                    )
                 )
         return True
 
     def _cancel(self, sale, reset_to_cart=False):
         if not self._is_cancel_allowed(sale):
-            raise UserError(_("This order cannot be cancelled"))
-        sale.action_cancel()
+            raise UserError(self.env._("This order cannot be cancelled"))
+        sale.with_context(disable_cancel_warning=True).action_cancel()
         if reset_to_cart:
             sale.action_draft()
             sale.typology = "cart"

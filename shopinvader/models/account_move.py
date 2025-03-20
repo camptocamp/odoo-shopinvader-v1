@@ -12,7 +12,7 @@ class AccountMove(models.Model):
     )
 
     def _post(self, soft=True):
-        res = super(AccountMove, self)._post(soft=soft)
+        res = super()._post(soft=soft)
         for record in self:
             backend = record.shopinvader_backend_id
             if record.move_type == "out_invoice" and backend:

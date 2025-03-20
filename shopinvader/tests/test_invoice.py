@@ -7,7 +7,7 @@ from .common import CommonCase, CommonTestDownload
 class TestInvoice(CommonCase, CommonTestDownload):
     @classmethod
     def setUpClass(cls):
-        super(TestInvoice, cls).setUpClass()
+        super().setUpClass()
         cls.register_payments_obj = cls.env["account.payment.register"]
         cls.journal_obj = cls.env["account.journal"]
         cls.sale = cls.env.ref("shopinvader.sale_order_2")
@@ -15,9 +15,13 @@ class TestInvoice(CommonCase, CommonTestDownload):
         cls.payment_method_manual_in = cls.env.ref(
             "account.account_payment_method_manual_in"
         )
+        cls.payment_method_line_manual_in = cls.env[
+            "account.payment.method.line"
+        ].search([("payment_method_id", "=", cls.payment_method_manual_in.id)], limit=1)
         cls.bank_journal_euro = cls.journal_obj.create(
             {"name": "Bank", "type": "bank", "code": "BNK627"}
         )
+        cls.payment_method_line_manual_in.journal_id = cls.bank_journal_euro
         cls.invoice_obj = cls.env["account.move"]
         cls.invoice = cls._confirm_and_invoice_sale(cls, cls.sale)
         cls.non_sale_invoice = cls.invoice.copy()
@@ -28,7 +32,7 @@ class TestInvoice(CommonCase, CommonTestDownload):
         ).id
 
     def setUp(self, *args, **kwargs):
-        super(TestInvoice, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.sale_service = work.component(usage="sales")
             self.invoice_service = work.component(usage="invoices")
@@ -170,20 +174,18 @@ class TestInvoice(CommonCase, CommonTestDownload):
     def test_report_get(self):
         default_report = self.env.ref("account.account_invoices")
         self.assertEqual(
-            self.invoice_service._get_report_action(self.invoice),
-            default_report.report_action(self.invoice, config=False),
+            self.invoice_service._get_report_ref(self.invoice), default_report
         )
         # set a custom report
         custom = default_report.copy({"name": "My custom report"})
         self.backend.invoice_report_id = custom
-        self.assertEqual(
-            self.invoice_service._get_report_action(self.invoice)["name"],
-            "My custom report",
-        )
+        self.assertEqual(self.invoice_service._get_report_ref(self.invoice), custom)
 
 
 class DeprecatedTestInvoice(TestInvoice):
+    allow_inherited_tests_method = True
+
     def setUp(self, *args, **kwargs):
-        super(DeprecatedTestInvoice, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.invoice_service = work.component(usage="invoice")

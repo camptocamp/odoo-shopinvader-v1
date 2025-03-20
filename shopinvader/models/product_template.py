@@ -35,15 +35,13 @@ class ProductTemplate(models.Model):
         for record in self:
             # TODO we should propose to redirect the old url
             record.shopinvader_bind_ids.unlink()
-        return super(ProductTemplate, self).unlink()
+        return super().unlink()
 
-    @api.model
-    def create(self, vals):
-        """Due to the order in which product.template, product.product,
-        and bindings, are created, this is to handle the case in which
-        a product.template + its bindings are created in one function call"""
-        result = super().create(vals)
-        bindings = result.shopinvader_bind_ids
-        if bindings:
-            bindings.active = True
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Due to the order in which product.template, product.product,
+        # and bindings, are created, this is to handle the case in which
+        # a product.template + its bindings are created in one function call.
+        result = super().create(vals_list)
+        result.shopinvader_bind_ids.active = True
         return result

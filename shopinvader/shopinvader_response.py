@@ -9,7 +9,7 @@ _test_mode = False
 threadLocal = threading.local()
 
 
-class ShopinvaderResponse(object):
+class ShopinvaderResponse:
     """
     A response object used to enrich the response returned by a shopinvader
     service with cache and session informations

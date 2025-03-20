@@ -69,5 +69,4 @@
         <field name="name">Meuble TV</field>
         <field name="parent_id" ref="product_category_22" />
     </record>
-
 </odoo>

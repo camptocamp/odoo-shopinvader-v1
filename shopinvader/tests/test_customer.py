@@ -16,14 +16,14 @@ _logger = logging.getLogger(__name__)
 class TestCustomerCommon(CommonCase):
     @classmethod
     def setUpClass(cls):
-        super(TestCustomerCommon, cls).setUpClass()
+        super().setUpClass()
         cls.partner = cls.env.ref("shopinvader.partner_1")
         cls.partner_binding = cls.env.ref("shopinvader.shopinvader_partner_1")
         cls.address = cls.env.ref("shopinvader.partner_1_address_1")
         cls.partner_2 = cls.env.ref("shopinvader.partner_2")
 
     def setUp(self, *args, **kwargs):
-        super(TestCustomerCommon, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.data = {
             "email": "new@customer.example.com",
             "name": "Purple",

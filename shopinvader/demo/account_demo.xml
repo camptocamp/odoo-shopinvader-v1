@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-
     <record id="tax_1" model="account.tax">
         <field name="name">Tax inc</field>
         <field eval="15" name="amount" />
@@ -59,7 +58,12 @@
         <field name="tax_dest_id" ref="tax_3" />
     </record>
 
+    <record id="account_analytic_plan_0" model="account.analytic.plan">
+        <field name="name">ShopInvader Analytic Plan</field>
+    </record>
+
     <record id="account_analytic_0" model="account.analytic.account">
         <field name="name">ShopInvader Analytic</field>
+        <field name="plan_id" ref="shopinvader.account_analytic_plan_0" />
     </record>
 </odoo>

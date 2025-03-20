@@ -20,11 +20,11 @@
                 </div>
                 <group>
                     <field name="binding_lines" colspan="2" nolabel="1">
-                        <tree editable="bottom" create="false" delete="false">
+                        <list editable="bottom" create="false" delete="false">
                             <field name="partner_id" force_save="1" />
                             <field name="email" />
                             <field name="bind" />
-                        </tree>
+                        </list>
                     </field>
                 </group>
                 <footer>
@@ -53,5 +53,4 @@
             eval="[(4, ref('shopinvader.group_shopinvader_partner_binding'))]"
         />
     </record>
-
 </odoo>
