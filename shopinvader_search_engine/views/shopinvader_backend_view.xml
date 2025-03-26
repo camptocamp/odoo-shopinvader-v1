@@ -14,15 +14,15 @@
                     <field
                         name="index_ids"
                         nolabel="1"
-                        context="{'shopinvader_backend_id': active_id}"
+                        context="{'shopinvader_backend_id': id}"
                     >
-                        <tree colors="red:not is_valid" create="0" delete="0">
+                        <list colors="red:not is_valid" create="0" delete="0">
                             <field name="name" />
                             <field name="lang_id" />
                             <field name="model_id" />
                             <field name="exporter_id" />
                             <field name="is_valid" />
-                        </tree>
+                        </list>
                     </field>
                 </group>
                 <group

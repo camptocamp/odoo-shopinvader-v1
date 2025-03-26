@@ -5,7 +5,7 @@
 
 {
     "name": "Shopinvader Catalog Search Engine Connector",
-    "version": "14.0.1.4.1",
+    "version": "18.0.1.0.0",
     "author": "Akretion, Camptocamp",
     "development_status": "Production/Stable",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
