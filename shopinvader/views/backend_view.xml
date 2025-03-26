@@ -29,7 +29,7 @@
                     name="%(shopinvader_variant_act_window)d"
                     type="action"
                     icon="fa-file-text-o"
-                    context="{'search_default_backend_id': active_id}"
+                    context="{'search_default_backend_id': id}"
                 >
                     <div class="o_stat_info">
                         <field name="nbr_variant" class="o_stat_value" />
