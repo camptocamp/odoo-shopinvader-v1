@@ -14,7 +14,7 @@
                     <field
                         name="index_ids"
                         nolabel="1"
-                        context="{'shopinvader_backend_id': active_id}"
+                        context="{'shopinvader_backend_id': id}"
                     >
                         <list colors="red:not is_valid" create="0" delete="0">
                             <field name="name" />
