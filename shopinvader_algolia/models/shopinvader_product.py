@@ -12,9 +12,9 @@ class ShopinvaderProduct(models.Model):
 
     hierarchical_categories = fields.Serialized(
         compute="_compute_shopinvader_category",
-        string="Hierarchical Categories",
     )
 
+    # pylint: disable=missing-return
     def _compute_shopinvader_category(self):
         super()._compute_shopinvader_category()
 
@@ -28,7 +28,7 @@ class ShopinvaderProduct(models.Model):
         for record in self:
             hierarchical_categories = {}
             for categ in record.shopinvader_categ_ids:
-                hierarchical_categories["lvl%s" % categ.level] = get_full_name(
+                hierarchical_categories[f"lvl{categ.level}"] = get_full_name(
                     categ.record_id
                 )
             record.hierarchical_categories = hierarchical_categories

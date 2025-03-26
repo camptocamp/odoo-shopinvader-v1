@@ -7,6 +7,11 @@
 import json
 import os
 
+import werkzeug
+
+from odoo.tests.common import _super_send
+from odoo.tools import mute_logger
+
 from odoo.addons.connector_algolia.components.adapter import AlgoliaAdapter
 from odoo.addons.connector_search_engine.tests.test_all import TestBindingIndexBase
 from odoo.addons.shopinvader.tests.common import _install_lang_odoo
@@ -31,8 +36,9 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
             "ALGOLIA_API_KEY", "FAKE_KEY"
         )
         cls.shopinvader_backend = cls.env.ref("shopinvader.backend_1")
-        cls.shopinvader_backend.bind_all_product()
-        cls.shopinvader_backend.bind_all_category()
+        with mute_logger("odoo.addons.queue_job.utils"):
+            cls.shopinvader_backend.bind_all_product()
+            cls.shopinvader_backend.bind_all_category()
         cls.index_product = cls.env.ref("shopinvader_algolia.index_1")
         cls.index_categ = cls.env.ref("shopinvader_algolia.index_2")
 
@@ -43,6 +49,13 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
             "filter_headers": ["Authorization"],
             "decode_compressed_response": True,
         }
+
+    @classmethod
+    def _request_handler(cls, s, r, **kw):
+        url = werkzeug.urls.url_parse(r.url)
+        if url.host.endswith("algolia.net"):
+            return _super_send(s, r, **kw)
+        return super()._request_handler(s, r, **kw)
 
     def setUp(self):
         super().setUp()
@@ -95,9 +108,7 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
         self.assertEqual(len(self.requests), 1)
         request = self.requests[0]
         self.assertEqual(request.method, "POST")
-        self.assertEqual(
-            self.parse_path(request.uri), "/1/indexes/%s/batch" % index.name
-        )
+        self.assertEqual(self.parse_path(request.uri), f"/1/indexes/{index.name}/batch")
         request_data = json.loads(request.body.decode("utf-8"))["requests"]
         self.assertEqual(
             len(request_data), binding_nbr, "All bindings should be exported"
