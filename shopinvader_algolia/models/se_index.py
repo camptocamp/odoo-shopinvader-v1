@@ -11,7 +11,7 @@ class SeIndex(models.Model):
     _inherit = "se.index"
 
     def _get_settings(self):
-        data = super(SeIndex, self)._get_settings()
+        data = super()._get_settings()
         model = self.model_id.model
         # TODO check backend se type and call specific algolia method?
         facetting_values = {}
