@@ -16,14 +16,15 @@ Shopinvader Catalog Search Engine Connector
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-shopinvader%2Fodoo--shopinvader-lightgray.png?logo=github
-    :target: https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_search_engine
-    :alt: shopinvader/odoo-shopinvader
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_search_engine
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
-This module is a technical module to implement batch export of data to external indexation services.
-The first concrete implementation allows to export data to Algolia.
+This module is a technical module to implement batch export of data to
+external indexation services. The first concrete implementation allows
+to export data to Algolia.
 
 **Table of contents**
 
@@ -35,34 +36,35 @@ Usage
 
 Go to Connector menu.
 
-Under the 'Search Engine Connector' menu,
-you will find a list of all search engines (Backends) defined
+Under the 'Search Engine Connector' menu, you will find a list of all
+search engines (Backends) defined
 
 Known issues / Roadmap
 ======================
 
-* harmonize/simplify names: Connector, backend...
+- harmonize/simplify names: Connector, backend...
 
 Changelog
 =========
 
 10.0.1.0.0 (2017-04-11)
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-* First real version : [REF] rename project to the real name : shoptor is dead long live to shopinvader", 2017-04-11)
+- First real version : [REF] rename project to the real name : shoptor
+  is dead long live to shopinvader", 2017-04-11)
 
 12.0.1.0.0 (2019-05-21)
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-* [12.0][MIG] shopinvader_search_engine
+- [12.0][MIG] shopinvader_search_engine
 
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/shopinvader/odoo-shopinvader/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/camptocamp/odoo-shopinvader-v1/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/shopinvader/odoo-shopinvader/issues/new?body=module:%20shopinvader_search_engine%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/camptocamp/odoo-shopinvader-v1/issues/new?body=module:%20shopinvader_search_engine%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -70,32 +72,32 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Akretion
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Sebastien BEAU <sebastien.beau@akretion.com>
-* Laurent Mignon <laurent.mignon@acsone.eu>
-* Benoît GUILLOT <benoit.guillot@akretion.com>
-* Raphaël Reverdy <raphael.reverdy@akretion.com>
-* Denis Roussel <denis.roussel@acsone.eu>
+- Sebastien BEAU <sebastien.beau@akretion.com>
+- Laurent Mignon <laurent.mignon@acsone.eu>
+- Benoît GUILLOT <benoit.guillot@akretion.com>
+- Raphaël Reverdy <raphael.reverdy@akretion.com>
+- Denis Roussel <denis.roussel@acsone.eu>
 
 Other credits
-~~~~~~~~~~~~~
+-------------
 
 Funders
--------
+~~~~~~~
 
 The development of this module has been financially supported by:
 
-* Akretion R&D
+- Akretion R&D
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
-This module is part of the `shopinvader/odoo-shopinvader <https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_search_engine>`_ project on GitHub.
+This module is part of the `camptocamp/odoo-shopinvader-v1 <https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_search_engine>`_ project on GitHub.
 
 You are welcome to contribute.

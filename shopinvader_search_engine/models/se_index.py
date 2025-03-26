@@ -5,7 +5,6 @@ from odoo import api, fields, models
 
 
 class SeIndex(models.Model):
-
     _inherit = "se.index"
 
     is_valid = fields.Char(compute="_compute_is_valid")
