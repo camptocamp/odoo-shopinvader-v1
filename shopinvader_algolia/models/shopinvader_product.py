@@ -16,7 +16,7 @@ class ShopinvaderProduct(models.Model):
     )
 
     def _compute_shopinvader_category(self):
-        super(ShopinvaderProduct, self)._compute_shopinvader_category()
+        super()._compute_shopinvader_category()
 
         def get_full_name(categ):
             result = []

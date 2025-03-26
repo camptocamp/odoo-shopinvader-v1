@@ -20,7 +20,7 @@ except ImportError:
 class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
     @classmethod
     def setUpClass(cls):
-        super(TestAlgoliaBackend, cls).setUpClass()
+        super().setUpClass()
         AlgoliaAdapter._build_component(cls._components_registry)
         cls.backend_specific = cls.env.ref("connector_algolia.se_algolia_demo")
         cls.backend = cls.backend_specific.se_backend_id
@@ -45,7 +45,7 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
         }
 
     def setUp(self):
-        super(TestAlgoliaBackend, self).setUp()
+        super().setUp()
         if self.vcr_enabled:
             # TODO we should discuss about this
             # @laurent @simone @guewen

@@ -6,8 +6,8 @@
 {
     "name": "Shopinvader Algolia Connector",
     "version": "14.0.2.0.1",
-    "author": "Akretion",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "author": "Akretion, Camptocamp",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "license": "AGPL-3",
     "category": "Generic Modules",
     # "post_init_hook": "post_init_hook",
