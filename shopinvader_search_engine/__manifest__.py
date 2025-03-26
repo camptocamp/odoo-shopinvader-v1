@@ -6,9 +6,9 @@
 {
     "name": "Shopinvader Catalog Search Engine Connector",
     "version": "14.0.1.4.1",
-    "author": "Akretion",
+    "author": "Akretion, Camptocamp",
     "development_status": "Production/Stable",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "license": "AGPL-3",
     "category": "Generic Modules",
     "depends": [
