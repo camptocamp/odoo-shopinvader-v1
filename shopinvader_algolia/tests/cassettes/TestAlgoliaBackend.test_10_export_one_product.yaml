@@ -1,0 +1,55 @@
+interactions:
+- request:
+    body: '{"requests": [{"action": "addObject", "body": {"id": 8, "model": {"name":
+      "Desk Combination"}, "url_key": "desk-combination-furn-7800", "redirect_url_key":
+      [], "main": true, "short_description": null, "description": null, "name": "Desk
+      Combination", "short_name": "", "seo_title": "Desk Combination | ", "meta_keywords":
+      null, "meta_description": null, "variant_count": 1, "categories": [], "sku":
+      "FURN_7800", "variant_attributes": {}, "price": {"default": {"value": 450.0,
+      "tax_included": false, "original_value": 450.0, "discount": 0.0}}, "hierarchicalCategories":
+      {}, "objectID": 8}}]}'
+    headers:
+      Content-Length:
+      - '589'
+      content-type:
+      - application/json
+      user-agent:
+      - Algolia for Python (4.16.0); Python (3.12.0); Search (4.16.0)
+      x-algolia-api-key:
+      - FAKE_KEY
+      x-algolia-application-id:
+      - FAKE_APP
+    method: POST
+    uri: https://FAKE_APP.algolia.net/1/indexes/demo_algolia_backend_shopinvader_variant_en_US/batch
+  response:
+    body:
+      string: '{"objectIDs":["8"],"taskID":890618186001}'
+    headers:
+      Accept-Encoding:
+      - deflate, gzip
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-store
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - inline; filename=a.txt
+      Content-Length:
+      - '41'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 28 Mar 2025 09:56:10 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Timing-Allow-Origin:
+      - '*'
+      X-Content-Type-Options:
+      - nosniff
+    status:
+      code: 200
+      message: OK
+version: 1
