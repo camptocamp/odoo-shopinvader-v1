@@ -16,6 +16,13 @@
         "connector_search_engine",
         "base_technical_user",
     ],
+    "external_dependencies": {
+        "python": [
+            # use our own fork of connector_search_engine
+            "odoo-addon-connector_search_engine @ "
+            "git+https://github.com/camptocamp/search-engine-v1@18.0#subdirectory=connector_search_engine"
+        ]
+    },
     "data": [
         "views/shopinvader_backend_view.xml",
         "views/shopinvader_variant_view.xml",
