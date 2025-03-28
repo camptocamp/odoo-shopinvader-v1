@@ -26,6 +26,7 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, queue_job__no_delay=True))
         AlgoliaAdapter._build_component(cls._components_registry)
         cls.backend_specific = cls.env.ref("connector_algolia.se_algolia_demo")
         cls.backend = cls.backend_specific.se_backend_id
@@ -90,7 +91,7 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
         )
         request_data = json.loads(request.body.decode("utf-8"))["requests"]
         self.assertEqual(len(request_data), 1)
-        self.assertEqual(request_data[0]["action"], "updateObject")
+        self.assertEqual(request_data[0]["action"], "addObject")
         self.assertEqual(request_data[0]["body"], si_variant.data)
 
     def test_20_recompute_all_products(self):
@@ -113,7 +114,7 @@ class TestAlgoliaBackend(VCRMixin, TestBindingIndexBase):
         self.assertEqual(
             len(request_data), binding_nbr, "All bindings should be exported"
         )
-        self.assertEqual(request_data[0]["action"], "updateObject")
+        self.assertEqual(request_data[0]["action"], "addObject")
 
     def test_20_export_all_products(self):
         self._test_export_all_binding(self.index_product)
