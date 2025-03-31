@@ -11,12 +11,11 @@ from odoo.addons.shopinvader.tests.common import CommonCase, CommonTestDownload
 
 
 class TestDeliveryService(CommonCase, CommonTestDownload):
-
     maxDiff = None
 
     @classmethod
     def setUpClass(cls):
-        super(TestDeliveryService, cls).setUpClass()
+        super().setUpClass()
         cls.picking_obj = cls.env["stock.picking"]
         cls.move_obj = cls.env["stock.move"]
         cls.partner = cls.env.ref("base.res_partner_2").copy()
@@ -32,7 +31,7 @@ class TestDeliveryService(CommonCase, CommonTestDownload):
         )
 
     def setUp(self, *args, **kwargs):
-        super(TestDeliveryService, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         with self.work_on_services(partner=self.partner) as work:
             self.service = work.component(usage="delivery")
         with self.work_on_services(partner=self.backend.anonymous_partner_id) as work:
@@ -48,7 +47,7 @@ class TestDeliveryService(CommonCase, CommonTestDownload):
         # To have them into correct order
         pickings = pickings.search([("id", "in", pickings.ids)])
         self.assertEqual(len(data), len(pickings))
-        for current_data, picking in zip(data, pickings):
+        for current_data, picking in zip(data, pickings, strict=False):
             carrier_dict = current_data.get("carrier", {})
             sale_dict = current_data.get("sale", {})
             self.assertEqual(current_data.get("delivery_id"), picking.id)
