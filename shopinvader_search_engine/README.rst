@@ -42,7 +42,7 @@ search engines (Backends) defined
 Known issues / Roadmap
 ======================
 
-- harmonize/simplify names: Connector, backend...
+-  harmonize/simplify names: Connector, backend...
 
 Changelog
 =========
@@ -50,13 +50,13 @@ Changelog
 10.0.1.0.0 (2017-04-11)
 -----------------------
 
-- First real version : [REF] rename project to the real name : shoptor
-  is dead long live to shopinvader", 2017-04-11)
+-  First real version : [REF] rename project to the real name : shoptor
+   is dead long live to shopinvader", 2017-04-11)
 
 12.0.1.0.0 (2019-05-21)
 -----------------------
 
-- [12.0][MIG] shopinvader_search_engine
+-  [12.0][MIG] shopinvader_search_engine
 
 Bug Tracker
 ===========
@@ -80,11 +80,11 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
-- Laurent Mignon <laurent.mignon@acsone.eu>
-- Benoît GUILLOT <benoit.guillot@akretion.com>
-- Raphaël Reverdy <raphael.reverdy@akretion.com>
-- Denis Roussel <denis.roussel@acsone.eu>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
+-  Laurent Mignon <laurent.mignon@acsone.eu>
+-  Benoît GUILLOT <benoit.guillot@akretion.com>
+-  Raphaël Reverdy <raphael.reverdy@akretion.com>
+-  Denis Roussel <denis.roussel@acsone.eu>
 
 Other credits
 -------------
@@ -94,7 +94,7 @@ Funders
 
 The development of this module has been financially supported by:
 
-- Akretion R&D
+-  Akretion R&D
 
 Maintainers
 -----------
