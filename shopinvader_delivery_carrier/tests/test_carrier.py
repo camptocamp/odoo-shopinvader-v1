@@ -7,7 +7,7 @@ from .common import CommonCarrierCase
 
 class CarrierCase(CommonCarrierCase):
     def setUp(self):
-        super(CarrierCase, self).setUp()
+        super().setUp()
         self.carrier_service = self.service.component("delivery_carrier")
 
     def test_available_carriers(self):
@@ -149,7 +149,7 @@ class CarrierCase(CommonCarrierCase):
         self.assertEqual(len(lines), len(self.cart.order_line))
         for line_id, line_values in lines.items():
             order_line = self.cart.order_line.filtered(
-                lambda l, lid=line_id: l.id == lid
+                lambda line, lid=line_id: line.id == lid
             )
             order_line.read()
             self.assertDictEqual(
@@ -186,7 +186,7 @@ class CarrierCase(CommonCarrierCase):
         self.assertEqual(len(available_carriers), len(carrier_rows))
         for carrier_result in carrier_rows:
             carrier = available_carriers.filtered(
-                lambda c: c.id == carrier_result.get("id")
+                lambda c, result=carrier_result: c.id == result.get("id")
             )
             self.assertEqual(len(carrier), 1)
             self.assertEqual(carrier.name, carrier_result.get("name"))
@@ -233,13 +233,15 @@ class CarrierCase(CommonCarrierCase):
         self.assertEqual(len(lines), len(self.cart.order_line))
         for line_id, line_values in lines.items():
             order_line = self.cart.order_line.filtered(
-                lambda l, lid=line_id: l.id == lid
+                lambda line, lid=line_id: line.id == lid
             )
             # Because delivery line has changed and the ID doesn't match
             # anymore.
             # But should still similar!
             if not order_line:
-                order_line = self.cart.order_line.filtered(lambda l: l.is_delivery)
+                order_line = self.cart.order_line.filtered(
+                    lambda line: line.is_delivery
+                )
             order_line.read()
             self.assertDictEqual(
                 order_line._convert_to_write(order_line._cache), line_values
@@ -283,7 +285,7 @@ class CarrierCase(CommonCarrierCase):
         self.assertEqual(len(lines), len(self.cart.order_line))
         for line_id, line_values in lines.items():
             order_line = self.cart.order_line.filtered(
-                lambda l, lid=line_id: l.id == lid
+                lambda line, lid=line_id: line.id == lid
             )
             order_line.read()
             self.assertDictEqual(
