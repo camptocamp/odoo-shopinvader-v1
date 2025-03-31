@@ -20,7 +20,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
             "data": [
                 {
                     "price": 0.0,
-                    "description": self.free_carrier.description,
+                    "description": self.free_carrier.carrier_description,
                     "id": self.free_carrier.id,
                     "name": self.free_carrier.name,
                     "code": self.free_carrier.code,
@@ -28,7 +28,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
                 },
                 {
                     "price": 0.0,
-                    "description": self.poste_carrier.description,
+                    "description": self.poste_carrier.carrier_description,
                     "id": self.poste_carrier.id,
                     "name": self.poste_carrier.name,
                     "code": self.poste_carrier.code,
@@ -45,7 +45,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
             "data": [
                 {
                     "price": 0.0,
-                    "description": self.free_carrier.description,
+                    "description": self.free_carrier.carrier_description,
                     "id": self.free_carrier.id,
                     "name": self.free_carrier.name,
                     "code": self.free_carrier.code,
@@ -53,7 +53,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
                 },
                 {
                     "price": 20.0,
-                    "description": self.poste_carrier.description,
+                    "description": self.poste_carrier.carrier_description,
                     "id": self.poste_carrier.id,
                     "name": self.poste_carrier.name,
                     "code": self.poste_carrier.code,
@@ -76,7 +76,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
             "data": [
                 {
                     "price": 0.0,
-                    "description": self.free_carrier.description,
+                    "description": self.free_carrier.carrier_description,
                     "id": self.free_carrier.id,
                     "name": self.free_carrier.name,
                     "code": self.free_carrier.code,
@@ -95,8 +95,9 @@ class TestDeliveryCarrier(CommonCarrierCase):
         partner_zip = self.cart.partner_id.zip
         self.free_carrier.country_ids = self.env.ref("base.be")
         self.poste_carrier.country_ids = self.env.ref("base.fr")
-        self.poste_carrier.zip_from = "75000"
-        self.poste_carrier.zip_to = "75000"
+        self.poste_carrier.zip_prefix_ids += self.env["delivery.zip.prefix"].create(
+            {"name": "75000"}
+        )
         self.params = {
             "target": "current_cart",
             "zip_code": "75100",
@@ -115,8 +116,6 @@ class TestDeliveryCarrier(CommonCarrierCase):
         self.poste_carrier.country_ids = self.env.ref("base.fr")
 
         # Change carrier zips
-        self.poste_carrier.zip_from = "75000"
-        self.poste_carrier.zip_to = "75200"
         self.params = {
             "target": "current_cart",
             "zip_code": "75100",
@@ -128,7 +127,7 @@ class TestDeliveryCarrier(CommonCarrierCase):
             "data": [
                 {
                     "price": 20.0,
-                    "description": self.poste_carrier.description,
+                    "description": self.poste_carrier.carrier_description,
                     "id": self.poste_carrier.id,
                     "name": self.poste_carrier.name,
                     "code": self.poste_carrier.code,

@@ -23,18 +23,16 @@ class StockPicking(models.Model):
         :return: bool
         """
         picking_outgoing = self.filtered(lambda p: p.picking_type_id.code == "outgoing")
-        all_move_lines = picking_outgoing.mapped("move_lines")
+        all_moves = picking_outgoing.mapped("move_ids")
         backends = picking_outgoing._get_related_backends()
 
-        def filter_line(line, backend):
-            line_backend = line.sale_line_id.order_id.shopinvader_backend_id
+        def filter_line(move, backend):
+            line_backend = move.sale_line_id.order_id.shopinvader_backend_id
             return line_backend == backend
 
         for backend in backends:
-            move_lines = all_move_lines.filtered(
-                lambda ml, b=backend: filter_line(ml, b)
-            )
-            pickings = move_lines.mapped("picking_id")
+            moves = all_moves.filtered(lambda ml, b=backend: filter_line(ml, b))
+            pickings = moves.mapped("picking_id")
             for picking in pickings:
                 backend._send_notification(notification, picking)
         return True
@@ -44,9 +42,9 @@ class StockPicking(models.Model):
         Get backend related to current pickings
         :return: shopinvader.backend recordset
         """
-        move_lines = self.mapped("move_lines")
+        moves = self.mapped("move_ids")
         # Load backend from related sale order lines
-        backends = move_lines.mapped("sale_line_id.order_id.shopinvader_backend_id")
+        backends = moves.mapped("sale_line_id.order_id.shopinvader_backend_id")
         return backends
 
     def _action_done(self):
