@@ -8,8 +8,12 @@ class SaleCase(CommonCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        product_model = cls.env["product.product"]
-        product = product_model.create({"name": "Unittest P1", "type": "product"})
+        product = cls.env["product.product"].create(
+            {
+                "name": "Product A",
+                "is_storable": True,
+            }
+        )
         cls.sale = cls.env.ref("shopinvader.sale_order_2")
         cls.sale.order_line[0].product_id = product
         cls.partner = cls.env.ref("shopinvader.partner_1")
@@ -26,7 +30,7 @@ class SaleCase(CommonCase):
         picking = self.sale.picking_ids
         picking.action_confirm()
         picking.action_assign()
-        picking.move_lines._action_done()
+        picking.move_line_ids._action_done()
 
     def test_read_sale(self):
         self.sale.action_confirm_cart()
@@ -37,3 +41,35 @@ class SaleCase(CommonCase):
             res["deliveries"][0],
             {"id": pick.id, "name": pick.name, "date": pick.scheduled_date},
         )
+
+    def test_available_carriers(self):
+        # Carriers are available on the backend
+        all_carriers = self.env["delivery.carrier"].search(
+            [
+                "|",
+                ("company_id", "=", False),
+                ("company_id", "=", self.env.company.id),
+            ]
+        )
+        carriers = self.env.ref("delivery.delivery_carrier") + self.env.ref(
+            "delivery.free_delivery_carrier"
+        )
+        sale = self.sale
+        self.assertEqual(sale.shopinvader_backend_id.carrier_ids, carriers)
+        # Carriers available on SO are limited to the ones on the backend
+        self.assertEqual(sale.shopinvader_available_carrier_ids, carriers)
+        self.assertEqual(sale._available_carriers(), all_carriers)
+        # No carrier on the backend
+        sale.shopinvader_backend_id = False
+        self.assertEqual(sale.shopinvader_available_carrier_ids, carriers.browse())
+
+    def test_available_carriers_by_country(self):
+        sale = self.sale
+        all_carriers = self.env["delivery.carrier"].search([])
+        be_carrier = sale.shopinvader_backend_id.carrier_ids[0]
+        be_carrier.country_ids = self.env.ref("base.be")
+        rest_of_carriers = all_carriers - be_carrier
+        rest_of_carriers.country_ids = self.env.ref("base.de")
+        sale.partner_shipping_id.country_id = self.env.ref("base.be")
+        self.assertEqual(sale.shopinvader_available_carrier_ids, be_carrier)
+        self.assertEqual(sale._available_carriers(), be_carrier)
