@@ -1,6 +1,6 @@
 # Copyright 2019 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
-from odoo import _, api, models
+from odoo import api, models
 
 
 class ShopinvaderNotification(models.Model):
@@ -14,7 +14,7 @@ class ShopinvaderNotification(models.Model):
         """
         return {
             "stock_picking_outgoing_validated": {
-                "name": _("Delivery order validated"),
+                "name": self.env._("Delivery order validated"),
                 "model": "stock.picking",
             }
         }
