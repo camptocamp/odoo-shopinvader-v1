@@ -52,19 +52,19 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
-- Laurent Mignon <laurent.mignon@acsone.com>
-- Simone Orsi <simone.orsi@camptocamp.com>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
+-  Laurent Mignon <laurent.mignon@acsone.com>
+-  Simone Orsi <simone.orsi@camptocamp.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- Akretion
-- Adaptoo
-- Encresdubuit
-- Abilis
+-  Akretion
+-  Adaptoo
+-  Encresdubuit
+-  Abilis
 
 Maintainers
 -----------
