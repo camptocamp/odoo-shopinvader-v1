@@ -129,4 +129,4 @@ class CartService(Component):
     def _get_lines_to_copy(self, cart):
         # Override. Don't copy delivery lines.
         res = super()._get_lines_to_copy(cart)
-        return res.filtered(lambda l: not l.is_delivery)
+        return res.filtered(lambda line: not line.is_delivery)
