@@ -24,7 +24,7 @@ class ShopinvaderNotification(models.Model):
         Inherit to add gift list notifications
         :return: dict
         """
-        result = super(ShopinvaderNotification, self)._get_all_notification()
+        result = super()._get_all_notification()
         picking_notification = self._get_picking_notification()
         if picking_notification:
             result.update(picking_notification)
