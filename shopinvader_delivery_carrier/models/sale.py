@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
             ]
         )
         return (
-            carriers.available_carriers(self.partner_shipping_id)
+            carriers.available_carriers(self.partner_shipping_id, self)
             if self.partner_id
             else carriers
         )
@@ -52,9 +52,7 @@ class SaleOrder(models.Model):
     def _set_carrier_and_price(self, carrier_id):
         wizard = (
             self.env["choose.delivery.carrier"]
-            .with_context(
-                {"default_order_id": self.id, "default_carrier_id": carrier_id}
-            )
+            .with_context(default_order_id=self.id, default_carrier_id=carrier_id)
             .create({})
         )
         wizard._onchange_carrier_id()
