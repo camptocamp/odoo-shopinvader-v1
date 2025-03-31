@@ -8,7 +8,7 @@ from odoo.addons.shopinvader.tests.test_cart import CommonConnectedCartCase
 class CommonCarrierCase(CommonConnectedCartCase):
     @classmethod
     def setUpClass(cls):
-        super(CommonCarrierCase, cls).setUpClass()
+        super().setUpClass()
         cls.free_carrier = cls.env.ref("delivery.free_delivery_carrier")
         cls.poste_carrier = cls.env.ref("delivery.delivery_carrier")
         cls.free_carrier.code = "FREE"
