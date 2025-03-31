@@ -2,7 +2,6 @@
 <!-- Copyright 2019 ACSONE SA/NV
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record id="email_picking" model="mail.template">
         <field name="name">Picking notification</field>
         <field name="email_from">${(object.company_id.email or '')|safe}</field>
@@ -13,5 +12,4 @@
         <field name="lang">${object.partner_id.lang}</field>
         <field name="body_html"><![CDATA[ Thanks for your order ]]></field>
     </record>
-
 </odoo>
