@@ -151,9 +151,12 @@ class DeliveryCarrierService(Component):
 
     @property
     def _json_parser_carrier(self):
-        return ["id", "name", "code", "description"]
+        return ["id", "name", "code", "carrier_description:description"]
 
 
+# TODO: we are still keeping this in v18 since it is used in
+# Locomotive theme but we'll refactor that likely next year
+# w/out using Locomotive.
 class DeprecatedDeliveryCarrierService(Component):
     """Deprecated use 'delivery_carriers' instead"""
 
