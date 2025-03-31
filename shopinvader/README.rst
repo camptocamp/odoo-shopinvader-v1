@@ -39,7 +39,7 @@ Solution <https://shopinvader.com>`__.
 Known issues / Roadmap
 ======================
 
-- Customer validation limitation
+-  Customer validation limitation
 
 Customer validation is global: enable/disable affects all websites, if
 you have more than one.
@@ -47,16 +47,16 @@ you have more than one.
 Technical
 ---------
 
-- Create methods should be rewritten to support multi
-- The logic to bind / unbind products and categories should be
-  implemented as component in place of wizard. Previously it was
-  possible to work with in-memory record of the wizard to call the same
-  logic from within odoo. In Odoo 13 it's no more the case. That means
-  that to rebind thousand of records we must create thousand of rows
-  into the database to reuse the logic provided by the wizard.
-- On product.category the name is no more translatable in V13. This
-  functionality has been restored into shopinvader. This should be moved
-  into a dedicated addon
+-  Create methods should be rewritten to support multi
+-  The logic to bind / unbind products and categories should be
+   implemented as component in place of wizard. Previously it was
+   possible to work with in-memory record of the wizard to call the same
+   logic from within odoo. In Odoo 13 it's no more the case. That means
+   that to rebind thousand of records we must create thousand of rows
+   into the database to reuse the logic provided by the wizard.
+-  On product.category the name is no more translatable in V13. This
+   functionality has been restored into shopinvader. This should be
+   moved into a dedicated addon
 
 Changelog
 =========
@@ -64,13 +64,13 @@ Changelog
 10.0.1.0.0 (2017-04-11)
 -----------------------
 
-- First real version : [REF] rename project to the real name : shoptor
-  is dead long live to shopinvader", 2017-04-11)
+-  First real version : [REF] rename project to the real name : shoptor
+   is dead long live to shopinvader", 2017-04-11)
 
 12.0.1.0.0 (2019-05-10)
 -----------------------
 
-- [12.0][MIG] shopinvader
+-  [12.0][MIG] shopinvader
 
 Bug Tracker
 ===========
@@ -94,23 +94,23 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
-- Simone Orsi <simone.orsi@camptocamp.com>
-- Laurent Mignon <laurent.mignon@acsone.eu>
-- Raphaël Reverdy <raphael.reverdy@akretion.com>
-- Kevin Khao <kevin.khao@akretion.com>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
+-  Simone Orsi <simone.orsi@camptocamp.com>
+-  Laurent Mignon <laurent.mignon@acsone.eu>
+-  Raphaël Reverdy <raphael.reverdy@akretion.com>
+-  Kevin Khao <kevin.khao@akretion.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- Akretion
-- Adaptoo
-- Encresdubuit
-- Abilis
-- Camptocamp
-- Cosanum
+-  Akretion
+-  Adaptoo
+-  Encresdubuit
+-  Abilis
+-  Camptocamp
+-  Cosanum
 
 Maintainers
 -----------
