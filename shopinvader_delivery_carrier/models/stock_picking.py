@@ -31,7 +31,9 @@ class StockPicking(models.Model):
             return line_backend == backend
 
         for backend in backends:
-            move_lines = all_move_lines.filtered(lambda l, b=backend: filter_line(l, b))
+            move_lines = all_move_lines.filtered(
+                lambda ml, b=backend: filter_line(ml, b)
+            )
             pickings = move_lines.mapped("picking_id")
             for picking in pickings:
                 backend._send_notification(notification, picking)
@@ -52,6 +54,6 @@ class StockPicking(models.Model):
         Inherit to update the invoice state if necessary
         :return:
         """
-        result = super(StockPicking, self)._action_done()
+        result = super()._action_done()
         self._notify_backend("stock_picking_outgoing_validated")
         return result
