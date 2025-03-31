@@ -61,10 +61,8 @@ class DeliveryService(Component):
         }
         return schema
 
-    def _get_report_action(self, target, params=None):
-        return self.env.ref("stock.action_report_delivery").report_action(
-            target, config=False
-        )
+    def _get_report_ref(self, params=None):
+        return self.env.ref("stock.action_report_delivery")
 
     def _get_allowed_picking_domain(self):
         """Domain to filter stock pickings.
