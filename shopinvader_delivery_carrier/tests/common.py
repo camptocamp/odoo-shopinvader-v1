@@ -12,9 +12,9 @@ class CommonCarrierCase(CommonConnectedCartCase):
         cls.free_carrier = cls.env.ref("delivery.free_delivery_carrier")
         cls.poste_carrier = cls.env.ref("delivery.delivery_carrier")
         cls.free_carrier.code = "FREE"
-        cls.free_carrier.description = "delivery in 5 days"
+        cls.free_carrier.carrier_description = "delivery in 5 days"
         cls.poste_carrier.code = "POSTE"
-        cls.poste_carrier.description = "delivery in 2 days"
+        cls.poste_carrier.carrier_description = "delivery in 2 days"
         cls.product_1 = cls.env.ref("product.product_product_4b")
         cls.precision = 2
 
@@ -58,5 +58,5 @@ class CommonCarrierCase(CommonConnectedCartCase):
 
     def _apply_carrier_and_assert_set(self):
         cart = self._set_carrier(self.poste_carrier)
-        self.assertEqual(cart["shipping"]["amount"]["total"], 20)
+        self.assertEqual(cart["shipping"]["amount"]["total"], 23.0)
         return cart
