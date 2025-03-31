@@ -5,7 +5,7 @@
     "name": "Shopinvader Notification default",
     "summary": """
         Provide default notification templates for Shopinvader suite.""",
-    "version": "14.0.1.0.1",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
@@ -20,5 +20,5 @@
         "data/email_template.xml",
         "data/shopinvader_notification.xml",
     ],
-    "installable": False,
+    "installable": True,
 }
