@@ -69,9 +69,7 @@ class TestDeliveryService(CommonCase, CommonTestDownload):
                 serv_date_order_string = fields.Datetime.to_string(
                     parser.parse(sale_dict.get("date_order"))
                 )
-                date_order_ts = fields.Datetime.context_timestamp(
-                    picking, picking.sale_id.date_order
-                )
+                date_order_ts = picking.sale_id.date_order
                 self.assertEqual(
                     serv_date_order_string,
                     fields.Datetime.to_string(date_order_ts),
