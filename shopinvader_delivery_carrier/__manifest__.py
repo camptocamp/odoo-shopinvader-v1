@@ -5,14 +5,13 @@
 {
     "name": "Shopinvader Carrier",
     "summary": "Carrier integration for Shopinvader",
-    "version": "14.0.2.3.1",
+    "version": "18.0.1.0.0",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Akretion, Camptocamp",
     "license": "AGPL-3",
     "application": True,
     "installable": True,
-    "external_dependencies": {"python": [], "bin": []},
     "depends": [
         "delivery",
         "queue_job",
@@ -26,5 +25,4 @@
         "demo/mail_template.xml",
         "demo/shopinvader_notification.xml",
     ],
-    "qweb": [],
 }
