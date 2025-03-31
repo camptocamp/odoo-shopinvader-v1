@@ -53,7 +53,7 @@ Authors
 Contributors
 ------------
 
-- Laurent Mignon <laurent.mignon@acsone.eu>
+-  Laurent Mignon <laurent.mignon@acsone.eu>
 
 Maintainers
 -----------
