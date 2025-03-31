@@ -6,7 +6,7 @@ from .common import CommonCarrierCase
 
 class TestDeliveryCarrier(CommonCarrierCase):
     def setUp(self):
-        super(TestDeliveryCarrier, self).setUp()
+        super().setUp()
         self.carrier_service = self.service.component("delivery_carriers")
 
     def _check_response(self, res, expected):
@@ -141,5 +141,5 @@ class TestDeliveryCarrier(CommonCarrierCase):
 
 class DeprecatedTestDeliveryCarrier(TestDeliveryCarrier):
     def setUp(self):
-        super(DeprecatedTestDeliveryCarrier, self).setUp()
+        super().setUp()
         self.carrier_service = self.service.component("delivery_carrier")
