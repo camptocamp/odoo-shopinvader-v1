@@ -8,7 +8,7 @@
     "category": "Connector",
     "summary": "Manage communications between Shopinvader and Locomotive CMS",
     "author": "Akretion",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "license": "AGPL-3",
     "development_status": "Production/Stable",
     "depends": [

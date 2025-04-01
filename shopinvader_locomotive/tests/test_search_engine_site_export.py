@@ -9,12 +9,11 @@ from .common import LocoCommonCase, mock_site_api
 
 
 class TestSiteSearchEngineExportBase(LocoCommonCase):
-
     maxDiff = None
 
     @classmethod
     def setUpClass(cls):
-        super(TestSiteSearchEngineExportBase, cls).setUpClass()
+        super().setUpClass()
         cls._setup_search_engine()
         cls.routes = [
             [
@@ -48,7 +47,7 @@ class TestSiteSearchEngineExportBase(LocoCommonCase):
         raise NotImplementedError()
 
     def setUp(self):
-        super(TestSiteSearchEngineExportBase, self).setUp()
+        super().setUp()
         self.metafields = {self.search_engine_name: {}}
         # simplified version of site data
         self.site = {
@@ -118,7 +117,7 @@ class TestSiteSearchEngineExport(TestSiteSearchEngineExportBase):
     @classmethod
     def tearDownClass(cls):
         cls.loader.restore_registry()
-        super(TestSiteSearchEngineExport, cls).tearDownClass()
+        super().tearDownClass()
 
     def test_search_engine_synchronize_01(self):
         """

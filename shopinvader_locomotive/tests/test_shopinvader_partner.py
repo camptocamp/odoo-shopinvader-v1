@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 # pylint: disable=W7936
 try:
     import requests_mock
-except (ImportError, IOError) as err:
+except (OSError, ImportError) as err:
     _logger.debug(err)
 
 

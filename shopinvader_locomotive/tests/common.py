@@ -12,14 +12,14 @@ _logger = logging.getLogger(__name__)
 # pylint: disable=W7936
 try:
     import requests_mock
-except (ImportError, IOError) as err:
+except (OSError, ImportError) as err:
     _logger.debug(err)
 
 
 class LocoCommonCase(CommonCase):
     @classmethod
     def setUpClass(cls):
-        super(LocoCommonCase, cls).setUpClass()
+        super().setUpClass()
         cls.base_url = cls.backend.location + "/locomotive/api/v3"
         cls.site = {
             "name": "My site",
@@ -34,6 +34,6 @@ def mock_site_api(base_url, site):
         m.post(base_url + "/tokens.json", json={"token": "744cfcfb3cd3"})
         m.get(base_url + "/sites", json=[site])
         yield m.put(
-            base_url + "/sites/%s" % site["_id"],
+            base_url + "/sites/{}".format(site["_id"]),
             json={"foo": "we_do_not_care"},
         )
