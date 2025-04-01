@@ -12,7 +12,7 @@ Base = base_tests.test_search_engine_site_export.TestSiteSearchEngineExportBase
 class TestSiteSearchEngineExport(Base):
     @classmethod
     def setUpClass(cls):
-        super(TestSiteSearchEngineExport, cls).setUpClass()
+        super().setUpClass()
         cls.indexes = [
             {
                 "name": "categories",
