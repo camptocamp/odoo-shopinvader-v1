@@ -14,6 +14,7 @@
     "installable": True,
     "depends": [
         "delivery",
+        "stock",
         "queue_job",
         "shopinvader",
         "sale_shipping_info_helper",
