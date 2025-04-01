@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="small" model="shopinvader.image.resize">
         <field name="name">Shop Small</field>
         <field name="key">small</field>
@@ -21,5 +20,4 @@
         <field name="size_x">500</field>
         <field name="size_y">500</field>
     </record>
-
 </odoo>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_image_resize_search_view">
         <field name="model">shopinvader.image.resize</field>
         <field name="arch" type="xml">
@@ -13,22 +12,22 @@
     <record model="ir.ui.view" id="shopinvader_image_resize_tree_view">
         <field name="model">shopinvader.image.resize</field>
         <field name="arch" type="xml">
-             <tree string="Product" editable="bottom">
+            <list string="Product" editable="bottom">
                 <field name="display_name" />
                 <field name="name" />
                 <field name="key" />
                 <field name="size_x" />
                 <field name="size_y" />
-             </tree>
+            </list>
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="shopinvader_image_resize_act_window">
         <field name="name">Shopinvader Image Resize</field>
         <field name="res_model">shopinvader.image.resize</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
         <field name="domain">[]</field>
-         <field name="view_id" ref="shopinvader_image_resize_tree_view" />
+        <field name="view_id" ref="shopinvader_image_resize_tree_view" />
         <field name="context">{}</field>
         <field
             name="groups_id"
@@ -50,5 +49,4 @@
         sequence="20"
         action="shopinvader_image_resize_act_window"
     />
-
 </odoo>

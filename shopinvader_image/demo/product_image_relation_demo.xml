@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- pylint:disable=file-not-used -->
 <odoo>
-
     <!-- Mid Century Modern Eames Chair with Molded Arms and Wood Legs -->
 
     <record id="product_image_relation_1" model="product.image.relation">
@@ -589,5 +588,4 @@
             eval="[(6,0,[ref('shopinvader.product_attribute_value_color_red')])]"
         />
     </record>
-
 </odoo>
