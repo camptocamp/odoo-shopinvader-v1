@@ -15,7 +15,8 @@
                         <field name="cart_expiry_delay_unit" />
                         <field
                             name="cart_expiry_policy"
-                            attrs="{'invisible': [('cart_expiry_delay', '&lt;=', 0)], 'required': [('cart_expiry_delay', '&gt;', 0)]}"
+                            invisible="cart_expiry_delay &lt;= 0"
+                            required="cart_expiry_delay &gt; 0"
                         />
                     </group>
                     <group />

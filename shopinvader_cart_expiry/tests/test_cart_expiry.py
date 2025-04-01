@@ -146,7 +146,7 @@ class TestCartExpiry(CartCase):
                 "last_external_update_date": so_date - timedelta(days=1),
             }
         )
-        self.sale.flush(["state", "last_external_update_date"])
+        self.sale.flush_recordset(["state", "last_external_update_date"])
         with mock.patch(now_method) as mock_now:
             mock_now.return_value = today
             self.backend.manage_cart_expiry()
