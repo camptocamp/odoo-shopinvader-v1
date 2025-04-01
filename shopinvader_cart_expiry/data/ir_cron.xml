@@ -8,8 +8,6 @@
         <field name="user_id" ref="base.user_root" />
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
-        <field name="numbercall" eval="-1" />
-        <field eval="False" name="doall" />
         <field name="model_id" ref="model_shopinvader_backend" />
         <field name="code">model._scheduler_manage_cart_expiry()</field>
     </record>
