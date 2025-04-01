@@ -32,7 +32,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
                 src = img["src"].replace("-_", "_")
                 self.assertTrue(
                     src.startswith(
-                        f"https://foo.com/customizable-desk-config_{scale.size_x}_{scale.size_y}"
+                        f"https://foo.com/customizable-desk_{scale.size_x}_{scale.size_y}"
                     )
                 )
 
@@ -53,13 +53,11 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
                 self.assertEqual(img["alt"], self.shopinvader_variant.name)
                 src = img["src"].replace("-_", "_")
                 self.assertTrue(
-                    src.startswith(
-                        f"/customizable-desk-config_{scale.size_x}_{scale.size_y}"
-                    )
+                    src.startswith(f"/customizable-desk_{scale.size_x}_{scale.size_y}")
                 )
 
     def test_image_metadata(self):
-        self.shopinvader_variant.invalidate_cache(["images"])
+        self.shopinvader_variant.invalidate_recordset()
         self.shopinvader_variant[0].image_ids[0].image_id.alt_name = "Test Alt Name"
         images = self.shopinvader_variant.images
         for scale in self.backend.shopinvader_variant_resize_ids:
@@ -73,13 +71,13 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
             self.assertNotIn("tag", img)
         # allow empty alt
         self.shopinvader_variant.backend_id.image_data_empty_alt_name_allowed = True
-        self.shopinvader_variant.invalidate_cache(["images"])
+        self.shopinvader_variant.invalidate_recordset()
         images = self.shopinvader_variant.images
         for scale in self.backend.shopinvader_variant_resize_ids:
             img = images[1][scale.key]
             # NO Fallback to product name
             self.assertNotIn("alt", img)
-        self.shopinvader_variant.invalidate_cache(["images"])
+        self.shopinvader_variant.invalidate_recordset()
         # value tags
         with mock.patch.object(
             type(self.shopinvader_variant), "_get_image_tag"
@@ -88,7 +86,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
             # enforce compute to get the tag
             # because the field is not there and the hash won't change
             self.shopinvader_variant._compute_images_stored()
-            self.shopinvader_variant.invalidate_cache(["images"])
+            self.shopinvader_variant.invalidate_recordset()
             images = self.shopinvader_variant.images
             for scale in self.backend.shopinvader_variant_resize_ids:
                 img = images[0][scale.key]
@@ -147,7 +145,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
             self.assertEqual(variant.images, [{"a": 1, "b": 2}])
             mocked.assert_called()
 
-        variant.invalidate_cache(["images"])
+        variant.invalidate_recordset()
         self.assertFalse(variant._images_must_recompute())
         with mock.patch.object(type(variant), "_get_image_data_for_record") as mocked:
             mocked.return_value = [{"c": 3, "d": 4}]
@@ -157,7 +155,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
 
         # simulate change in image scale
         self.backend.shopinvader_variant_resize_ids[0].key = "very-small"
-        variant.invalidate_cache(["images"])
+        variant.invalidate_recordset()
         self.assertTrue(variant._images_must_recompute())
         with mock.patch.object(type(variant), "_get_image_data_for_record") as mocked:
             mocked.return_value = [{"c": 3, "d": 4}]
@@ -172,5 +170,6 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
         self.env["ir.config_parameter"].sudo().set_param(
             "web.base.url", "https://foo.com"
         )
-        random_image.invalidate_cache()
-        self.assertTrue(variant._images_must_recompute())
+        random_image.invalidate_recordset()
+        random_image.file_id.invalidate_recordset()
+        self.assertTrue(variant.with_context(foo=1)._images_must_recompute())
