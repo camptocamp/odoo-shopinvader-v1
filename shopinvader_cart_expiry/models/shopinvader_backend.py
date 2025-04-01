@@ -3,7 +3,7 @@
 
 from datetime import timedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.osv import expression
 
 
@@ -34,7 +34,9 @@ class ShopinvaderBackend(models.Model):
             domain = []
         domain = expression.AND([domain, [("cart_expiry_delay", ">", 0)]])
         for backend in self.search(domain):
-            description = _("Manage cart expired for backend %s") % backend.name
+            description = self.env._(
+                "Manage cart expired for backend %(name)s", name=backend.name
+            )
             backend.with_delay(description=description).manage_cart_expiry()
 
     def _get_cart_expiry_delay_domain(self):
