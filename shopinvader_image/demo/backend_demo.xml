@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
     <record id="shopinvader.backend_1" model="shopinvader.backend">
         <field
             name="shopinvader_variant_resize_ids"
@@ -11,5 +10,4 @@
             eval="[(6, 0, [ref('small'), ref('medium')])]"
         />
     </record>
-
 </odoo>
