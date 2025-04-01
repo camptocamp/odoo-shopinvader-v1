@@ -5,10 +5,10 @@
 {
     "name": "Shopinvader image",
     "summary": "Add the export of Image for Shopinvader",
-    "version": "14.0.1.4.0",
+    "version": "18.0.1.0.0",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
-    "author": "Akretion",
+    "author": "Akretion, Camptocamp",
     "license": "AGPL-3",
     "depends": ["shopinvader", "storage_image_product"],
     "data": [
