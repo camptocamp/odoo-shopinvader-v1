@@ -8,7 +8,6 @@ from .common import LocoCommonCase, mock_site_api
 
 
 class TestBackendCommonCase(LocoCommonCase):
-
     maxDiff = None
 
     ODOO_STORE_JSON_KEY = [
@@ -25,7 +24,7 @@ class TestBackendCommonCase(LocoCommonCase):
         super().setUpClass()
         ref = cls.env.ref
         cls.odoo_url = cls.env["ir.config_parameter"].get_param("web.base.url")
-        cls.api_url = "{}/shopinvader".format(cls.odoo_url)
+        cls.api_url = f"{cls.odoo_url}/shopinvader"
         country_ids = [ref("base.fr").id, ref("base.us").id]
         filter_ids = [
             ref("shopinvader.product_filter_1").id,

@@ -111,7 +111,7 @@ class ShopinvaderSiteExportMapper(Component):
         # and use this mapper from the site mapper.
         specific_handler = getattr(
             self,
-            "_{}_config".format(se_backend.search_engine_name),
+            f"_{se_backend.search_engine_name}_config",
             lambda se_backend, config: config,
         )
         return specific_handler(se_backend, config)
@@ -169,7 +169,7 @@ class ShopinvaderSiteExportMapper(Component):
         return indices, routes
 
     def _get_index_name(self, index):
-        return index.name.replace("_{}".format(index.lang_id.code), "")
+        return index.name.replace(f"_{index.lang_id.code}", "")
 
     @mapping
     @changed_by("partner_title_ids")

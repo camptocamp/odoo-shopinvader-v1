@@ -16,6 +16,6 @@ class ShopinvaderServiceContextProvider(Component):
         return res
 
     def _get_component_context(self):
-        res = super(ShopinvaderServiceContextProvider, self)._get_component_context()
+        res = super()._get_component_context()
         res["client_header"] = self._get_client_header()
         return res
