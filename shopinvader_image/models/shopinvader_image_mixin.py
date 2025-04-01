@@ -45,7 +45,7 @@ class ShopinvaderImageMixin(models.AbstractModel):
 
     @property
     def _resize_scales_field(self):
-        return "%s_resize_ids" % self._name.replace(".", "_")
+        return f"{self._name.replace('.', '_')}_resize_ids"
 
     def _resize_scales(self):
         return self.backend_id[self._resize_scales_field]
