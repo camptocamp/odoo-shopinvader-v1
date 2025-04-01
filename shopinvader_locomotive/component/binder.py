@@ -8,6 +8,7 @@ from odoo.addons.component.core import Component
 
 class LocomotiveBinder(Component):
     "Base Binder for locomotive"
+
     _name = "locomotive.binder"
     _inherit = ["base.binder", "base.locomotive.connector"]
     _odoo_field = "record_id"
