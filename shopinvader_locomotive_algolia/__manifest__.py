@@ -10,7 +10,7 @@
     "version": "14.0.1.0.0",
     "license": "AGPL-3",
     "author": "Camptcamp SA",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "depends": ["component", "shopinvader_locomotive", "shopinvader_algolia"],
     "data": ["views/se_backend_algolia.xml"],
     "installable": True,
