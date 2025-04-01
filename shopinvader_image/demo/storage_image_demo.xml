@@ -318,5 +318,4 @@
         <field name="backend_id" ref="storage_backend.default_storage_backend" />
         <field name="file_id" ref="storage_file_554" />
     </record>
-
 </odoo>
