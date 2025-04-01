@@ -4,10 +4,10 @@
 
 {
     "name": "Shopinvader Locomotive CMS Connector",
-    "version": "14.0.2.1.2",
+    "version": "18.0.1.0.0",
     "category": "Connector",
     "summary": "Manage communications between Shopinvader and Locomotive CMS",
-    "author": "Akretion",
+    "author": "Akretion, Camptocamp",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "license": "AGPL-3",
     "development_status": "Production/Stable",

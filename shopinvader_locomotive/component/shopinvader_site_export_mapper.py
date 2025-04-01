@@ -28,10 +28,10 @@ class ShopinvaderSiteExportMapper(Component):
             res[lang.code[0:2]] = []
             # Make sure no value is cached in the former lang processed
             # TODO: tested manually and it works. Needs test coverage.
-            record.invalidate_cache([backend_field])
+            record.invalidate_recordset([backend_field])
             field_value = record[backend_field]
             if isinstance(field_value, models.Model):
-                field_value.invalidate_cache()
+                field_value.invalidate_recordset()
             for rec in field_value.with_context(lang=lang.code):
                 res[lang.code[0:2]].append(rec.jsonify(parser, one=True))
         return res
