@@ -1,9 +1,7 @@
 # Copyright 2019 ACSONE SA/NV (http://acsone.eu)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import SUPERUSER_ID, tools
-from odoo.api import Environment
-from odoo.modules.module import get_resource_path
+from odoo import tools
 
 DEMO_POST_INIT = [
     "demo/storage_file_demo.xml",
@@ -14,17 +12,16 @@ DEMO_POST_INIT = [
 
 def load_xml(env, module, filepath):
     tools.convert_file(
-        env.cr,
+        env,
         module,
-        get_resource_path(module, filepath),
+        tools.file_path(f"{module}/{filepath}"),
         {},
         mode="init",
         noupdate=False,
     )
 
 
-def post_init_hook(cr, registry):
-    env = Environment(cr, SUPERUSER_ID, {})
+def post_init_hook(env):
     module_obj = env["ir.module.module"]
     module = module_obj.search([("name", "=", "shopinvader_image")])
     if module.demo:
@@ -50,7 +47,7 @@ def post_init_hook(cr, registry):
         # prevent removal of demo data since the xml files are not declared
         # into the demo section and therefore the xml_ids are no more found on
         # addon update
-        cr.execute(
+        env.cr.execute(
             """
             update
                 ir_model_data
