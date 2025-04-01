@@ -32,9 +32,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
                 src = img["src"].replace("-_", "_")
                 self.assertTrue(
                     src.startswith(
-                        "https://foo.com/customizable-desk-config_{0.size_x}_{0.size_y}".format(
-                            scale
-                        )
+                        f"https://foo.com/customizable-desk-config_{scale.size_x}_{scale.size_y}"
                     )
                 )
 
@@ -56,7 +54,7 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
                 src = img["src"].replace("-_", "_")
                 self.assertTrue(
                     src.startswith(
-                        "/customizable-desk-config_{0.size_x}_{0.size_y}".format(scale)
+                        f"/customizable-desk-config_{scale.size_x}_{scale.size_y}"
                     )
                 )
 

@@ -9,5 +9,4 @@
         <field name="name">secondary</field>
         <field name="apply_on">product</field>
     </record>
-
 </odoo>
