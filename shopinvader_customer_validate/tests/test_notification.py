@@ -33,52 +33,43 @@ class NotificationCustomerCase(CommonAddressCase, NotificationCaseMixin):
         self.backend.update(
             dict(validate_customers=True, validate_customers_type="all")
         )
-        partner = self._create_customer(
-            email="new@tovalidate.example.com",
-            external_id="F5CdkqOEL",
-            name="To Validate",
-        )
-        job = self._find_notification_job(
-            name="Notify new_customer_welcome_not_validated for res.partner,%d"
-            % partner.id
-        )
-        self.assertTrue(job)
-        self._perform_job(job)
-        self._check_notification("new_customer_welcome_not_validated", partner)
+        with self._catpure_notification(
+            "new_customer_welcome_not_validated",
+            notif_target_model="res.partner",
+        ):
+            partner = self._create_customer(
+                email="new@tovalidate.example.com",
+                external_id="F5CdkqOEL",
+                name="To Validate",
+            )
 
         # now enable it
         invader_partner = partner._get_invader_partner(self.backend)
-        invader_partner._get_shopinvader_validate_wizard().action_apply()
-        job = self._find_notification_job(
-            name="Notify customer_validated for res.partner,%d" % partner.id
-        )
-        self.assertTrue(job)
-        self._perform_job(job)
-        self._check_notification("customer_validated", partner)
+        with self._catpure_notification(
+            "customer_validated",
+            notif_target=partner,
+        ):
+            invader_partner._get_shopinvader_validate_wizard().action_apply()
 
     def test_address_created_not_validated(self):
         self.backend.update(
             dict(validate_customers=True, validate_customers_type="all")
         )
         params = dict(self.address_params, name="John Doe")
-        self.address_service.dispatch("create", params=params)
+        with self._catpure_notification(
+            "address_created_not_validated",
+            # notification goes to the owner of the address
+            notif_target=self.partner,
+        ):
+            self.address_service.dispatch("create", params=params)
         address = self.env["res.partner"].search([("name", "=", "John Doe")], limit=1)
         self.assertEqual(address.parent_id, self.partner)
-        # notification goes to the owner of the address
-        partner = self.partner
-        job = self._find_notification_job(
-            name="Notify address_created_not_validated for res.partner,%d" % partner.id
-        )
-        self.assertTrue(job)
-        self._perform_job(job)
-        self._check_notification("address_created_not_validated", partner)
 
         # now enable it
         wiz = address._get_shopinvader_validate_address_wizard()
-        wiz.action_apply()
-        job = self._find_notification_job(
-            name="Notify address_validated for res.partner,%d" % partner.id
-        )
-        self.assertTrue(job)
-        self._perform_job(job)
-        self._check_notification("address_validated", partner)
+        with self._catpure_notification(
+            "address_validated",
+            # notification goes to the owner of the address
+            notif_target=self.partner,
+        ):
+            wiz.action_apply()

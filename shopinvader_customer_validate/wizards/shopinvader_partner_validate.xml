@@ -16,11 +16,11 @@
                 </group>
                 <group>
                     <field name="shopinvader_partner_ids" colspan="4" nolabel="1">
-                        <tree create="false" delete="false">
+                        <list create="false" delete="false">
                             <field name="record_id" />
                             <field name="email" />
                             <field name="state" />
-                        </tree>
+                        </list>
                     </field>
                 </group>
                 <footer>
