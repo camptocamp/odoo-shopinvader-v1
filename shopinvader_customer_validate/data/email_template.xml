@@ -7,7 +7,7 @@
         <field
             name="name"
         >Shopinvader - Welcome customer not validated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or ''}}</field>
         <field
             name="subject"
         >Welcome notification {{ object.name }} - Account to be validated</field>
@@ -16,20 +16,13 @@
         <field name="auto_delete" eval="False" />
         <field name="lang">{{ object.lang }}</field>
         <field name="body_html" type="html">
-            <t t-call="shopinvader_notification_default.email_layout">
-                <t t-set="mail_title">
-                    <t t-call="shopinvader_notification_default.customer_welcome" />
-                </t>
-                <t t-set="main_content">
-              Welcome, your account will be validated and activated soon
-            </t>
-            </t>
+            <t t-call="shopinvader_customer_validate.new_customer_not_validated" />
         </field>
     </record>
 
     <record id="email_customer_validated_notification" model="mail.template">
         <field name="name">Shopinvader - Customer validated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or ''}}</field>
         <field
             name="subject"
         >Welcome notification {{ object.name }} - Account validated</field>
@@ -38,12 +31,7 @@
         <field name="auto_delete" eval="False" />
         <field name="lang">{{ object.lang }}</field>
         <field name="body_html" type="html">
-            <t t-call="shopinvader_notification_default.email_layout">
-                <t t-set="mail_title">Account validated</t>
-                <t t-set="main_content">
-              Your account has been validated and activated
-            </t>
-            </t>
+            <t t-call="shopinvader_customer_validate.customer_validated" />
         </field>
     </record>
 
@@ -51,7 +39,7 @@
         <field
             name="name"
         >Shopinvader - Address created not validated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or ''}}</field>
         <field
             name="subject"
         >Notification {{ object.name }} - Address created to be validated</field>
@@ -60,32 +48,20 @@
         <field name="auto_delete" eval="False" />
         <field name="lang">{{ object.lang }}</field>
         <field name="body_html" type="html">
-            <t t-call="shopinvader_notification_default.email_layout">
-                <t t-set="mail_title">Address created but not validated</t>
-                <t t-set="main_content">
-              A new address has been added to your account, will be validated and activated soon.
-            </t>
-            </t>
+            <t t-call="shopinvader_customer_validate.address_created_not_validated" />
         </field>
     </record>
 
     <record id="email_address_validated_notification" model="mail.template">
         <field name="name">Shopinvader - Address validated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or ''}}</field>
         <field name="subject">Notification {{ object.name }} - Address validated</field>
         <field name="partner_to">{{ object.id }}</field>
         <field name="model_id" ref="base.model_res_partner" />
         <field name="auto_delete" eval="False" />
         <field name="lang">{{ object.lang }}</field>
-        <field name="body_type">qweb</field>
-        <field name="body_view_id" ref="address_validated" />
         <field name="body_html" type="html">
-            <t t-call="shopinvader_notification_default.email_layout">
-                <t t-set="mail_title">Address validated</t>
-                <t t-set="main_content">
-              A new address has been validated and activated.
-            </t>
-            </t>
+            <t t-call="shopinvader_customer_validate.address_validated" />
         </field>
     </record>
 </odoo>
