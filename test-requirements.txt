@@ -4,3 +4,4 @@ odoo_test_helper
 odoo-addon-connector_search_engine @ git+https://github.com/camptocamp/search-engine-v1@18.0#subdirectory=connector_search_engine
 odoo-addon-connector_algolia @ git+https://github.com/camptocamp/search-engine-v1@18.0#subdirectory=connector_algolia
 vcrpy-unittest
+requests_mock
