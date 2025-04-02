@@ -6,7 +6,6 @@ from odoo import fields, models
 
 
 class ShopinvaderBackend(models.Model):
-
     _inherit = "shopinvader.backend"
 
     validate_customers = fields.Boolean(
