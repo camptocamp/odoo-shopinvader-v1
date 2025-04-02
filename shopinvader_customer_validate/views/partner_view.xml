@@ -13,16 +13,14 @@
             <group name="shopinvader_options" position="inside">
                 <group name="validation" string="Validation">
                     <field name="address_type" readonly="1" />
-                    <field name="has_shopinvader_user" invisible="1" />
-                    <field name="has_shopinvader_user_active" invisible="1" />
                     <field
                         name="has_shopinvader_user_to_validate"
-                        attrs="{'invisible':[('has_shopinvader_user_to_validate','=',False)]}"
+                        invisible="not has_shopinvader_user_to_validate"
                     />
                     <field
                         name="is_shopinvader_active"
                         readonly="1"
-                        attrs="{'invisible':[('has_shopinvader_user','=',True)]}"
+                        invisible="has_shopinvader_user"
                     />
                     <field name="display_validate_address" invisible="1" />
                     <button
@@ -30,20 +28,18 @@
                         name="action_shopinvader_validate_customer"
                         type="object"
                         title="Validate user for Shopinvader"
-                        attrs="{'invisible':['|', ('has_shopinvader_user_active', '=', True), ('has_shopinvader_user', '=', False) ]}"
+                        invisible="has_shopinvader_user_active or not has_shopinvader_user"
                         icon="fa-user-o"
                     >
                         Shop: validate user
                     </button>
-                    <div
-                        attrs="{'invisible':[('display_validate_address', '=', False)]}"
-                    >
+                    <div invisible="not display_validate_address">
                         <button
                             class="btn btn-sm btn-success"
                             name="action_shopinvader_validate_address"
                             type="object"
                             title="Validate address for Shopinvader"
-                            attrs="{'invisible':[('is_shopinvader_active', '=', True)]}"
+                            invisible="is_shopinvader_active"
                             icon="fa-address-card-o"
                         >
                         Shop: validate address
@@ -54,7 +50,7 @@
                             type="object"
                             context="{'default_next_state': 'inactive'}"
                             title="Deactivate address for Shopinvader"
-                            attrs="{'invisible':[('is_shopinvader_active', '=', False)]}"
+                            invisible="not is_shopinvader_active"
                             icon="fa-address-card-o"
                         >
                         Shop: deactivate address
@@ -63,14 +59,12 @@
                 </group>
             </group>
             <xpath expr="//field[@name='child_ids']" position="before">
-                <field name="has_shopinvader_user_to_validate" invisible="1" />
-                <field name="has_shopinvader_address_to_validate" invisible="1" />
                 <button
                     class="btn btn-sm btn-success"
                     name="action_shopinvader_validate_customer"
                     type="object"
                     title="There's at least one Shopinvader user to validate"
-                    attrs="{'invisible':[('has_shopinvader_user_to_validate','=',False)]}"
+                    invisible="not has_shopinvader_user_to_validate"
                     icon="fa-user-o"
                 >
                   Shop: validate users
@@ -81,20 +75,16 @@
                     context="{'shopinvader__validate_customer_children': True}"
                     type="object"
                     title="There's at least one address to validate for Shopinvader"
-                    attrs="{'invisible':[('has_shopinvader_address_to_validate','=',False)]}"
+                    invisible="not has_shopinvader_address_to_validate"
                     icon="fa-address-card-o"
                 >
                   Shop: validate addresses
                 </button>
             </xpath>
             <xpath
-                expr="//field[@name='child_ids']/kanban//div[hasclass('o_kanban_image')]"
-                position="before"
+                expr="//field[@name='child_ids']/kanban//t[@t-name='card']/main"
+                position="inside"
             >
-                <field name="address_type" invisible="1" />
-                <field name="has_shopinvader_user" invisible="1" />
-                <field name="parent_has_shopinvader_user" invisible="1" />
-                <field name="is_shopinvader_active" invisible="1" />
                 <div
                     t-if="record.parent_has_shopinvader_user.raw_value and record.address_type.raw_value=='address' and !record.has_shopinvader_user.raw_value and !record.is_shopinvader_active.raw_value"
                     class="float-right"
@@ -144,7 +134,7 @@
     >
         <field name="name">Shopinvader customers to validate</field>
         <field name="res_model">res.partner</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('has_shopinvader_user_to_validate', '=', True)]</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -162,7 +152,7 @@
     >
         <field name="name">Shopinvader addresses to validate</field>
         <field name="res_model">res.partner</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field
             name="domain"
         >[('has_shopinvader_address_to_validate', '=', True)]</field>

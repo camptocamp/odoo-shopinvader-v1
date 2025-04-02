@@ -7,8 +7,6 @@
         <field name="model">shopinvader.address.validate</field>
         <field name="arch" type="xml">
             <form>
-                <field name="valid_backend_ids" invisible="1" />
-                <field name="display_warning" invisible="1" />
                 <div class="alert alert-info" role="alert">
                     <p>
                         Validate Shopinvader addresses.
@@ -22,7 +20,7 @@
                 <div
                     class="alert alert-warning"
                     role="alert"
-                    attrs="{'invisible': [('display_warning', '=', False)]}"
+                    invisible="not display_warning"
                 >
                   Selected partners have more than one backend matching.
                   Since you might have a complex hierarchy of customers
@@ -40,14 +38,14 @@
                 </group>
                 <group name="selected">
                     <field name="partner_ids" colspan="4" nolabel="1">
-                        <tree create="false" delete="false">
+                        <list create="false" delete="false">
                             <field name="backends_display" string="Valid backends" />
                             <field name="parent_id" string="Parent" />
                             <field name="name" />
                             <field name="email" />
                             <field name="type" />
                             <field name="is_shopinvader_active" />
-                        </tree>
+                        </list>
                     </field>
                 </group>
                 <footer>
