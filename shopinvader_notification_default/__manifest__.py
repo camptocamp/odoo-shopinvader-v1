@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
-    "depends": ["shopinvader", "email_template_qweb"],
+    "depends": ["shopinvader"],
     "data": [
         "templates/layout.xml",
         "templates/cart_email.xml",
