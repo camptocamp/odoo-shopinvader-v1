@@ -11,7 +11,7 @@ from odoo.addons.component.tests.common import SavepointComponentCase
 class TestResPartner(SavepointComponentCase):
     @classmethod
     def setUpClass(cls):
-        super(TestResPartner, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
         cls.unique_email = datetime.now().isoformat() + "@test.com"
         cls.backend1 = cls.env.ref("shopinvader.backend_1")

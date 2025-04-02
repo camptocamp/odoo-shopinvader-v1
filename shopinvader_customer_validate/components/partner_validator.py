@@ -21,7 +21,7 @@ class PartnerValidator(Component):
         if self.backend.validate_customers:
             validator = getattr(
                 self,
-                "_validate_partner_{}".format(self.backend.validate_customers_type),
+                f"_validate_partner_{self.backend.validate_customers_type}",
                 lambda partner: True,
             )
             # TODO: this should raise an exception if not satisfied
@@ -87,7 +87,7 @@ class PartnerValidator(Component):
             return False
         handler = getattr(
             self,
-            "_enabled_by_params_for_{}".format(partner_type),
+            f"_enabled_by_params_for_{partner_type}",
             lambda backend_policy, params: True,
         )
         return handler(backend_policy, params)
