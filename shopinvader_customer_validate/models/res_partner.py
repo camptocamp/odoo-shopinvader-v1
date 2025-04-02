@@ -44,6 +44,7 @@ class ResPartner(models.Model):
         compute_sudo=True,
     )
 
+    # pylint: disable=missing-return
     @api.depends("shopinvader_bind_ids.state")
     def _compute_has_shopinvader_user(self):
         super()._compute_has_shopinvader_user()
