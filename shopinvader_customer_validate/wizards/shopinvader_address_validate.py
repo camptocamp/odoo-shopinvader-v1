@@ -17,7 +17,6 @@ class ShopinvaderAddressValidate(models.TransientModel):
         string="ShopInvader Backend",
         compute="_compute_valid_backend_ids",
         compute_sudo=True,
-        store=True,
         readonly=False,
     )
     partner_ids = fields.Many2many(
