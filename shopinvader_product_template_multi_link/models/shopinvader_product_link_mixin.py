@@ -11,7 +11,6 @@ from collections import defaultdict
 from odoo import models
 
 from odoo.addons.base_sparse_field.models.fields import Serialized
-from odoo.addons.http_routing.models.ir_http import slugify
 
 
 class ShopinvaderProductLinkMixin(models.AbstractModel):
@@ -53,7 +52,11 @@ class ShopinvaderProductLinkMixin(models.AbstractModel):
 
     def _product_link_code(self, link):
         """Normalize link code, default to `generic` when missing."""
-        return slugify(link.type_id.code or "generic").replace("-", "_")
+        return (
+            self.env["ir.http"]
+            ._slugify(link.type_id.code or "generic")
+            .replace("-", "_")
+        )
 
     def _get_product_link_data(self, link):
         target = self._product_link_target(link)
