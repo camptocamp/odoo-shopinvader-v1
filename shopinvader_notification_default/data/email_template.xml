@@ -2,7 +2,7 @@
 <odoo noupdate="1">
     <record id="email_cart_notification" model="mail.template">
         <field name="name">Shopinvader - Cart notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Cart notification {{ object.name }}</field>
         <field name="partner_to">{{ object.partner_id.id }}</field>
         <field name="model_id" ref="sale.model_sale_order" />
@@ -15,7 +15,7 @@
 
     <record id="email_sale_notification" model="mail.template">
         <field name="name">Shopinvader - Sale notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Sale notification {{ object.name }}</field>
         <field name="partner_to">{{ object.partner_id.id }}</field>
         <field name="model_id" ref="sale.model_sale_order" />
@@ -28,7 +28,7 @@
 
     <record id="email_invoice_notification" model="mail.template">
         <field name="name">Shopinvader - Invoice notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Invoice notification {{ object.number }}</field>
         <field name="partner_to">{{ object.partner_id.id }}</field>
         <field name="model_id" ref="account.model_account_move" />
@@ -41,7 +41,7 @@
 
     <record id="email_new_customer_welcome_notification" model="mail.template">
         <field name="name">Shopinvader - Welcome notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Welcome notification {{ object.name }}</field>
         <field name="partner_to">{{ object.id }}</field>
         <field name="model_id" ref="base.model_res_partner" />
@@ -54,7 +54,7 @@
 
     <record id="email_customer_updated_notification" model="mail.template">
         <field name="name">Shopinvader - Customer updated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Notification {{ object.name }} - Customer modified</field>
         <field name="partner_to">{{ object.id }}</field>
         <field name="model_id" ref="base.model_res_partner" />
@@ -67,7 +67,7 @@
 
     <record id="email_address_created_notification" model="mail.template">
         <field name="name">Shopinvader - Address created notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Notification {{ object.name }} - Address created</field>
         <field name="partner_to">{{ object.id }}</field>
         <field name="model_id" ref="base.model_res_partner" />
@@ -80,7 +80,7 @@
 
     <record id="email_address_updated_notification" model="mail.template">
         <field name="name">Shopinvader - Address updated notification</field>
-        <field name="email_from">{{ (object.user_id.email or '')|safe }}</field>
+        <field name="email_from">{{ object.user_id.email or '' }}</field>
         <field name="subject">Notification {{ object.name }} - Address modified</field>
         <field name="partner_to">{{ object.id }}</field>
         <field name="model_id" ref="base.model_res_partner" />
