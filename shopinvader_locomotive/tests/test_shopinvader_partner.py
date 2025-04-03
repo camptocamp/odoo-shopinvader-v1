@@ -8,6 +8,8 @@ from unittest.mock import patch
 from odoo import fields
 from odoo.exceptions import AccessError
 
+from odoo.addons.queue_job.tests.common import trap_jobs
+
 from .common import LocoCommonCase
 
 _logger = logging.getLogger(__name__)
@@ -34,20 +36,20 @@ class CommonShopinvaderPartner(LocoCommonCase):
 
     def _create_shopinvader_partner(self, data, external_id):
         partner = self.env["res.partner"].create(data)
-        self._init_job_counter()
-        shopinvader_partner = self.env["shopinvader.partner"].create(
-            {"record_id": partner.id, "backend_id": self.backend.id}
-        )
-        # The creation of a shopinvader partner into odoo must trigger
-        # the creation of a user account into locomotive
-        self._check_nbr_job_created(1)
+        with trap_jobs() as trap:
+            shopinvader_partner = self.env["shopinvader.partner"].create(
+                {"record_id": partner.id, "backend_id": self.backend.id}
+            )
+            # The creation of a shopinvader partner into odoo must trigger
+            # the creation of a user account into locomotive
+            trap.assert_jobs_count(1)
         with requests_mock.mock() as m:
             m.post(self.base_url + "/tokens.json", json={"token": "744cfcfb3cd3"})
             res = m.post(
                 self.base_url + "/content_types/customers/entries",
                 json={"_id": external_id},
             )
-            self._perform_created_job()
+            trap.perform_enqueued_jobs()
             return shopinvader_partner, res.request_history[0].json()
 
 
@@ -72,11 +74,11 @@ class TestShopinvaderPartner(CommonShopinvaderPartner):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        shop_partner.unlink()
-        # The deletion of a shopinvader into odoo must trigger the deletion
-        # of a user account into locomotive
-        self._check_nbr_job_created(1)
+        with trap_jobs() as trap:
+            shop_partner.unlink()
+            # The deletion of a shopinvader into odoo must trigger the deletion
+            # of a user account into locomotive
+            trap.assert_jobs_count(1)
         with requests_mock.mock() as m:
             m.post(self.base_url + "/tokens.json", json={"token": "744cfcfb3cd3"})
             m.delete(
@@ -84,59 +86,59 @@ class TestShopinvaderPartner(CommonShopinvaderPartner):
                 + "/content_types/customers/entries/5a953d6aae1c744cfcfb3cd3",
                 json={},
             )
-            self._perform_created_job()
+            trap.perform_enqueued_jobs()
 
     def test_update_shopinvader_partner_from_odoo(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        partner = shop_partner.record_id
-        partner.write({"name": "TEST"})
-        # As we updated a field to export, a job should be created
-        self._check_nbr_job_created(1)
+        with trap_jobs() as trap:
+            partner = shop_partner.record_id
+            partner.write({"name": "TEST"})
+            # As we updated a field to export, a job should be created
+            trap.assert_jobs_count(1)
 
     def test_no_update_shopinvader_partner_from_odoo(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        partner = shop_partner.record_id
-        partner.write({"city": "TEST"})
-        # As we did not updated a field to export, no job should be created
-        self._check_nbr_job_created(0)
+        with trap_jobs() as trap:
+            partner = shop_partner.record_id
+            partner.write({"city": "TEST"})
+            # As we did not updated a field to export, no job should be created
+            trap.assert_jobs_count(0)
 
     def test_no_update_on_shopinvader_partner_external_id(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        shop_partner.write({"external_id": "TEST"})
-        # should not create export job
-        self._check_nbr_job_created(0)
+        with trap_jobs() as trap:
+            shop_partner.write({"external_id": "TEST"})
+            # should not create export job
+            trap.assert_jobs_count(0)
 
     def test_update_on_shopinvader_partner_with_mixed_fields(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        shop_partner.write(
-            {
-                "partner_email": "TEST",
-                "external_id": "TEST",
-            }
-        )
-        # should create export job as it contains non-filtered partner field
-        self._check_nbr_job_created(1)
+        with trap_jobs() as trap:
+            shop_partner.write(
+                {
+                    "partner_email": "TEST",
+                    "external_id": "TEST",
+                }
+            )
+            # should create export job as it contains non-filtered partner field
+            trap.assert_jobs_count(1)
 
     def test_update_on_shopinvader_partner_without_fields_set(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
-        shop_partner.write({})
-        # no jobs should be created
-        self._check_nbr_job_created(0)
+        with trap_jobs() as trap:
+            shop_partner.write({})
+            # no jobs should be created
+            trap.assert_jobs_count(0)
 
     def test_get_export_not_triggered_fields_override(self):
         def mock_get_export_not_triggered_fields(self):
@@ -145,42 +147,41 @@ class TestShopinvaderPartner(CommonShopinvaderPartner):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
-        self._init_job_counter()
         with patch(
             "odoo.addons.shopinvader_locomotive.component.event_listeners."
             "ShopinvaderBindingListener._get_export_not_triggered_fields",
             mock_get_export_not_triggered_fields,
         ):
-            shop_partner.write({"external_id": "TEST"})
-        # job should be created normally
-        self._check_nbr_job_created(1)
+            with trap_jobs() as trap:
+                shop_partner.write({"external_id": "TEST"})
+                # job should be created normally
+                trap.assert_jobs_count(1)
 
     def test_binding_access_rights(self):
         shop_partner, params = self._create_shopinvader_partner(
             self.data, "5a953d6aae1c744cfcfb3cd3"
         )
         demo_user_id = self.ref("base.user_demo")
-        self._init_job_counter()
         partner = shop_partner.record_id.with_user(demo_user_id)
         # demo user has no write access on shopinvader_partner model
-        with self.assertRaises(AccessError):
+        with self.assertRaises(AccessError), trap_jobs() as trap:
             shop_partner.with_user(demo_user_id).write(
                 {"sync_date": fields.Datetime.now()}
             )
 
-        # demo user triggers an export to Locomotive
-        partner.write({"name": "TEST"})
-        # As we updated a field to export, a job should be created
-        self._check_nbr_job_created(1)
-        with requests_mock.mock() as m:
-            m.post(self.base_url + "/tokens.json", json={"token": "744cfcfb3cd3"})
-            m.put(
-                self.base_url
-                + "/content_types/customers/entries/5a953d6aae1c744cfcfb3cd3",
-                json={},
-            )
-            # export ran as demo user even if no access on shopinvader_partner
-            self._perform_created_job()
+            # demo user triggers an export to Locomotive
+            partner.write({"name": "TEST"})
+            trap.assert_jobs_count(1)
+            # As we updated a field to export, a job should be created
+            with requests_mock.mock() as m:
+                m.post(self.base_url + "/tokens.json", json={"token": "744cfcfb3cd3"})
+                m.put(
+                    self.base_url
+                    + "/content_types/customers/entries/5a953d6aae1c744cfcfb3cd3",
+                    json={},
+                )
+                # export ran as demo user even if no access on shopinvader_partner
+                trap.perform_enqueued_jobs()
 
     def test_get_binding_to_export(self):
         """
