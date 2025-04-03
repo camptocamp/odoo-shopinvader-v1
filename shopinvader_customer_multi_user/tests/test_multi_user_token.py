@@ -16,7 +16,7 @@ class TestMultiUserToken(TestMultiUserCommon):
         tokens = set()
         for x in range(count):
             comp = self._create_partner_binding(
-                name="ACME %s" % x,
+                name=f"ACME {x}",
                 is_company=True,
             )
             if comp.invader_user_token:

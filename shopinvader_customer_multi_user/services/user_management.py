@@ -4,7 +4,7 @@
 
 from functools import wraps
 
-from odoo import _, exceptions
+from odoo import exceptions
 from odoo.osv import expression
 
 from odoo.addons.base_rest.components.service import to_bool, to_int
@@ -24,7 +24,7 @@ def protect_by_invader_user(checker_name):
             service = args[0]
             user = service.invader_partner_user
             if user is None:
-                raise exceptions.AccessError(_("User not authenticated"))
+                raise exceptions.AccessError(service.env._("User not authenticated"))
             if checker_name in user._fields:
                 checker = user[checker_name]
             elif hasattr(user, checker_name):
@@ -34,7 +34,7 @@ def protect_by_invader_user(checker_name):
                 checker = getattr(service, checker_name)
             result = checker() if callable(checker) else checker
             if not result:
-                raise exceptions.AccessError(_("User not allowed"))
+                raise exceptions.AccessError(service.env._("User not allowed"))
             return func(*args, **kwargs)
 
         return wrapped
@@ -82,7 +82,7 @@ class UsersService(Component):
     def delete(self, _id):
         # TODO: add test
         if _id == self.invader_partner_user.id:
-            raise exceptions.UserError(_("You cannot delete your own user"))
+            raise exceptions.UserError(self.env._("You cannot delete your own user"))
         binding = self._get(_id)
         self._delete(binding)
         return self.search()

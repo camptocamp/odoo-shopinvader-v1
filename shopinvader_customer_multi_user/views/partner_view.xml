@@ -9,7 +9,7 @@
                 <group
                     name="multi_user"
                     string="Multi user"
-                    attrs="{'invisible':[('shopinvader_bind_ids','=',False),('address_type', '=', 'profile')]}"
+                    invisible="not shopinvader_bind_ids and address_type == 'profile'"
                 >
                     <field name="has_invader_user" />
                     <field name="invader_user_token" />
@@ -17,12 +17,12 @@
                         name="action_regenerate_invader_user_token"
                         type="object"
                         string="Re-generate token"
-                        attrs="{'invisible': [('invader_user_token','=',False)]}"
+                        invisible="not invader_user_token"
                     />
                     <field
                         name="invader_address_share_policy"
                         options="{'horizontal': True}"
-                        attrs="{'invisible': [('address_type', '!=', 'address')]}"
+                        invisible="address_type != 'address'"
                     />
                 </group>
             </group>

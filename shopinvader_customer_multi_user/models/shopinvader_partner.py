@@ -114,18 +114,19 @@ class ShopinvaderPartner(models.Model):
                 break
         return invader_partner
 
-    @api.model
-    def create(self, vals):
-        binding = super().create(vals)
-        # Generate company's invader user token when creating a binding
-        partner = binding.record_id
-        if (
-            binding.backend_id.customer_multi_user
-            and not partner.invader_user_token
-            and partner.is_company
-        ):
-            partner.assign_invader_user_token()
-        return binding
+    @api.model_create_multi
+    def create(self, vals_list):
+        bindings = super().create(vals_list)
+        for binding in bindings:
+            # Generate company's invader user token when creating a binding
+            partner = binding.record_id
+            if (
+                binding.backend_id.customer_multi_user
+                and not partner.invader_user_token
+                and partner.is_company
+            ):
+                partner.assign_invader_user_token()
+        return bindings
 
     def _make_partner_domain(self, partner_field, operator="="):
         """Make domain for records related to current shopinvader partner.

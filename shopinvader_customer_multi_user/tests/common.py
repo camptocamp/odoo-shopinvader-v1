@@ -54,9 +54,9 @@ class TestMultiUserCommon(TestCustomerCommon):
             vals["external_id"] = vals["name"].lower().replace(" ", "-")
             vals["external_id"] += str(abs(hash(urandom(4))))
         if "ref" not in vals:
-            vals["ref"] = "#%s" % vals["external_id"].upper()
+            vals["ref"] = "#{}".format(vals["external_id"].upper())
         if "email" not in vals:
-            vals["email"] = "%s@example.com" % vals["external_id"]
+            vals["email"] = "{}@example.com".format(vals["external_id"])
         return cls.env["shopinvader.partner"].create(vals)
 
     @classmethod
