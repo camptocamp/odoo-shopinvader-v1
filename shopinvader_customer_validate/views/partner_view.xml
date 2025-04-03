@@ -85,6 +85,11 @@
                 expr="//field[@name='child_ids']/kanban//t[@t-name='card']/main"
                 position="inside"
             >
+                <!-- invisible fields mandatory for kanban view -->
+                <field name="parent_has_shopinvader_user" invisible="1" />
+                <field name="address_type" invisible="1" />
+                <field name="has_shopinvader_user" invisible="1" />
+                <field name="is_shopinvader_active" invisible="1" />
                 <div
                     t-if="record.parent_has_shopinvader_user.raw_value and record.address_type.raw_value=='address' and !record.has_shopinvader_user.raw_value and !record.is_shopinvader_active.raw_value"
                     class="float-right"
