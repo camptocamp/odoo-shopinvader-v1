@@ -31,7 +31,7 @@ class AddressService(Component):
                 partner_field=partner_field,
                 operator=operator,
                 with_backend=with_backend,
-                **kw
+                **kw,
             )
         # Complete override of domain generation as there's complex logic
         # which is delegated completely to `_make_address_domain`

@@ -8,7 +8,7 @@
     "version": "14.0.1.5.0",
     "license": "AGPL-3",
     "author": "Camptocamp SA",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "depends": ["shopinvader"],
     "data": [
         "views/shopinvader_backend.xml",

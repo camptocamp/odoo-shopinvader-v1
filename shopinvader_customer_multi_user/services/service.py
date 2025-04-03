@@ -17,7 +17,7 @@ class BaseShopinvaderService(AbstractComponent):
             partner_field=partner_field,
             operator=operator,
             with_backend=with_backend,
-            **kw
+            **kw,
         )
         # Remove partner leaf
         domain_no_partner = [x for x in domain if x[0] != partner_field]

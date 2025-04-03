@@ -15,7 +15,6 @@ def _generate_token(length=10):
 
 
 class ResPartner(models.Model):
-
     _inherit = "res.partner"
 
     invader_user_token = fields.Char(

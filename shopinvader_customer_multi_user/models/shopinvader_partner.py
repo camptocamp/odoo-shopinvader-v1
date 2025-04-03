@@ -8,7 +8,6 @@ from odoo.tools.safe_eval import safe_eval
 
 
 class ShopinvaderPartner(models.Model):
-
     _inherit = "shopinvader.partner"
 
     is_invader_user = fields.Boolean(
