@@ -9,7 +9,6 @@ _logger = logging.getLogger(__name__)
 
 
 class ProductSet(models.Model):
-
     _inherit = "product.set"
 
     shopinvader_backend_id = fields.Many2one(
@@ -32,7 +31,6 @@ class ProductSet(models.Model):
 
 
 class ProductSetLine(models.Model):
-
     _inherit = "product.set.line"
 
     shopinvader_variant_id = fields.Many2one(

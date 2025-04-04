@@ -19,6 +19,9 @@ Shopinvader Locomotive CMS Connector
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_locomotive
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_locomotive
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -41,7 +44,7 @@ To configure this module, you need to:
 Known issues / Roadmap
 ======================
 
-- Lib extraction
+-  Lib extraction
 
 Changelog
 =========
@@ -49,13 +52,13 @@ Changelog
 10.0.1.0.0 (2018-06-11)
 -----------------------
 
-- [IMP] shopinvader_locomotive: Move connector_locomotive to
-  shopinvader_locomotive;
+-  [IMP] shopinvader_locomotive: Move connector_locomotive to
+   shopinvader_locomotive;
 
 12.0.1.0.0 (2019-06-05)
 -----------------------
 
-- [12.0][MIG] shopinvader_locomotive
+-  [12.0][MIG] shopinvader_locomotive
 
 Bug Tracker
 ===========
@@ -79,8 +82,8 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
-- Denis Roussel <denis.roussel@acsone.eu>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
+-  Denis Roussel <denis.roussel@acsone.eu>
 
 Maintainers
 -----------

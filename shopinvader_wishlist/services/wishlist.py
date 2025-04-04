@@ -510,9 +510,7 @@ class WishlistService(Component):
             FROM (VALUES {})
                 AS c(id, product_id)
             WHERE c.id = set_line.id;
-        """.format(
-            ",".join(["({}, {})".format(*x) for x in new_values])
-        )
+        """.format(",".join(["({}, {})".format(*x) for x in new_values]))
         self.env.cr.execute(query)
         set_lines.invalidate_cache(["product_id", "shopinvader_variant_id"])
         set_lines.recompute()

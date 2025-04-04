@@ -19,6 +19,9 @@ Shopinvader Product Variant Selector
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_product_variant_selector
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_product_variant_selector
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -202,15 +205,15 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- Abilis
-- Cosanum
+-  Abilis
+-  Cosanum
 
 Maintainers
 -----------

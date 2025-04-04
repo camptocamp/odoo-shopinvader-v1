@@ -19,6 +19,9 @@ Shopinvader image
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_image
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_image
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -52,12 +55,12 @@ Changelog
 10.0.1.0.0 (2018-05-02)
 -----------------------
 
-- [ADD] First draft to have image into dict/json exported
+-  [ADD] First draft to have image into dict/json exported
 
 12.0.1.0.0 (2019-06-03)
 -----------------------
 
-- [12.0][MIG] shopinvader_image
+-  [12.0][MIG] shopinvader_image
 
 Bug Tracker
 ===========
@@ -81,11 +84,11 @@ Authors
 Contributors
 ------------
 
-- Sebastien BEAU <sebastien.beau@akretion.com>
-- Laurent Mignon <laurent.mignon@acsone.com>
-- François Honoré <francois.honore@acsone.eu>
-- Raphaël Reverdy <raphael.reverdy@akretion.com>
-- Denis Roussel <denis.roussel@acsone.eu>
+-  Sebastien BEAU <sebastien.beau@akretion.com>
+-  Laurent Mignon <laurent.mignon@acsone.com>
+-  François Honoré <francois.honore@acsone.eu>
+-  Raphaël Reverdy <raphael.reverdy@akretion.com>
+-  Denis Roussel <denis.roussel@acsone.eu>
 
 Maintainers
 -----------

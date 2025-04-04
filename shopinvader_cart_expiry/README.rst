@@ -19,6 +19,9 @@ Shopinvader cart expiry
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_cart_expiry
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_cart_expiry
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -53,7 +56,7 @@ Authors
 Contributors
 ------------
 
-- Cédric PIGEON <cedric.pigeon@acsone.eu>
+-  Cédric PIGEON <cedric.pigeon@acsone.eu>
 
 Maintainers
 -----------

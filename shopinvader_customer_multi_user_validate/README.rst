@@ -19,6 +19,9 @@ Shopinvader Customer Multi User Validate
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_multi_user_validate
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_multi_user_validate
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -53,15 +56,15 @@ Authors
 Contributors
 ------------
 
-- Simone Orsi <simone.orsi@camptocamp.com>
+-  Simone Orsi <simone.orsi@camptocamp.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- Camptocamp
-- Cosanum
+-  Camptocamp
+-  Cosanum
 
 Maintainers
 -----------
