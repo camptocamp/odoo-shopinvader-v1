@@ -19,7 +19,7 @@ class ShopinvaderVariantCase(SavepointCase):
 
     @classmethod
     def mref(cls, key):
-        return cls.env.ref("shopinvader_product_variant_selector.{}".format(key))
+        return cls.env.ref(f"shopinvader_product_variant_selector.{key}")
 
     def _configure_and_get_variant(self, code):
         self.template._create_variant_ids()

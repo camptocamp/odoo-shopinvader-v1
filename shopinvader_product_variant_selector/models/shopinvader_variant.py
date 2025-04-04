@@ -38,7 +38,7 @@ class ShopinvaderVariant(models.Model):
         """
         res = {"name": attribute.name, "values": []}
         values = self.attribute_line_ids.filtered(
-            lambda l: l.attribute_id == attribute
+            lambda line: line.attribute_id == attribute
         ).value_ids
         for value in values:
             if value in self.attribute_value_ids:
@@ -69,6 +69,6 @@ class ShopinvaderVariant(models.Model):
                     record._get_selector_for_attribute(attribute, selected_values)
                 )
                 selected_values |= record.attribute_value_ids.filtered(
-                    lambda v: v.attribute_id == attribute
+                    lambda v, attr=attribute: v.attribute_id == attr
                 )
             record.variant_selector = data
