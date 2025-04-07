@@ -49,7 +49,7 @@ class TestCustomerSpecialProduct(ProductCommonCase):
         )
         self.shopinvader_variant.manufactured_for_partner_ids = False
         self.shopinvader_variant.shopinvader_product_id.write({"active": False})
-        self.category.shopinvader_bind_ids.invalidate_cache()
+        self.category.shopinvader_bind_ids.invalidate_recordset()
         redirect_urls = self.category.shopinvader_bind_ids.redirect_url_url_ids
         self.assertEqual(len(redirect_urls), 1)
         url_key = self.shopinvader_variant.automatic_url_key
@@ -61,7 +61,7 @@ class TestCustomerSpecialProduct(ProductCommonCase):
             len(self.category.shopinvader_bind_ids.redirect_url_url_ids), 0
         )
         self.shopinvader_variant.record_id.write({"active": False})
-        self.category.shopinvader_bind_ids.invalidate_cache()
+        self.category.shopinvader_bind_ids.invalidate_recordset()
         self.assertEqual(
             len(self.category.shopinvader_bind_ids.redirect_url_url_ids), 0
         )

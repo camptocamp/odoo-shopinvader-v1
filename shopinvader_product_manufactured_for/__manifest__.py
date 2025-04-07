@@ -4,7 +4,7 @@
 {
     "name": "Shopinvader Product Manufactured For",
     "summary": "Manage Product Made Specially For Some Customers",
-    "version": "14.0.1.1.0",
+    "version": "18.0.1.0.0",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Camptocamp",
