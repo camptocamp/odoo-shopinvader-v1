@@ -6,7 +6,7 @@
     "summary": "Manage Product Made Specially For Some Customers",
     "version": "14.0.1.1.0",
     "category": "e-commerce",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Camptocamp",
     "license": "AGPL-3",
     "application": False,
