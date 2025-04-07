@@ -5,7 +5,7 @@
 {
     "name": "Shopinvader Product Link Date Span",
     "summary": "Integrate `product_template_multi_link_date_span` in Shopinvader",
-    "version": "14.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Camptocamp",
