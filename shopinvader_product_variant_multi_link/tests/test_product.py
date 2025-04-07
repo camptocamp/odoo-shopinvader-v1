@@ -8,6 +8,7 @@ from odoo.addons.shopinvader_product_template_multi_link.tests.test_product impo
 
 
 class ProductVariantLinkCaseBase(ProductLinkCaseBase):
+    # pylint: disable=missing-return
     @classmethod
     def _create_links(cls):
         super()._create_links()
