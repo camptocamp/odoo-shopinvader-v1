@@ -189,18 +189,24 @@ class ShopinvaderVariant(models.Model):
 
     @api.model
     def _get_main_product_read_fields(self):
-        # Respect same order (split is to clean the direction eg: `desc` or `asc`)
-        order_by = [
-            x.split()[0].strip() for x in self.env["product.product"]._order.split(",")
-        ]
-        return ["shopinvader_product_id", "backend_id", "lang_id"] + order_by
+        return [
+            "shopinvader_product_id",
+            "backend_id",
+            "lang_id",
+        ] + self._get_product_product_order_by()
 
-    @api.model
-    def _get_main_product_sorted_variants(self, variants):
+    def _get_product_product_order_by(self):
         # NOTE: if the order is changed by adding `asc/desc` this can be broken
         # but it's very unlikely that the default order for product.product
         # will be changed.
-        order_by = [x.strip() for x in self.env["product.product"]._order.split(",")]
+        # Respect same order (split is to clean the direction eg: `desc` or `asc`)
+        return [
+            x.split()[0].strip() for x in self.env["product.product"]._order.split(",")
+        ]
+
+    @api.model
+    def _get_main_product_sorted_variants(self, variants):
+        order_by = self._get_product_product_order_by()
 
         def get_value(record, key):
             field_type = self._fields[key].type
