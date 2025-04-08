@@ -5,17 +5,13 @@
 import json
 import logging
 
+import requests_mock
+
 from odoo.addons.shopinvader_locomotive.tests.test_shopinvader_partner import (
     CommonShopinvaderPartner,
 )
 
 _logger = logging.getLogger(__name__)
-
-# pylint: disable=W7936
-try:
-    import requests_mock
-except (ImportError, IOError) as err:
-    _logger.debug(err)
 
 
 class TestShopinvaderWishlistSync(CommonShopinvaderPartner):
