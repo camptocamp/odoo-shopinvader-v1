@@ -269,7 +269,7 @@ class WishlistCase(CommonWishlistCase):
         after = self.wishlist_service.dispatch(
             "update_items", self.prod_set.id, params=params
         )
-        self.prod_set.invalidate_cache()
+        self.prod_set.invalidate_recordset()
         self.assertEqual(line1.sequence, 10)
         self.assertEqual(line2.sequence, 20)
         self.assertEqual([x["id"] for x in after["lines"]], [line1.id, line2.id])

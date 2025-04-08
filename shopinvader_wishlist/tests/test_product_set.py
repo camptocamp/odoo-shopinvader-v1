@@ -44,7 +44,7 @@ class ProductSet(CommonCase):
         )
         variant = prod.shopinvader_bind_ids[0]
         variant.active = False
-        line.invalidate_cache(["shopinvader_variant_id"])
+        line.invalidate_recordset(["shopinvader_variant_id"])
         self.assertEqual(line.shopinvader_variant_id, variant)
 
     @mute_logger("odoo.models.unlink")

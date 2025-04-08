@@ -3,7 +3,7 @@
 
 import logging
 
-from odoo import _, api, exceptions, fields, models
+from odoo import api, exceptions, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class ProductSet(models.Model):
     def get_lines_by_products(self, product_ids=None, invader_variant_ids=None):
         if not product_ids and not invader_variant_ids:
             raise exceptions.ValidationError(
-                _("Provide `product_ids` or `invader_variant_id`")
+                self.env._("Provide `product_ids` or `invader_variant_id`")
             )
         if product_ids:
             return self.set_line_ids.filtered(lambda x: x.product_id.id in product_ids)

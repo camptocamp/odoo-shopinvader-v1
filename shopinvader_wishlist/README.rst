@@ -50,16 +50,16 @@ Authors
 Contributors
 ------------
 
--  Simone Orsi <simone.orsi@camptocamp.com>
--  Laurent Mignon <laurent.mignon@acsone.com>
+- Simone Orsi <simone.orsi@camptocamp.com>
+- Laurent Mignon <laurent.mignon@acsone.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
--  Camptocamp
--  Cosanum
+- Camptocamp
+- Cosanum
 
 Maintainers
 -----------

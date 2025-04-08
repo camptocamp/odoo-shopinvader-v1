@@ -7,7 +7,7 @@ from functools import wraps
 
 from werkzeug.exceptions import NotFound
 
-from odoo import _, exceptions
+from odoo import exceptions
 from odoo.osv import expression
 
 from odoo.addons.base_rest.components.service import to_int
@@ -50,7 +50,9 @@ class WishlistService(Component):
     def create(self, **params):
         if not self._is_logged_in():
             # TODO: is there any way to control this in the REST API?
-            raise exceptions.UserError(_("Must be authenticated to create a wishlist"))
+            raise exceptions.UserError(
+                self.env._("Must be authenticated to create a wishlist")
+            )
         vals = self._prepare_params(params.copy())
         record = self.env[self._expose_model].create(vals)
         self._post_create(record)
@@ -314,7 +316,7 @@ class WishlistService(Component):
         return self._default_domain_for_partner_records()
 
     def _get_add_to_cart_wizard(self, record, cart):
-        return self.env["product.set.add"].create(
+        return self.env["sale.product.set.wizard"].create(
             {
                 "order_id": cart.id,
                 "product_set_id": record.id,
@@ -349,17 +351,17 @@ class WishlistService(Component):
         if data_mode:
             try:
                 parser = getattr(self, "_json_parser_" + data_mode)()
-            except AttributeError:
+            except AttributeError as err:
                 raise exceptions.UserError(
-                    _("JSON data mode `%s` not found.") % data_mode
-                )
+                    self.env._("JSON data mode `%s` not found.") % data_mode
+                ) from err
         else:
             parser = self._json_parser()
         return records.jsonify(parser)
 
     def _to_json_one(self, records, **kw):
         # This works only here... see `_update_item` :/
-        records.set_line_ids.invalidate_cache()
+        records.set_line_ids.invalidate_recordset()
         values = self._to_json(records, **kw)
         if len(records) == 1:
             values = values[0]
@@ -425,7 +427,7 @@ class WishlistService(Component):
         product_id = params["product_id"]
         line = record.get_lines_by_products(product_ids=[product_id])
         if not line and raise_if_not_found:
-            raise NotFound("No product found with id %s" % params["product_id"])
+            raise NotFound("No product found with id {}".format(params["product_id"]))
         return line
 
     def _update_lines(self, record, lines, raise_if_not_found=False):
@@ -450,11 +452,6 @@ class WishlistService(Component):
         ]
         if values:
             record.write({"set_line_ids": values})
-        # TODO: WTF?? Cache on sequence is not invalidated.
-        # And calling this does not work here, must be called in `_to_json_one`.
-        # record.set_line_ids.invalidate_cache()
-        # flush does not work neither
-        # record.set_line_ids.flush()
 
     def _add_items(self, record, params):
         self._update_lines(record, params["lines"])
@@ -512,9 +509,9 @@ class WishlistService(Component):
             WHERE c.id = set_line.id;
         """.format(",".join(["({}, {})".format(*x) for x in new_values]))
         self.env.cr.execute(query)
-        set_lines.invalidate_cache(["product_id", "shopinvader_variant_id"])
-        set_lines.recompute()
-        record.invalidate_cache(["set_line_ids"])
+        set_lines.invalidate_recordset(["product_id", "shopinvader_variant_id"])
+        set_lines.flush_recordset()
+        record.invalidate_recordset(["set_line_ids"])
         return set_lines
 
     def _prepare_item(self, record, params):
