@@ -2,7 +2,7 @@
 # @author Simone Orsi <simone.orsi@camptocamp.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import mock
+from unittest import mock
 
 from odoo import exceptions
 
@@ -12,7 +12,7 @@ from odoo.addons.shopinvader_wishlist.tests.test_wishlist import CommonWishlistC
 class WishlistCase(CommonWishlistCase):
     @classmethod
     def setUpClass(cls):
-        super(WishlistCase, cls).setUpClass()
+        super().setUpClass()
         cls.company_binding = cls._create_invader_partner(
             cls.env,
             name="Company foo",
