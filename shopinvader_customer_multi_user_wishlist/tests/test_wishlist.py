@@ -59,7 +59,7 @@ class WishlistCase(CommonWishlistCase):
                 with self.assertRaises(exceptions.ValidationError) as err:
                     self.wishlist_service.add_to_cart(self.prod_set.id)
                 self.assertEqual(
-                    err.exception.name,
+                    err.exception.args[0],
                     "You can use a sale order assigned "
                     "only to following partner(s): Company foo",
                 )
