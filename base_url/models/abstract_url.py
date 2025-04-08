@@ -37,7 +37,7 @@ class AbstractUrl(models.AbstractModel):
         compute="_compute_redirect_url_url_ids", comodel_name="url.url"
     )
     lang_id = fields.Many2one("res.lang", required=True)
-    active = fields.Boolean(default=True)
+    active = fields.Boolean(default=True, inverse="_inverse_url_active")
 
     @api.constrains("url_builder", "manual_url_key")
     def _check_manual_url_key(self):
@@ -116,7 +116,6 @@ class AbstractUrl(models.AbstractModel):
         for record in self:
             if not record.active:
                 record.url_key = ""
-                record._redirect_existing_url()
             else:
                 if record.url_builder == "manual":
                     new_url = record.manual_url_key
@@ -147,6 +146,9 @@ class AbstractUrl(models.AbstractModel):
             record.url_url_ids = record.env["url.url"].search(
                 [("model_id", "=", get_model_ref(record))]
             )
+
+    def _inverse_url_active(self):
+        self._redirect_existing_url()
 
     @api.model
     def _prepare_url(self, url_key):
