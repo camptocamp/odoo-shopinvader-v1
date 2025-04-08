@@ -19,6 +19,9 @@ Shopinvader Customer Multi User
 .. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
     :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_multi_user
     :alt: camptocamp/odoo-shopinvader-v1
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_multi_user
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -38,20 +41,20 @@ Shopinvader backend -> Sale tab -> Enable "Validate customers"
 
 Then the registration workflow changes as following:
 
-- for each company binding a unique token is generated, you can see it
-  in the Shopinvader tab on company form
-- on Locomotive registration page users can enter the company token (if
-  your theme does not support this yet, just add a text field named
-  company_token)
-- on odoo side, when the company token is given:
+-  for each company binding a unique token is generated, you can see it
+   in the Shopinvader tab on company form
+-  on Locomotive registration page users can enter the company token (if
+   your theme does not support this yet, just add a text field named
+   company_token)
+-  on odoo side, when the company token is given:
 
-  - if the company is found, the new partner will be attached to the
-    company with a specific type "Invader client user"
-  - if the company is not found, the new partner will be created as a
-    standalone customer as by default
+   -  if the company is found, the new partner will be attached to the
+      company with a specific type "Invader client user"
+   -  if the company is not found, the new partner will be created as a
+      standalone customer as by default
 
-- on Locomotive the main address will be the one of the company and not
-  the one from the child partner.
+-  on Locomotive the main address will be the one of the company and not
+   the one from the child partner.
 
 NOTE: at the moment users on Locomotive side will be able to see all
 other address and they will be able to modify them, included the main
@@ -78,15 +81,15 @@ Authors
 Contributors
 ------------
 
-- Simone Orsi <simahawk@gmail.com>
+-  Simone Orsi <simahawk@gmail.com>
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- Camptocamp
-- Cosanum
+-  Camptocamp
+-  Cosanum
 
 Maintainers
 -----------
