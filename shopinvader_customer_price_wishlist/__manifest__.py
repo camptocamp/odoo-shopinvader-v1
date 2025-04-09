@@ -7,7 +7,7 @@
     "version": "14.0.1.1.0",
     "license": "AGPL-3",
     "author": "Camptocamp,Odoo Community Association (OCA)",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "depends": ["shopinvader_customer_price", "shopinvader_wishlist"],
     "auto_install": True,
 }
