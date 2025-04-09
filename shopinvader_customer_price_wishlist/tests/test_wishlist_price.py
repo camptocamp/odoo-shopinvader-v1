@@ -34,7 +34,7 @@ class WishlistCase(CommonWishlistCase, ProductCommonCase):
 
     def test_jsonify_default(self):
         res_line = self._get_line_data()
-        expected_price = self.s_variant._get_price(
+        expected_price = self.s_variant.record_id._get_price(
             pricelist=self.base_pricelist,
             fposition=self.backend._get_fiscal_position(self.partner),
         )
@@ -42,8 +42,8 @@ class WishlistCase(CommonWishlistCase, ProductCommonCase):
         # change partner
         self.wishlist_service.work.partner = self.partner2
         res_line = self._get_line_data()
-        expected_price = self.s_variant._get_price(
-            pricelist=self.base_pricelist,
+        expected_price = self.s_variant.record_id._get_price(
+            pricelist=self.partner2.property_product_pricelist,
             fposition=self.backend._get_fiscal_position(self.partner2),
         )
         self.assertEqual(res_line["product"]["price"]["default"], expected_price)
@@ -51,7 +51,7 @@ class WishlistCase(CommonWishlistCase, ProductCommonCase):
     def test_jsonify_custom_pricelist(self):
         self.partner.property_product_pricelist = self.discount_pricelist
         res_line = self._get_line_data()
-        expected_price = self.s_variant._get_price(
+        expected_price = self.s_variant.record_id._get_price(
             pricelist=self.discount_pricelist,
             fposition=self.backend._get_fiscal_position(self.partner),
         )
@@ -60,8 +60,8 @@ class WishlistCase(CommonWishlistCase, ProductCommonCase):
         # change partner
         self.wishlist_service.work.partner = self.partner2
         res_line = self._get_line_data()
-        expected_price = self.s_variant._get_price(
-            pricelist=self.base_pricelist,
+        expected_price = self.s_variant.record_id._get_price(
+            pricelist=self.partner2.property_product_pricelist,
             fposition=self.backend._get_fiscal_position(self.partner2),
         )
         self.assertEqual(res_line["product"]["price"]["default"], expected_price)
