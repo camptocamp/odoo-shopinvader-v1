@@ -16,9 +16,9 @@ Shopinvader Customer Price
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-shopinvader%2Fodoo--shopinvader-lightgray.png?logo=github
-    :target: https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_customer_price
-    :alt: shopinvader/odoo-shopinvader
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_price
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
@@ -26,33 +26,35 @@ Handle customer specific prices.
 
 Provides:
 
-* endpoint `/customer_price/products` to fetch customer prices for products.
-* backend configuration to state which pricelist should be used by partner
-  (by selecting a partner field that relates to pricelists)
-
+- endpoint /customer_price/products to fetch customer prices for
+  products.
+- backend configuration to state which pricelist should be used by
+  partner (by selecting a partner field that relates to pricelists)
 
 **Use case**
 
-Thousands of customers and at least 1 pricelist per each customer.
-You want to display customer specific prices in the frontend on demand.
-For instance: product page, wishlists, etc.
+Thousands of customers and at least 1 pricelist per each customer. You
+want to display customer specific prices in the frontend on demand. For
+instance: product page, wishlists, etc.
 
 **Rationale**
 
-One of the key points of Shopinvader's speed
-is the delegation of products' data indexing to external search engines.
+One of the key points of Shopinvader's speed is the delegation of
+products' data indexing to external search engines.
 
 While this is perfect for generic data and not so complex price rules,
-if you have very special prices per each customer that's a blocker,
-and you'd need to index all prices for all customers to make it work seemlessly.
+if you have very special prices per each customer that's a blocker, and
+you'd need to index all prices for all customers to make it work
+seemlessly.
 
 **Warning**
 
-It's strongly recommended to not call the endpoint for each product on search results
-otherwise you'll get potentially thousands of requests to Odoo.
+It's strongly recommended to not call the endpoint for each product on
+search results otherwise you'll get potentially thousands of requests to
+Odoo.
 
-Also, when setting the pricelist field for the partner,
-beware that prices in the indexes might differ from the prices in the cart.
+Also, when setting the pricelist field for the partner, beware that
+prices in the indexes might differ from the prices in the cart.
 
 **Table of contents**
 
@@ -62,26 +64,29 @@ beware that prices in the indexes might differ from the prices in the cart.
 Known issues / Roadmap
 ======================
 
-Probably the best option would be to have 1 index per customer
-which would even allow to sort and filter products by customer's prices
-but this requires a lot of work with current implementation of search engine machinery.
+Probably the best option would be to have 1 index per customer which
+would even allow to sort and filter products by customer's prices but
+this requires a lot of work with current implementation of search engine
+machinery.
 
 If you use Algolia this is probably a no-go as it would cost too much.
 In the context of ElasticSearch instead you could afford it.
 
 Things that would be needed to go for an indexed solution:
 
-* make language not required on indexes (at the momemt the whole SE machinery relies on languages)
-* automatically generate one index per each pricelist/customer
-* make the frontend capable of switching indexes depending on the customer
+- make language not required on indexes (at the momemt the whole SE
+  machinery relies on languages)
+- automatically generate one index per each pricelist/customer
+- make the frontend capable of switching indexes depending on the
+  customer
 
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/shopinvader/odoo-shopinvader/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/camptocamp/odoo-shopinvader-v1/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/shopinvader/odoo-shopinvader/issues/new?body=module:%20shopinvader_customer_price%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/camptocamp/odoo-shopinvader-v1/issues/new?body=module:%20shopinvader_customer_price%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -89,26 +94,26 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Camptocamp
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Simone Orsi <simahawk@gmail.com>
+- Simone Orsi <simahawk@gmail.com>
 
 Other credits
-~~~~~~~~~~~~~
+-------------
 
 The development of this module has been financially supported by:
 
-* Camptocamp
-* Cosanum
+- Camptocamp
+- Cosanum
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
-This module is part of the `shopinvader/odoo-shopinvader <https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_customer_price>`_ project on GitHub.
+This module is part of the `camptocamp/odoo-shopinvader-v1 <https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_customer_price>`_ project on GitHub.
 
 You are welcome to contribute.

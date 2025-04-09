@@ -6,7 +6,6 @@ from odoo import fields, models, tools
 
 
 class ShopinvaderBackend(models.Model):
-
     _inherit = "shopinvader.backend"
 
     cart_pricelist_partner_field_id = fields.Many2one(
