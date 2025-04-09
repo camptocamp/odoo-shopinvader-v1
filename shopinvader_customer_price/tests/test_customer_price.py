@@ -32,6 +32,8 @@ class CommonCustomerPriceCase(ProductCommonCase):
         self.assertEqual(res, expected)
 
     def test_get_fiscal_position(self):
+        self.partner1.property_account_position_id = self.fiscal_pos1
+        self.partner2.property_account_position_id = self.fiscal_pos2
         self.assertEqual(
             self.backend._get_fiscal_position(self.partner1), self.fiscal_pos1
         )
@@ -45,6 +47,9 @@ class CommonCustomerPriceCase(ProductCommonCase):
             self.backend.pricelist_id,
         )
         self.partner1.property_product_pricelist = self.discount_pricelist
+        self.partner2.property_product_pricelist = False
+        # partner pl id is cached
+        self.env.registry.clear_cache()
         self.assertEqual(
             self.backend._get_cart_pricelist(self.partner1),
             self.discount_pricelist,
@@ -58,16 +63,18 @@ class CommonCustomerPriceCase(ProductCommonCase):
         s_variant = self.shopinvader_variant
         service = self._get_service(self.partner1)
         # partner1
-        expected_price = s_variant._get_price(
-            pricelist=self.base_pricelist, fposition=self.fiscal_pos1
+        expected_price = s_variant.record_id._get_price(
+            pricelist=self.partner1.property_product_pricelist,
+            fposition=self.fiscal_pos1,
         )
         res = service.dispatch(
             "products", params={"ids": s_variant.record_id.ids, "one": True}
         )
         self._test_response(res, s_variant, expected_price)
         # partner2
-        expected_price = s_variant._get_price(
-            pricelist=self.base_pricelist, fposition=self.fiscal_pos2
+        expected_price = s_variant.record_id._get_price(
+            pricelist=self.partner2.property_product_pricelist,
+            fposition=self.fiscal_pos2,
         )
         service = self._get_service(self.partner2)
         res = service.dispatch(
@@ -83,7 +90,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         res = service.dispatch(
             "products", params={"ids": s_variant.record_id.ids, "one": True}
         )
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.discount_pricelist, fposition=self.fiscal_pos1
         )
         self._test_response(res, s_variant, expected_price)
@@ -98,12 +105,12 @@ class CommonCustomerPriceCase(ProductCommonCase):
             params={"ids": [s_variant.record_id.id, s_variant2.record_id.id]},
         )
         self.assertEqual(len(res), 2)
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res1 = [x for x in res if x["id"] == s_variant.record_id.id][0]
         self._test_response(res1, s_variant, expected_price)
-        expected_price = s_variant2._get_price(
+        expected_price = s_variant2.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res2 = [x for x in res if x["id"] == s_variant2.record_id.id][0]

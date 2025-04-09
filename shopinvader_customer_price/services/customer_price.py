@@ -53,7 +53,7 @@ class CustomerPriceService(Component):
         fposition = self.shopinvader_backend._get_fiscal_position(self.partner)
         company = self.shopinvader_backend.company_id
         return {
-            self.invader_partner.role: record._get_price(
+            self.invader_partner.role: record.record_id._get_price(
                 pricelist=pricelist, fposition=fposition, company=company
             )
         }
