@@ -5,3 +5,5 @@ requests_mock
 # NOTE: this should stay in `requirements.txt` but the auto generation wipes it out :/
 odoo-addon-connector_search_engine @ git+https://github.com/camptocamp/search-engine-v1@18.0#subdirectory=connector_search_engine
 odoo-addon-connector_algolia @ git+https://github.com/camptocamp/search-engine-v1@18.0#subdirectory=connector_algolia
+
+odoo-addon-pricelist_cache @ git+https://github.com/OCA/sale-workflow@refs/pull/3656/head#subdirectory=pricelist_cache
