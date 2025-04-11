@@ -25,11 +25,9 @@ class CustomerPriceService(Component):
         ].get_cached_prices_for_pricelist(pricelist, products)
         res = []
         for cache in price_caches:
-            product = cache.product_id
-            price_unit = cache.price
             res.append(
-                product._get_price(
-                    price_unit=price_unit, pricelist=pricelist, company=company
+                cache.product_id._get_price(
+                    price_unit=cache.price, pricelist=pricelist, company=company
                 )
             )
         return res
