@@ -7,7 +7,6 @@ from odoo.addons.stock_packaging_calculator.tests.utils import make_pkg_values
 
 
 class TestProductPackagingData(CommonCase):
-
     maxDiff = None
 
     @classmethod

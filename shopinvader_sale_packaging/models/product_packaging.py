@@ -5,7 +5,6 @@ from odoo import api, fields, models
 
 
 class ProductPackaging(models.Model):
-
     _inherit = "product.packaging"
 
     shopinvader_display = fields.Boolean(

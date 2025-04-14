@@ -8,8 +8,8 @@
     """,
     "version": "14.0.1.1.0",
     "license": "AGPL-3",
-    "author": "Camptocamp SA",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "author": "Camptocamp",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "depends": [
         "shopinvader",
         "sale_stock",
