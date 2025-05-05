@@ -35,7 +35,7 @@ class ShopinvaderVariant(models.Model):
     def _get_variant_packaging(self):
         res = []
         ctx = self._get_variant_packaging_ctx(self.backend_id)
-        rec = self.record_id.with_context(ctx)
+        rec = self.record_id.with_context(**ctx)
         contained_mapping = rec.packaging_contained_mapping or {}
         packaging = rec._ordered_packaging()
         can_be_sold_info = {
