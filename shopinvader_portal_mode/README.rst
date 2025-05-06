@@ -45,7 +45,7 @@ Credits
 Authors
 -------
 
-* Camptocamp SA
+* Camptocamp
 
 Contributors
 ------------
