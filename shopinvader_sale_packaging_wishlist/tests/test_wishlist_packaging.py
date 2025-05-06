@@ -11,17 +11,17 @@ class WishlistCase(CommonWishlistCase):
         super().setUpClass()
         cls.prod_set = cls.env.ref("shopinvader_wishlist.wishlist_1")
         cls.prod_set.shopinvader_backend_id = cls.backend
-        cls.packaging_type = (
-            cls.env["product.packaging.type"]
+        cls.packaging_level = (
+            cls.env["product.packaging.level"]
             .sudo()
-            .create({"name": "TYPE 1", "code": "P", "sequence": 3})
+            .create({"name": "TYPE 1", "code": "P", "sequence": 3, "can_be_sold": True})
         )
         cls.product_packaging = cls.env["product.packaging"].create(
             {
                 "name": "PKG TEST",
                 "product_id": cls.prod1.id,
                 "qty": 4,
-                "packaging_type_id": cls.packaging_type.id,
+                "packaging_level_id": cls.packaging_level.id,
             }
         )
         # Make sure our products' data is up to date
@@ -87,8 +87,7 @@ class WishlistCase(CommonWishlistCase):
                 "name": "PKG Foo",
                 "product_id": prod.id,
                 "qty": 100,
-                "can_be_sold": False,
-                "packaging_type_id": self.packaging_type.id,
+                "packaging_level_id": self.packaging_level.id,
             }
         )
         self.assertEqual(res_line["quantity"], 1)
@@ -109,8 +108,6 @@ class WishlistCase(CommonWishlistCase):
             ],
         )
 
-        # set some packaging values
-        packaging.can_be_sold = True
         self.prod_set.set_line_ids[0].write(
             {"product_packaging_qty": 3, "product_packaging_id": packaging.id}
         )
@@ -122,8 +119,8 @@ class WishlistCase(CommonWishlistCase):
             res_line["packaging"],
             {
                 "id": packaging.id,
-                "name": self.packaging_type.name,
-                "code": self.packaging_type.code,
+                "name": self.packaging_level.name,
+                "code": self.packaging_level.code,
                 "barcode": packaging.barcode,
             },
         )
@@ -142,7 +139,7 @@ class WishlistCase(CommonWishlistCase):
                     ],
                     "id": packaging.id,
                     "is_unit": False,
-                    "name": packaging.packaging_type_id.name,
+                    "name": packaging.packaging_level_id.name,
                     "qty": 3,
                     "barcode": packaging.barcode,
                 }
