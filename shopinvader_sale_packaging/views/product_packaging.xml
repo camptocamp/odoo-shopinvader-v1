@@ -4,15 +4,14 @@
         <field name="model">product.packaging</field>
         <field
             name="inherit_id"
-            ref="sale_by_packaging.product_packaging_tree_view_inherit"
-        />
-        <field
-            name="groups_id"
-            eval="[(4, ref('shopinvader.group_shopinvader_manager'))]"
+            ref="sell_only_by_packaging.product_packaging_tree_view_inherit"
         />
         <field name="arch" type="xml">
             <field name="force_sale_qty" position="after">
-                <field name="shopinvader_display" />
+                <field
+                    name="shopinvader_display"
+                    groups="shopinvader.group_shopinvader_manager"
+                />
             </field>
         </field>
     </record>
@@ -20,15 +19,14 @@
         <field name="model">product.packaging</field>
         <field
             name="inherit_id"
-            ref="sale_by_packaging.product_packaging_form_view_inherit"
-        />
-        <field
-            name="groups_id"
-            eval="[(4, ref('shopinvader.group_shopinvader_manager'))]"
+            ref="sell_only_by_packaging.product_packaging_form_view_inherit"
         />
         <field name="arch" type="xml">
             <field name="force_sale_qty" position="after">
-                <field name="shopinvader_display" />
+                <field
+                    name="shopinvader_display"
+                    groups="shopinvader.group_shopinvader_manager"
+                />
             </field>
         </field>
     </record>

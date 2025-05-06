@@ -6,7 +6,7 @@ from odoo.addons.shopinvader.tests.common import CommonCase
 from odoo.addons.shopinvader.tests.test_cart_item import ItemCaseMixin
 
 
-class ConnectedItemCase(ItemCaseMixin, CommonCase):
+class TestCart(ItemCaseMixin, CommonCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -67,7 +67,7 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
         cart_line = cart["lines"]["items"][0]
         # check SO line values
         line = self.env["sale.order.line"].browse(cart_line["id"])
-        self.assertEqual(line.product_packaging, self.pkg_pallet)
+        self.assertEqual(line.product_packaging_id, self.pkg_pallet)
         self.assertEqual(line.product_packaging_qty, 2.0)
         self.assertEqual(line.product_uom_qty, 4000)
         # Check cart line values
@@ -76,8 +76,8 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
             cart_line["packaging"],
             {
                 "id": self.pkg_pallet.id,
-                "name": self.pkg_pallet.packaging_type_id.name,
-                "code": self.pkg_pallet.packaging_type_id.code,
+                "name": self.pkg_pallet.packaging_level_id.name,
+                "code": self.pkg_pallet.packaging_level_id.code,
                 "barcode": self.pkg_pallet.barcode,
             },
         )
@@ -85,13 +85,20 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
         self.assertIn("sell_only_by_packaging", cart_line["product"])
 
     def test_update_item(self):
-        line = self.cart.order_line[0]
+        line = self.env["sale.order.line"].create(
+            {
+                "order_id": self.cart.id,
+                "product_id": self.product_1.id,
+                "product_packaging_id": self.pkg_box.id,
+                "product_packaging_qty": 2.0,
+            }
+        )
         product = line.product_id
         cart = self.update_item(
             line.id, 1, packaging_id=self.pkg_pallet, packaging_qty=3.0
         )
         # check SO line values
-        self.assertEqual(line.product_packaging, self.pkg_pallet)
+        self.assertEqual(line.product_packaging_id, self.pkg_pallet)
         self.assertEqual(line.product_packaging_qty, 3.0)
         self.assertEqual(line.product_uom_qty, 6000)
         # Check cart line values
@@ -101,8 +108,8 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
             cart_line["packaging"],
             {
                 "id": self.pkg_pallet.id,
-                "name": self.pkg_pallet.packaging_type_id.name,
-                "code": self.pkg_pallet.packaging_type_id.code,
+                "name": self.pkg_pallet.packaging_level_id.name,
+                "code": self.pkg_pallet.packaging_level_id.code,
                 "barcode": self.pkg_pallet.barcode,
             },
         )
@@ -114,7 +121,7 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
         product = line.product_id
         line.write(
             {
-                "product_packaging": self.pkg_pallet.id,
+                "product_packaging_id": self.pkg_pallet.id,
                 "product_packaging_qty": 4.0,
             }
         )
@@ -132,15 +139,15 @@ class ConnectedItemCase(ItemCaseMixin, CommonCase):
             cart_line["packaging"],
             {
                 "id": self.pkg_pallet.id,
-                "name": self.pkg_pallet.packaging_type_id.name,
-                "code": self.pkg_pallet.packaging_type_id.code,
+                "name": self.pkg_pallet.packaging_level_id.name,
+                "code": self.pkg_pallet.packaging_level_id.code,
                 "barcode": self.pkg_pallet.barcode,
             },
         )
         self.assertEqual(cart_line["packaging_qty"], 4.0)
         # check SO line values
         line = self.env["sale.order.line"].browse(cart_line["id"])
-        self.assertEqual(line.product_packaging, self.pkg_pallet)
+        self.assertEqual(line.product_packaging_id, self.pkg_pallet)
         self.assertEqual(line.product_packaging_qty, 4.0)
         self.assertEqual(line.product_uom_qty, 8000)
 

@@ -2,8 +2,8 @@
 # Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from odoo.addons.product_packaging_calculator.tests.utils import make_pkg_values
 from odoo.addons.shopinvader.tests.common import CommonCase
-from odoo.addons.stock_packaging_calculator.tests.utils import make_pkg_values
 
 
 class TestProductPackagingData(CommonCase):
@@ -13,13 +13,13 @@ class TestProductPackagingData(CommonCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.product = product = cls.env.ref("product.product_product_6")
-        cls.type_retail_box = cls.env["product.packaging.type"].create(
+        cls.type_retail_box = cls.env["product.packaging.level"].create(
             {"name": "Retail Box", "code": "PACK", "sequence": 3}
         )
-        cls.type_transport_box = cls.env["product.packaging.type"].create(
+        cls.type_transport_box = cls.env["product.packaging.level"].create(
             {"name": "Transport Box", "code": "CASE", "sequence": 4}
         )
-        cls.type_pallet = cls.env["product.packaging.type"].create(
+        cls.type_pallet = cls.env["product.packaging.level"].create(
             {"name": "Pallet", "code": "PALLET", "sequence": 5}
         )
         cls.pkg_box = cls.env["product.packaging"].create(
@@ -27,7 +27,7 @@ class TestProductPackagingData(CommonCase):
                 "name": "Box",
                 "product_id": product.id,
                 "qty": 50,
-                "packaging_type_id": cls.type_retail_box.id,
+                "packaging_level_id": cls.type_retail_box.id,
                 "barcode": "BOX",
             }
         )
@@ -36,7 +36,7 @@ class TestProductPackagingData(CommonCase):
                 "name": "Big Box",
                 "product_id": product.id,
                 "qty": 200,
-                "packaging_type_id": cls.type_transport_box.id,
+                "packaging_level_id": cls.type_transport_box.id,
                 "barcode": "BIGBOX",
             }
         )
@@ -45,7 +45,7 @@ class TestProductPackagingData(CommonCase):
                 "name": "Pallet",
                 "product_id": product.id,
                 "qty": 2000,
-                "packaging_type_id": cls.type_pallet.id,
+                "packaging_level_id": cls.type_pallet.id,
                 "barcode": "PALLET",
             }
         )
@@ -58,7 +58,7 @@ class TestProductPackagingData(CommonCase):
         return [
             make_pkg_values(
                 self.pkg_pallet,
-                can_be_sold=self.pkg_pallet.can_be_sold,
+                can_be_sold=self.pkg_pallet.sales,
                 contained=[
                     make_pkg_values(
                         self.pkg_big_box,
@@ -68,12 +68,12 @@ class TestProductPackagingData(CommonCase):
             ),
             make_pkg_values(
                 self.pkg_big_box,
-                can_be_sold=self.pkg_pallet.can_be_sold,
+                can_be_sold=self.pkg_pallet.sales,
                 contained=[make_pkg_values(self.pkg_box, qty=4)],
             ),
             make_pkg_values(
                 self.pkg_box,
-                can_be_sold=self.pkg_pallet.can_be_sold,
+                can_be_sold=self.pkg_pallet.sales,
                 contained=[make_pkg_values(self.product.uom_id, qty=50)],
             ),
             make_pkg_values(

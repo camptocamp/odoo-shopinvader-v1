@@ -21,7 +21,7 @@ class TestSaleOrderPackaging(CommonCase):
             }
         )
         cls.sale_line1.write(
-            {"product_packaging": cls.pkg_box.id, "product_packaging_qty": 5}
+            {"product_packaging_id": cls.pkg_box.id, "product_packaging_qty": 5}
         )
         cls.sale.action_confirm()
         cls.partner = cls.env.ref("shopinvader.partner_1")
@@ -44,8 +44,8 @@ class TestSaleOrderPackaging(CommonCase):
                     line["packaging"],
                     {
                         "id": self.pkg_box.id,
-                        "name": self.pkg_box.packaging_type_id.name,
-                        "code": self.pkg_box.packaging_type_id.code,
+                        "name": self.pkg_box.packaging_level_id.name,
+                        "code": self.pkg_box.packaging_level_id.code,
                         "barcode": self.pkg_box.barcode,
                     },
                 )

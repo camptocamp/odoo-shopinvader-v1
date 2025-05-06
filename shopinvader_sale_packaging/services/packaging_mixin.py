@@ -32,14 +32,14 @@ class PackagingServiceMixin(AbstractComponent):
     def _packaging_info_ctx(self):
         return {
             # consider only packaging that can be sold
-            "_packaging_filter": lambda x: x.can_be_sold,
+            "_packaging_filter": lambda x: x.sales,
         }
 
     def _packaging_values_from_params(self, params):
         if "packaging_id" in params and "packaging_qty" in params:
             return {
                 # Make sure packaging_id is wiped if we pass 0
-                "product_packaging": params.pop("packaging_id") or False,
+                "product_packaging_id": params.pop("packaging_id") or False,
                 "product_packaging_qty": params.pop("packaging_qty"),
             }
         return {}
@@ -50,7 +50,7 @@ class PackagingServiceMixin(AbstractComponent):
         return {
             "id": packaging.id,
             # Use packaging type name because it's translated
-            "name": packaging.packaging_type_id.name,
-            "code": packaging.packaging_type_id.code,
+            "name": packaging.packaging_level_id.name,
+            "code": packaging.packaging_level_id.code,
             "barcode": packaging.barcode,
         }

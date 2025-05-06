@@ -26,10 +26,10 @@ class ShopinvaderVariant(models.Model):
             "lang_id",
             "record_id.sell_only_by_packaging",
             "record_id.packaging_ids.qty",
-            "record_id.packaging_ids.can_be_sold",
+            "record_id.packaging_ids.sales",
             "record_id.packaging_ids.shopinvader_display",
             "record_id.packaging_ids.barcode",
-            "record_id.packaging_ids.packaging_type_id.name",
+            "record_id.packaging_ids.packaging_level_id.name",
         )
 
     def _get_variant_packaging(self):
@@ -39,7 +39,7 @@ class ShopinvaderVariant(models.Model):
         contained_mapping = rec.packaging_contained_mapping or {}
         packaging = rec._ordered_packaging()
         can_be_sold_info = {
-            x["id"]: x["can_be_sold"] for x in self.packaging_ids.read(["can_be_sold"])
+            x["id"]: x["sales"] for x in self.packaging_ids.read(["sales"])
         }
         for pkg in packaging:
             pkg_info = self._prepare_qty_by_packaging_values(pkg, pkg.qty)

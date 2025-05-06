@@ -5,8 +5,8 @@
 from odoo import fields, models
 
 
-class ProductPackagingType(models.Model):
-    _inherit = "product.packaging.type"
+class ProductPackagingLevel(models.Model):
+    _inherit = "product.packaging.level"
 
     shopinvader_display = fields.Boolean(
         help="Include this packaging into Shopinvader product metadata.",
