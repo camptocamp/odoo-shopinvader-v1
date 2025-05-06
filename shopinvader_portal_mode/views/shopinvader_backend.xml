@@ -2,7 +2,6 @@
 <!-- Copyright 2021 Camptocamp
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
     <record model="ir.ui.view" id="shopinvader_backend_form_view">
         <field name="name">shopinvader.backend.form (in shopinvader_portal_mode)</field>
         <field name="model">shopinvader.backend</field>
@@ -13,5 +12,4 @@
             </group>
         </field>
     </record>
-
 </odoo>
