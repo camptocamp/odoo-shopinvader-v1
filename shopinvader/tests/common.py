@@ -297,24 +297,29 @@ class CommonTestDownload:
 
     # FIXME: this seems duplicated in some common test cases
 
-    def _ensure_posted(self, invoice):
+
+class InvoiceHelper:
+    @classmethod
+    def _ensure_posted(cls, invoice):
         if invoice.state != "posted":
             invoice._post()
 
-    def _make_payment(self, invoice):
+    @classmethod
+    def _make_payment(cls, invoice, payment_method_line):
         """
         Make the invoice payment
         :param invoice: account.invoice recordset
         :return: bool
         """
-        self._ensure_posted(invoice)
+        cls._ensure_posted(invoice)
         ctx = {"active_ids": invoice.ids, "active_model": "account.move"}
-        wizard_obj = self.register_payments_obj.with_context(**ctx)
+        register_payments_obj = invoice.env["account.payment.register"]
+        wizard_obj = register_payments_obj.with_context(**ctx)
         register_payments = wizard_obj.create(
             {
                 "payment_date": fields.Date.today(),
-                "journal_id": self.bank_journal_euro.id,
-                "payment_method_line_id": self.payment_method_line_manual_in.id,
+                "journal_id": payment_method_line.journal_id.id,
+                "payment_method_line_id": payment_method_line.id,
             }
         )
         register_payments._create_payments()
