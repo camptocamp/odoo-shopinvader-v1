@@ -6,7 +6,7 @@ from odoo import fields
 from odoo.exceptions import MissingError
 from odoo.tools import mute_logger
 
-from .common import CommonCase, CommonTestDownload
+from .common import CommonCase, CommonTestDownload, InvoiceHelper
 
 
 class CommonSaleCase(CommonCase):
@@ -15,7 +15,6 @@ class CommonSaleCase(CommonCase):
         super().setUpClass()
         cls.sale = cls.env.ref("shopinvader.sale_order_2")
         cls.partner = cls.env.ref("shopinvader.partner_1")
-        cls.register_payments_obj = cls.env["account.payment.register"]
         cls.journal_obj = cls.env["account.journal"]
         cls.payment_method_manual_in = cls.env.ref(
             "account.account_payment_method_manual_in"
@@ -36,6 +35,9 @@ class CommonSaleCase(CommonCase):
 
 class SaleCase(CommonSaleCase, CommonTestDownload):
     allow_inherited_tests_method = True
+
+    def _make_payment(self, invoice):
+        InvoiceHelper._make_payment(invoice, self.payment_method_line_manual_in)
 
     def _confirm_and_invoice_sale(self):
         self.sale.action_confirm()
