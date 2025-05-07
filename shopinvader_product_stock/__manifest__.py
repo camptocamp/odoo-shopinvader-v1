@@ -6,7 +6,7 @@
     "name": "Shopinvader Product Stock",
     "summary": "This module is used to choose a stock field during the"
     "export (by backend)",
-    "version": "14.0.1.0.3",
+    "version": "18.0.1.0.0",
     "development_status": "Production/Stable",
     "category": "e-commerce",
     "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
@@ -26,5 +26,4 @@
         "data/queue_job_channel_data.xml",
         "data/queue_job_function_data.xml",
     ],
-    "external_dependencies": {"python": ["slugify"]},
 }

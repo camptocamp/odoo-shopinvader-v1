@@ -10,11 +10,6 @@ from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from slugify import slugify
-except (OSError, ImportError) as err:
-    _logger.debug(err)
-
 
 class ShopinvaderBackend(models.Model):
     _inherit = "shopinvader.backend"
@@ -78,4 +73,4 @@ class ShopinvaderBackend(models.Model):
         return result
 
     def _make_warehouse_key(self, wh):
-        return slugify(wh.code)
+        return self.env["ir.http"]._slugify(wh.code)
