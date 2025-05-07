@@ -11,7 +11,7 @@ from odoo.addons.queue_job.tests.common import JobMixin
 class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
     @classmethod
     def setUpClass(cls):
-        super(StockCommonCase, cls).setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,
@@ -83,7 +83,7 @@ class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
     def _create_fake_acl(cls, Klass):
         model_id = cls._test_get_model_id(Klass._name)
         values = {
-            "name": "Fake ACL for %s" % Klass._name,
+            "name": f"Fake ACL for {Klass._name}",
             "model_id": model_id,
             "perm_read": 1,
             "perm_create": 1,
