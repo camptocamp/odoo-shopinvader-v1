@@ -35,7 +35,7 @@ class ShopinvaderVariant(models.Model):
     def _compute_stock_data(self):
         result = defaultdict(dict)
         for backend in self.mapped("backend_id"):
-            loc_records = self.filtered(lambda s: s.backend_id == backend)
+            loc_records = self.filtered(lambda s, b=backend: s.backend_id == b)
             for (
                 wh_key,
                 wh_ids,
