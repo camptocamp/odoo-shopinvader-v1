@@ -4,6 +4,7 @@
 # Copyright 2020 Camptocamp SA (http://www.camptocamp.com)
 # Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.shopinvader.tests.common import UtilsMixin
 
 from .common import StockCommonCase
@@ -27,9 +28,10 @@ class TestProductProduct(StockCommonCase, UtilsMixin):
 
     def test_update_qty_from_wizard(self):
         """Updating the quantity through an inventory create a job."""
-        job = self.job_counter()
-        self._add_stock_to_product(self.product, self.loc_1, 100)
-        self.assertEqual(job.count_created(), 1)
+        with trap_jobs() as trap:
+            self._add_stock_to_product(self.product, self.loc_1, 100)
+            trap.assert_jobs_count(1)
+            # TODO: check the job function
 
     def test_update_stock_on_new_product(self):
         """Recompute binding not exported yet does nothing."""
@@ -43,28 +45,29 @@ class TestProductProduct(StockCommonCase, UtilsMixin):
         shopinvader_product.sync_state = "to_update"
         self.assertEqual(shopinvader_product.data[key_stock], {"global": {"qty": 0.0}})
 
-        jobs = self.job_counter()
-        self._add_stock_to_product(self.product, self.loc_1, 100)
-        self.assertEqual(jobs.count_created(), 1)
+        with trap_jobs() as trap:
+            self._add_stock_to_product(self.product, self.loc_1, 100)
+            trap.assert_jobs_count(1)
+            # TODO: check the job function
 
-        shopinvader_product.invalidate_cache(["stock_data"])
+            shopinvader_product.invalidate_recordset(["stock_data"])
 
-        with self.se_adapter_fake.mocked_calls() as calls:
-            self.perform_jobs(jobs)
+            with self.se_adapter_fake.mocked_calls() as calls:
+                trap.perform_enqueued_jobs()
 
-        self.assertEqual(
-            shopinvader_product.data[key_stock], {"global": {"qty": 100.0}}
-        )
-        if sync_immediatly:
-            self.assertEqual(len(calls), 1)
-            call = calls[0]
-            self.assertEqual(call["method"], "index")
-            self.assertEqual(len(call["args"]), 1)
-            self.assertEqual(call["args"][0][key_stock], {"global": {"qty": 100.0}})
-            self.assertEqual(shopinvader_product.sync_state, "done")
-        else:
-            self.assertEqual(len(calls), 0)
-            self.assertEqual(shopinvader_product.sync_state, "to_update")
+            self.assertEqual(
+                shopinvader_product.data[key_stock], {"global": {"qty": 100.0}}
+            )
+            if sync_immediatly:
+                self.assertEqual(len(calls), 1)
+                call = calls[0]
+                self.assertEqual(call["method"], "index")
+                self.assertEqual(len(call["args"]), 1)
+                self.assertEqual(call["args"][0][key_stock], {"global": {"qty": 100.0}})
+                self.assertEqual(shopinvader_product.sync_state, "done")
+            else:
+                self.assertEqual(len(calls), 0)
+                self.assertEqual(shopinvader_product.sync_state, "to_update")
 
     def test_update_stock(self):
         """Recompute product should update binding and export it."""
@@ -103,11 +106,11 @@ class TestProductProduct(StockCommonCase, UtilsMixin):
         shopinvader_product.sync_state = "to_update"
         self.assertNotIn("stock", shopinvader_product.data)
 
-        jobs = self.job_counter()
-        self._add_stock_to_product(self.product, self.loc_1, 100)
-        self.assertEqual(jobs.count_created(), 1)
-        self.perform_jobs(jobs)
-        self.assertNotIn("stock", shopinvader_product.data)
+        with trap_jobs() as trap:
+            self._add_stock_to_product(self.product, self.loc_1, 100)
+            trap.assert_jobs_count(1)
+            trap.perform_enqueued_jobs()
+            self.assertNotIn("stock", shopinvader_product.data)
 
     def test_multi_warehouse(self):
         warehouses = self.warehouse_1 + self.warehouse_2
@@ -119,13 +122,12 @@ class TestProductProduct(StockCommonCase, UtilsMixin):
         expected = self._expectect_qty_by_wh(warehouses, self.product)
         self.assertEqual(shopinvader_product.data["stock"], expected)
 
-        jobs = self.job_counter()
-        self._add_stock_to_product(self.product, self.loc_1, 100)
-        self._add_stock_to_product(self.product, self.loc_2, 200)
-
-        shopinvader_product.invalidate_cache(["stock_data"])
-        self.assertEqual(jobs.count_created(), 1)
-        with self.se_adapter_fake.mocked_calls():
-            self.perform_jobs(jobs)
-        expected = self._expectect_qty_by_wh(warehouses, self.product)
-        self.assertEqual(shopinvader_product.data["stock"], expected)
+        with trap_jobs() as trap:
+            self._add_stock_to_product(self.product, self.loc_1, 100)
+            self._add_stock_to_product(self.product, self.loc_2, 200)
+            trap.assert_jobs_count(1)
+            shopinvader_product.invalidate_recordset(["stock_data"])
+            with self.se_adapter_fake.mocked_calls():
+                trap.perform_enqueued_jobs()
+            expected = self._expectect_qty_by_wh(warehouses, self.product)
+            self.assertEqual(shopinvader_product.data["stock"], expected)
