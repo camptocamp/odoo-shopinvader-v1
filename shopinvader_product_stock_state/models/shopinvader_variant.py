@@ -11,7 +11,7 @@ class ShopinvaderVariant(models.Model):
     _inherit = "shopinvader.variant"
 
     def _prepare_stock_data(self):
-        res = super(ShopinvaderVariant, self)._prepare_stock_data()
+        res = super()._prepare_stock_data()
         if "state" in self.backend_id.stock_level_config:
             res["state"] = self.stock_state
         if self._skip_stock_qty_update():
