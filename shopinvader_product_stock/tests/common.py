@@ -4,6 +4,8 @@
 # Simone Orsi <simahawk@gmail.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from odoo.tools import mute_logger
+
 from odoo.addons.connector_search_engine.tests.test_all import TestBindingIndexBaseFake
 from odoo.addons.queue_job.tests.common import JobMixin
 
@@ -16,19 +18,29 @@ class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
             context=dict(
                 cls.env.context,
                 tracking_disable=True,  # speed up tests
-                test_queue_job_no_delay=False,  # we want the jobs
+                queue_job__no_delay=False,  # we want the jobs
             )
         )
         ref = cls.env.ref
         cls.shopinvader_backend = ref("shopinvader.backend_1")
         cls.warehouse_1 = ref("stock.warehouse0")
         cls.loc_1 = cls.warehouse_1.lot_stock_id
-        cls.warehouse_2 = ref("stock.stock_warehouse_shop0")
+        cls.warehouse_2 = cls.env["stock.warehouse"].create(
+            {
+                "name": "Warehouse 2",
+                "code": "WH2",
+                "lot_stock_id": ref("stock.stock_location_stock").id,
+                "view_location_id": ref("stock.stock_location_stock").id,
+            }
+        )
         cls.loc_2 = cls.warehouse_2.lot_stock_id
         cls.product = cls.env["product.product"].create(
-            {"name": "Stock prod 1", "type": "product"}
+            {"name": "Stock prod 1", "is_storable": True}
         )
-        cls.shopinvader_backend.bind_all_product()
+        with mute_logger("odoo.addons.queue_job.utils"):
+            cls.shopinvader_backend.with_context(
+                queue_job__no_delay=True
+            ).bind_all_product()
         cls.index = cls.env["se.index"].create(
             {
                 "name": "test-product-index",
@@ -60,7 +72,7 @@ class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
             {
                 "product_id": product.id,
                 "location_id": location.id,
-                "inventory_quantity": qty,
+                "inventory_quantity_auto_apply": qty,
             }
         )
 
@@ -77,24 +89,3 @@ class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
                 "picking_type_id": self.picking_type_in.id,
             }
         )
-
-    # TODO: this should be move to test helper
-    @classmethod
-    def _create_fake_acl(cls, Klass):
-        model_id = cls._test_get_model_id(Klass._name)
-        values = {
-            "name": f"Fake ACL for {Klass._name}",
-            "model_id": model_id,
-            "perm_read": 1,
-            "perm_create": 1,
-            "perm_write": 1,
-            "perm_unlink": 1,
-            "active": True,
-        }
-        cls.env["ir.model.access"].create(values)
-
-    @classmethod
-    def _test_get_model_id(cls, name):
-        cls.env.cr.execute("SELECT id FROM ir_model WHERE model = %s", (name,))
-        res = cls.env.cr.fetchone()
-        return res[0] if res else None
