@@ -50,7 +50,7 @@ class ProductProduct(models.Model):
                 if not stock_export_key:
                     continue
                 data = binding.data
-                if data[stock_export_key] != binding.stock_data:
+                if data.get(stock_export_key) != binding.stock_data:
                     data[stock_export_key] = binding.stock_data
                     vals = {"data": data}
                     if binding.backend_id.synchronize_stock == "immediatly":
