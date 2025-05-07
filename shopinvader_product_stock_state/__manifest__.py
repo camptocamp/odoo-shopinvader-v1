@@ -7,7 +7,7 @@
     "export (by backend)",
     "version": "14.0.1.0.0",
     "category": "e-commerce",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Akretion",
     "license": "AGPL-3",
     "installable": True,
