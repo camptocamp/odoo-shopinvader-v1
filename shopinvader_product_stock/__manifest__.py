@@ -9,7 +9,7 @@
     "version": "14.0.1.0.3",
     "development_status": "Production/Stable",
     "category": "e-commerce",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "author": "Akretion,ACSONE SA/NV,Camptocamp",
     "license": "AGPL-3",
     "installable": True,

@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 try:
     from slugify import slugify
-except (ImportError, IOError) as err:
+except (OSError, ImportError) as err:
     _logger.debug(err)
 
 

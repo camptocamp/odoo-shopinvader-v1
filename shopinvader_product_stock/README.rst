@@ -16,15 +16,15 @@ Shopinvader Product Stock
 .. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
-.. |badge3| image:: https://img.shields.io/badge/github-shopinvader%2Fodoo--shopinvader-lightgray.png?logo=github
-    :target: https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_product_stock
-    :alt: shopinvader/odoo-shopinvader
+.. |badge3| image:: https://img.shields.io/badge/github-camptocamp%2Fodoo--shopinvader--v1-lightgray.png?logo=github
+    :target: https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_product_stock
+    :alt: camptocamp/odoo-shopinvader-v1
 
 |badge1| |badge2| |badge3|
 
-This is shopinvader product stock module.
-This module is used to export a specific stock field on product.product,
-only if the value has been updated.
+This is shopinvader product stock module. This module is used to export
+a specific stock field on product.product, only if the value has been
+updated.
 
 **Table of contents**
 
@@ -35,22 +35,22 @@ Changelog
 =========
 
 10.0.1.0.0 (2018-06-15)
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-* Rename modules
+- Rename modules
 
 12.0.1.0.0 (2019-05-23)
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
-* [12.0][MIG] shopinvader_product_stock
+- [12.0][MIG] shopinvader_product_stock
 
 Bug Tracker
 ===========
 
-Bugs are tracked on `GitHub Issues <https://github.com/shopinvader/odoo-shopinvader/issues>`_.
+Bugs are tracked on `GitHub Issues <https://github.com/camptocamp/odoo-shopinvader-v1/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/shopinvader/odoo-shopinvader/issues/new?body=module:%20shopinvader_product_stock%0Aversion:%2014.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/camptocamp/odoo-shopinvader-v1/issues/new?body=module:%20shopinvader_product_stock%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -58,37 +58,37 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Akretion
 * ACSONE SA/NV
 * Camptocamp
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Sébastien BEAU <sebastien.beau@akretion.com>
-* François Honoré <francois.honore@acsone.eu>
-* Laurent Mignon <laurent.mignon@acsone.eu>
-* Denis Roussel <denis.roussel@acsone.eu>
-* Simone Orsi <simahawk@gmail.com>
+- Sébastien BEAU <sebastien.beau@akretion.com>
+- François Honoré <francois.honore@acsone.eu>
+- Laurent Mignon <laurent.mignon@acsone.eu>
+- Denis Roussel <denis.roussel@acsone.eu>
+- Simone Orsi <simahawk@gmail.com>
 
 Other credits
-~~~~~~~~~~~~~
+-------------
 
 Funders
--------
+~~~~~~~
 
 The development of this module has been financially supported by:
 
-* Akretion R&D
-* Adaptoo
-* Encresdubuit
-* Abilis
+- Akretion R&D
+- Adaptoo
+- Encresdubuit
+- Abilis
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
-This module is part of the `shopinvader/odoo-shopinvader <https://github.com/shopinvader/odoo-shopinvader/tree/14.0/shopinvader_product_stock>`_ project on GitHub.
+This module is part of the `camptocamp/odoo-shopinvader-v1 <https://github.com/camptocamp/odoo-shopinvader-v1/tree/18.0/shopinvader_product_stock>`_ project on GitHub.
 
 You are welcome to contribute.
