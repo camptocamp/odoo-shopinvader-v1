@@ -425,7 +425,7 @@
 
     <record id="product_product_tv_stand_wood_and_glass_white" model="product.product">
         <field name="product_tmpl_id" ref="product_template_tv_stand_wood_and_glass" />
-        <field name="default_code">C</field>
+        <field name="default_code">TVSTAND-ST-160B</field>
     </record>
 
     <record id="product_product_park_entertainment" model="product.product">
