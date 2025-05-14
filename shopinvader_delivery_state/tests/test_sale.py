@@ -53,7 +53,6 @@ class TestSalesService(CommonCase):
 
     def test_state_done_not_shipped(self):
         self.shop_sales.action_confirm()
-        self.shop_sales[0].action_done()
         service = self._get_service()
         res = service.search()
         states = sorted([x["state"] for x in res["data"]])
