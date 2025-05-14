@@ -17,9 +17,17 @@ class SaleOrder(models.Model):
     )
 
     def _compute_shopinvader_state_depends(self):
-        return super()._compute_shopinvader_state_depends() + ("delivery_state",)
+        return super()._compute_shopinvader_state_depends() + ("delivery_status",)
 
     def _get_shopinvader_state(self):
-        if self.delivery_state == "no":
+        if not self.delivery_status:
             return super()._get_shopinvader_state()
-        return "shipping_" + self.delivery_state
+        # v18: the status value changed from v14 to v18
+        # hence here we need a custom mapping to not migrate
+        # existing data and above all to not break the shop UI
+        # which relies on the old values.
+        return {
+            "pending": "shipping_unprocessed",
+            "partial": "shipping_partially",
+            "full": "shipping_done",
+        }.get(self.delivery_status)
