@@ -11,7 +11,7 @@
     "author": "Akretion, Camptocamp",
     "company": "Akretion",
     "maintainer": "Akretion",
-    "website": "https://github.com/shopinvader/odoo-shopinvader",
+    "website": "https://github.com/camptocamp/odoo-shopinvader-v1",
     "category": "Product",
     "depends": ["shopinvader_image"],
     "external_dependencies": {

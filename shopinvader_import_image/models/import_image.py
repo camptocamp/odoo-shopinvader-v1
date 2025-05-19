@@ -26,7 +26,7 @@ _logger = logging.getLogger(__name__)
 try:
     import magic
     import validators
-except (ImportError, IOError) as err:
+except (OSError, ImportError) as err:
     _logger.debug(err)
 
 
@@ -48,7 +48,6 @@ def gen_chunks(iterable, chunksize=10):
 
 
 class ProductImageImportWizard(models.Model):
-
     _name = "shopinvader.import.product_image"
     _description = "Handle import of shopinvader product images"
 
@@ -148,7 +147,7 @@ class ProductImageImportWizard(models.Model):
 
     def _read_from_url(self, file_path):
         if validators.url(file_path):
-            return urlopen(file_path).read()
+            return urlopen(file_path, timeout=10).read()
         return None
 
     def _read_from_zip_file(self, file_path):
@@ -190,7 +189,9 @@ class ProductImageImportWizard(models.Model):
                     line = {key: row[column] for key, column in mapping.items()}
                 except KeyError as e:
                     _logger.error(e)
-                    raise exceptions.UserError(_("CSV Schema Incompatible"))
+                    raise exceptions.UserError(
+                        self.env._("CSV Schema Incompatible")
+                    ) from e
                 lines.append(line)
         return lines
 
@@ -228,7 +229,7 @@ class ProductImageImportWizard(models.Model):
                 report[k] = sorted(set(prev_report[k] + v))
 
         # Lock as writing can come from several jobs
-        sql = "SELECT id FROM %s WHERE ID IN %%s FOR UPDATE" % self._table
+        sql = "SELECT id FROM {} WHERE ID IN %%s FOR UPDATE".format(self._table)
         self.env.cr.execute(sql, (tuple(self.ids),), log_exceptions=False)
         self.write(
             {
