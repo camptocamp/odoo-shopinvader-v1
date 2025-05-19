@@ -19,8 +19,6 @@ from zipfile import ZipFile
 from odoo import _, api, exceptions, fields, models
 from odoo.tools import date_utils
 
-from odoo.addons.http_routing.models.ir_http import slugify
-
 _logger = logging.getLogger(__name__)
 
 try:
@@ -59,7 +57,6 @@ class ProductImageImportWizard(models.Model):
             ("product.template", "Product template"),
             ("product.product", "Product variants"),
         ],
-        string="Product Model",
         required=True,
     )
     source_type = fields.Selection(
@@ -126,12 +123,12 @@ class ProductImageImportWizard(models.Model):
 
     @api.depends("report")
     def _compute_report_html(self):
-        tmpl = self.env.ref("shopinvader_import_image.report_html")
+        tmpl_xid = "shopinvader_import_image.report_html"
         for record in self:
             if not record.report:
                 record.report_html = ""
                 continue
-            report_html = tmpl._render({"record": record})
+            report_html = self.env["ir.qweb"]._render(tmpl_xid, {"record": record})
             record.report_html = report_html
 
     @api.model
@@ -142,7 +139,7 @@ class ProductImageImportWizard(models.Model):
         binary = getattr(self, "_read_from_" + self.source_type)(file_path)
         if binary:
             mimetype = magic.from_buffer(binary, mime=True)
-            res = {"mimetype": mimetype, "b64": base64.encodestring(binary)}
+            res = {"mimetype": mimetype, "b64": base64.b64encode(binary)}
         return res
 
     def _read_from_url(self, file_path):
@@ -165,13 +162,15 @@ class ProductImageImportWizard(models.Model):
     def _read_from_external_storage(self, file_path):
         if not self.source_storage_backend_id:
             raise exceptions.UserError(_("No storage backend provided!"))
-        return self.source_storage_backend_id._get_bin_data(file_path)
+        return self.source_storage_backend_id.get(file_path, binary=True)
 
     def _read_csv(self):
         if self.file_csv:
             return base64.b64decode(self.file_csv)
         elif self.external_csv_path:
-            return self.source_storage_backend_id._get_bin_data(self.external_csv_path)
+            return self.source_storage_backend_id.get(
+                self.external_csv_path, binary=True
+            )
 
     def _get_lines(self):
         lines = []
@@ -229,7 +228,7 @@ class ProductImageImportWizard(models.Model):
                 report[k] = sorted(set(prev_report[k] + v))
 
         # Lock as writing can come from several jobs
-        sql = "SELECT id FROM {} WHERE ID IN %%s FOR UPDATE".format(self._table)
+        sql = f"SELECT id FROM {self._table} WHERE ID IN %s FOR UPDATE"
         self.env.cr.execute(sql, (tuple(self.ids),), log_exceptions=False)
         self.write(
             {
@@ -356,7 +355,7 @@ class ProductImageImportWizard(models.Model):
         # preserve extension if any
         fname, ext = os.path.splitext(fname)
         # make sure is really clean
-        return slugify(fname) + ext.lower()
+        return self.env["ir.http"]._slugify((fname) + ext.lower())
 
     @api.model
     def _cron_cleanup_obsolete(self, days=7):
