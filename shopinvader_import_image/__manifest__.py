@@ -6,7 +6,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     "name": "Import Shopinvader product image",
-    "version": "14.0.1.1.1",
+    "version": "18.0.1.0.0",
     "summary": "Import product images",
     "author": "Akretion, Camptocamp",
     "company": "Akretion",

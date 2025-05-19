@@ -73,7 +73,7 @@ class TestShopinvaderImportImage(TestShopinvaderImportImageCase):
             self.wiz._get_base64("A001.jpg"),
             {
                 "mimetype": "image/jpeg",
-                "b64": base64.encodestring(img_content),
+                "b64": base64.b64encode(img_content),
             },
         )
 
@@ -174,9 +174,7 @@ class TestShopinvaderImportImage(TestShopinvaderImportImageCase):
         fake_image_binary = self._get_file_content(
             "A001.jpg", base_path=self.base_path, as_binary=True
         )
-        with mock.patch.object(
-            self.storage_backend.__class__, "_get_bin_data"
-        ) as mocked:
+        with mock.patch.object(self.storage_backend.__class__, "get") as mocked:
             mocked.return_value = fake_image_binary
             wiz.do_import()
         self.assertEqual(
