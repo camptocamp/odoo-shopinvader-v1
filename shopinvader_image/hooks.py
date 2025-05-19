@@ -47,14 +47,15 @@ def post_init_hook(env):
         # prevent removal of demo data since the xml files are not declared
         # into the demo section and therefore the xml_ids are no more found on
         # addon update
+
         env.cr.execute(
             """
-            update
+            select
+                id
+            from
                 ir_model_data
-            set
-                module='__export__'
             where
-                module='shopinvader_image'
+                module='__export__'
                 and model in (
                     'storage.file',
                     'storage.image',
@@ -63,3 +64,20 @@ def post_init_hook(env):
                 )
         """
         )
+        if not env.cr.fetchone():
+            env.cr.execute(
+                """
+                update
+                    ir_model_data
+                set
+                    module='__export__'
+                where
+                    module='shopinvader_image'
+                    and model in (
+                        'storage.file',
+                        'storage.image',
+                        'product.image.relation',
+                        'product.product'
+                    )
+            """
+            )
