@@ -4,8 +4,7 @@
 
 import base64
 import os
-
-import mock
+from unittest import mock
 
 from odoo.addons.shopinvader_image.tests.common import TestShopinvaderImageCase
 
