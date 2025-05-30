@@ -168,7 +168,9 @@ class ProductImageImportWizard(models.Model):
         if self.file_csv:
             return base64.b64decode(self.file_csv)
         elif self.external_csv_path:
-            return self.source_storage_backend_id._get_bin_data(self.external_csv_path)
+            return self.source_storage_backend_id.get(
+                self.external_csv_path, binary=True
+            )
 
     def _get_lines(self):
         lines = []
