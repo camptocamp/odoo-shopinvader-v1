@@ -327,7 +327,7 @@ class CartService(Component):
 
     def _get_sale_order_line_name(self, vals):
         product = self.env["product.product"].browse(vals["product_id"])
-        name = product.name_get()[0][1]
+        name = product.display_name
         if product.description_sale:
             name += "\n" + product.description_sale
         return name
