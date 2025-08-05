@@ -9,7 +9,11 @@ class CommonCustomerPriceCase(ProductCommonCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.env = cls.env(context=dict(cls.env.context, tracking_disable=True))
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context, tracking_disable=True, queue_job__no_delay=True
+            )
+        )
         cls.partner1 = cls.env.ref("shopinvader.partner_1")
         cls.partner2 = cls.env.ref("shopinvader.partner_2")
         cls.discount_pricelist = cls.env.ref("shopinvader.pricelist_1")
@@ -41,7 +45,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         s_variant = self.shopinvader_variant
         service = self._get_service(self.partner1)
         # partner1
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res = service.dispatch(
@@ -49,7 +53,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         )
         self._test_response(res, s_variant, expected_price)
         # partner2
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos2
         )
         service = self._get_service(self.partner2)
@@ -62,7 +66,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         s_variant = self.shopinvader_variant
         service = self._get_service(self.partner1)
         # partner1
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res = service.dispatch(
@@ -70,7 +74,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         )
         self._test_response(res, s_variant, expected_price)
         # partner2
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos2
         )
         service = self._get_service(self.partner2)
@@ -88,7 +92,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         res = service.dispatch(
             "products", params={"ids": s_variant.record_id.ids, "one": True}
         )
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.discount_pricelist, fposition=self.fiscal_pos1
         )
         self._test_response(res, s_variant, expected_price)
@@ -101,7 +105,7 @@ class CommonCustomerPriceCase(ProductCommonCase):
         res = service.dispatch(
             "products", params={"ids": s_variant.record_id.ids, "one": True}
         )
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.discount_pricelist, fposition=self.fiscal_pos1
         )
         self._test_response(res, s_variant, expected_price)
@@ -117,12 +121,12 @@ class CommonCustomerPriceCase(ProductCommonCase):
             params={"ids": [s_variant.record_id.id, s_variant2.record_id.id]},
         )
         self.assertEqual(len(res), 2)
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res1 = [x for x in res if x["id"] == s_variant.record_id.id][0]
         self._test_response(res1, s_variant, expected_price)
-        expected_price = s_variant2._get_price(
+        expected_price = s_variant2.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res2 = [x for x in res if x["id"] == s_variant2.record_id.id][0]
@@ -138,12 +142,12 @@ class CommonCustomerPriceCase(ProductCommonCase):
             params={"ids": [s_variant.record_id.id, s_variant2.record_id.id]},
         )
         self.assertEqual(len(res), 2)
-        expected_price = s_variant._get_price(
+        expected_price = s_variant.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res1 = [x for x in res if x["id"] == s_variant.record_id.id][0]
         self._test_response(res1, s_variant, expected_price)
-        expected_price = s_variant2._get_price(
+        expected_price = s_variant2.record_id._get_price(
             pricelist=self.base_pricelist, fposition=self.fiscal_pos1
         )
         res2 = [x for x in res if x["id"] == s_variant2.record_id.id][0]
