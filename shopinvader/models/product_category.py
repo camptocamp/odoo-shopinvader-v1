@@ -17,7 +17,6 @@ class ProductCategory(models.Model):
     )
     filter_ids = fields.Many2many(comodel_name="product.filter", string="Filter")
     active = fields.Boolean(default=True)
-
     # V13 restore translate on category name...
     # This code is a transversal fix and should go into a dedicated addon...
     # The translate=True has been removed in
@@ -29,7 +28,9 @@ class ProductCategory(models.Model):
     _rec_name = None
     name = fields.Char(translate=True)
 
-    def name_get(self):
+    def _compute_display_name(self):
+        """Override to use the original record's complete_name field."""
+
         def get_names(cat):
             """Return the list [cat.name, cat.parent_id.name, ...]"""
             res = []
@@ -38,22 +39,21 @@ class ProductCategory(models.Model):
                 cat = cat.parent_id
             return res
 
-        return [(cat.id, " / ".join(reversed(get_names(cat)))) for cat in self]
+        for record in self:
+            record.display_name = " / ".join(reversed(get_names(record)))
 
     @api.model
     def name_search(self, name, args=None, operator="ilike", limit=100):
-        if not args:
-            args = []
+        args = args or []
         if name:
-            # Be sure name_search is symetric to name_get
-            category_names = name.split(" / ")
-            parents = list(category_names)
+            category_names = [x.strip() for x in name.split(" / ")]
+            parents = category_names[:]
             child = parents.pop()
             domain = [("name", operator, child)]
             if parents:
                 names_ids = self.name_search(
                     " / ".join(parents),
-                    args=args,
+                    args=args[:],  # safer recursion
                     operator="ilike",
                     limit=limit,
                 )
@@ -67,24 +67,24 @@ class ProductCategory(models.Model):
                     domain = expression.AND(
                         [[("parent_id", "in", category_ids)], domain]
                     )
-                for i in range(1, len(category_names)):
-                    domain = [
-                        # fmt: off
-                        [
-                            (
-                                "name",
-                                operator,
-                                " / ".join(category_names[-1 - i :]),
-                            )
-                        ],
-                        # fmt: on
-                        domain,
-                    ]
-                    if operator in expression.NEGATIVE_TERM_OPERATORS:
-                        domain = expression.AND(domain)
-                    else:
-                        domain = expression.OR(domain)
-            categories = self.search(expression.AND([domain, args]), limit=limit)
+                # Optional fallback search for partial matches
+                if operator not in expression.NEGATIVE_TERM_OPERATORS:
+                    for i in range(1, len(category_names)):
+                        domain = expression.OR(
+                            [
+                                [
+                                    (
+                                        "name",
+                                        operator,
+                                        " / ".join(category_names[-1 - i :]),
+                                    )
+                                ],
+                                domain,
+                            ]
+                        )
+            search_domain = expression.AND([domain, args])
         else:
-            categories = self.search(args, limit=limit)
-        return categories.name_get()
+            search_domain = args
+
+        records = self.search_fetch(search_domain, ["display_name"], limit=limit)
+        return [(record.id, record.display_name) for record in records.sudo()]
