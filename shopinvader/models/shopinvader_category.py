@@ -62,8 +62,10 @@ class ShopinvaderCategory(models.Model):
         )
     ]
 
-    def name_get(self):
-        return [(cat.id, cat.record_id.display_name) for cat in self]
+    def _compute_display_name(self):
+        """Override to use the original record's complete_name field."""
+        for record in self:
+            record.display_name = record.record_id.display_name
 
     @api.depends("record_id.active")
     def _compute_active(self):
