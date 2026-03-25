@@ -12,25 +12,28 @@ class TestAbstractUrl(TransactionCase, FakeModelLoader):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
-        from .models import ResPartner, ResPartnerAddressableFake, UrlBackendFake
-
-        cls.loader.update_registry(
-            (UrlBackendFake, ResPartner, ResPartnerAddressableFake)
-        )
-
         cls.lang = cls.env.ref("base.lang_en")
         cls.UrlUrl = cls.env["url.url"]
-        cls.ResPartnerAddressable = cls.env["res.partner.addressable.fake"]
-        cls.url_backend = cls.env["url.backend.fake"].create({"name": "fake backend"})
         cls.name = "partner name"
         cls.auto_key = "partner-name"
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        super().tearDownClass()
+    def setUp(self):
+        super().setUp()
+        self.loader = FakeModelLoader(self.env, self.__module__)
+        self.loader.backup_registry()
+        from .models import ResPartner, ResPartnerAddressableFake, UrlBackendFake
+
+        self.loader.update_registry(
+            (UrlBackendFake, ResPartner, ResPartnerAddressableFake)
+        )
+        self.ResPartnerAddressable = self.env["res.partner.addressable.fake"]
+        self.url_backend = self.env["url.backend.fake"].create({"name": "fake backend"})
+        self.name = "partner name"
+        self.auto_key = "partner-name"
+
+    def tearDown(self):
+        self.loader.restore_registry()
+        super().tearDown()
 
     def _get_default_partner_value(self):
         return {
