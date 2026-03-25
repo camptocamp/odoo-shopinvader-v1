@@ -12,7 +12,7 @@ class Mixin:
     def _get_file_content(
         filename, base_path=None, as_binary=False, module="shopinvader_product_media"
     ):
-        with file_open("%s/tests/fixture/%s" % (module, filename), "rb") as f:
+        with file_open(f"{module}/tests/fixture/{filename}", "rb") as f:
             data = f.read()
             if as_binary:
                 return data
