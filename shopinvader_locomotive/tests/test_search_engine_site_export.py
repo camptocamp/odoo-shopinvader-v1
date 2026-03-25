@@ -11,10 +11,26 @@ from .common import LocoCommonCase, mock_site_api
 class TestSiteSearchEngineExportBase(LocoCommonCase):
     maxDiff = None
 
+    def setUp(self):
+        super().setUp()
+        self._setup_search_engine()
+        self.metafields = {self.search_engine_name: {}}
+        # simplified version of site data
+        self.site = {
+            "name": "My site",
+            "handle": "shopinvader",
+            "_id": "space_id",
+            "metafields": json.dumps(self.metafields),
+        }
+
+    def tearDown(self):
+        if hasattr(self, "loader"):
+            self.loader.restore_registry()
+        super().tearDown()
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls._setup_search_engine()
         cls.routes = [
             [
                 "*",
@@ -42,20 +58,8 @@ class TestSiteSearchEngineExportBase(LocoCommonCase):
             "routes": json.dumps(cls.routes),
         }
 
-    @classmethod
-    def _setup_search_engine(cls):
+    def _setup_search_engine(self):
         raise NotImplementedError()
-
-    def setUp(self):
-        super().setUp()
-        self.metafields = {self.search_engine_name: {}}
-        # simplified version of site data
-        self.site = {
-            "name": "My site",
-            "handle": "shopinvader",
-            "_id": "space_id",
-            "metafields": json.dumps(self.metafields),
-        }
 
     def _update_site_metafields(self, key, values):
         self.metafields[key] = values
@@ -79,45 +83,41 @@ class TestSiteSearchEngineExportBase(LocoCommonCase):
 
 
 class TestSiteSearchEngineExport(TestSiteSearchEngineExportBase):
-    @classmethod
-    def _setup_search_engine(cls):
+    def _setup_search_engine(self):
         # Load fake models ->/
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
+        self.loader = FakeModelLoader(self.env, self.__module__)
+        self.loader.backup_registry()
         from odoo.addons.connector_search_engine.tests.models import SeBackendFake
 
-        cls.loader.update_registry((SeBackendFake,))
+        self.loader.update_registry((SeBackendFake,))
         # ->/ Load fake models
-        cls.se_backend = (
-            cls.env[SeBackendFake._name].create({"name": "Fake SE"}).se_backend_id
+        self.se_backend = (
+            self.env[SeBackendFake._name].create({"name": "Fake SE"}).se_backend_id
         )
-        cls.search_engine_name = cls.se_backend.search_engine_name
-        cls.backend.se_backend_id = cls.se_backend
-        cls.env["se.index"].create(
+        self.search_engine_name = self.se_backend.search_engine_name
+        self.backend.se_backend_id = self.se_backend
+        self.env["se.index"].create(
             {
-                "backend_id": cls.backend.se_backend_id.id,
+                "backend_id": self.backend.se_backend_id.id,
                 "name": "index-product",
-                "lang_id": cls.env.ref("base.lang_en").id,
-                "model_id": cls.env.ref("shopinvader.model_shopinvader_variant").id,
-                "exporter_id": cls.env.ref("shopinvader.ir_exp_shopinvader_variant").id,
+                "lang_id": self.env.ref("base.lang_en").id,
+                "model_id": self.env.ref("shopinvader.model_shopinvader_variant").id,
+                "exporter_id": self.env.ref(
+                    "shopinvader.ir_exp_shopinvader_variant"
+                ).id,
             }
         )
-        cls.env["se.index"].create(
+        self.env["se.index"].create(
             {
-                "backend_id": cls.backend.se_backend_id.id,
+                "backend_id": self.backend.se_backend_id.id,
                 "name": "index-category",
-                "lang_id": cls.env.ref("base.lang_en").id,
-                "model_id": cls.env.ref("shopinvader.model_shopinvader_category").id,
-                "exporter_id": cls.env.ref(
+                "lang_id": self.env.ref("base.lang_en").id,
+                "model_id": self.env.ref("shopinvader.model_shopinvader_category").id,
+                "exporter_id": self.env.ref(
                     "shopinvader.ir_exp_shopinvader_category"
                 ).id,
             }
         )
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        super().tearDownClass()
 
     def test_search_engine_synchronize_01(self):
         """
