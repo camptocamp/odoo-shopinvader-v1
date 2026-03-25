@@ -39,6 +39,7 @@ class ProductMediaCase(ProductCommonCase, Mixin):
             self.media1 | self.media2 | self.media3,
         )
         self.media1.active = False
+        self.shopinvader_variant.invalidate_recordset()
         self.assertEqual(
             self.shopinvader_variant.variant_media_ids.media_id,
             self.media2 | self.media3,
