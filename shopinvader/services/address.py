@@ -6,8 +6,9 @@
 # pylint: disable=method-required-super, consider-merging-classes-inherited
 
 from odoo.exceptions import AccessError
+from odoo.tools import str2bool
 
-from odoo.addons.base_rest.components.service import to_bool, to_int
+from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
 
 from .. import shopinvader_response
@@ -151,9 +152,9 @@ class AddressService(Component):
                     }
                 },
             },
-            "is_company": {"coerce": to_bool, "type": "boolean"},
-            "opt_in": {"coerce": to_bool, "type": "boolean"},
-            "opt_out": {"coerce": to_bool, "type": "boolean"},
+            "is_company": {"coerce": str2bool, "type": "boolean"},
+            "opt_in": {"coerce": str2bool, "type": "boolean"},
+            "opt_out": {"coerce": str2bool, "type": "boolean"},
             "lang": {"type": "string", "required": False},
             "vat": {"type": "string", "required": False, "nullable": True},
             "company_name": {"type": "string", "required": False, "nullable": True},
