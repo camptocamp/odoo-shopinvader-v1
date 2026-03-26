@@ -63,6 +63,8 @@ jobs:
         run: oca_init_test_database
       - name: Run tests
         run: oca_run_tests
+        env:
+          REST_API_METHOD_FIX_DECORATOR_DEPRECATE_LOG_DISABLE: 1
       - uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
