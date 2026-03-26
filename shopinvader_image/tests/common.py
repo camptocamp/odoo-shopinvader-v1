@@ -6,14 +6,14 @@
 
 
 from odoo.addons.shopinvader.tests.common import ProductCommonCase
-from odoo.addons.storage_image_product.tests.common import ProductImageCommonCase
+from odoo.addons.storage_image_product.tests.common import ProductImageCaseMixin
 
 
-class TestShopinvaderImageCase(ProductCommonCase, ProductImageCommonCase):
+class TestShopinvaderImageCase(ProductCommonCase, ProductImageCaseMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        ProductImageCommonCase.setUpClass()
+        cls._setup_base_image_data()
         cls.logo = cls.env["product.image.relation"].create(
             {"product_tmpl_id": cls.template.id, "image_id": cls.logo_image.id}
         )
