@@ -14,10 +14,20 @@ class BackendCaseBase(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.backend = cls.env.ref("shopinvader.backend_1")
+        cls.prod_export = cls.env.ref("shopinvader.ir_exp_shopinvader_variant")
+        cls.categ_export = cls.env.ref("shopinvader.ir_exp_shopinvader_category")
+        cls.ir_model_model = cls.env["ir.model"]
+        cls.variant_model = cls.ir_model_model._get("shopinvader.variant")
+        cls.categ_model = cls.ir_model_model._get("shopinvader.category")
+        cls.lang_en = cls.backend.lang_ids
+        cls.lang_fr = _install_lang_odoo(cls.env, "base.lang_fr")
 
+    def setUp(self):
+        super().setUp()
         # Load fake models ->/
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
+        self.loader = FakeModelLoader(self.env, self.__module__)
+        self.loader.backup_registry()
         from odoo.addons.connector_search_engine.tests.models import SeBackendFake
 
         class AgnosticBinding(models.Model):
@@ -28,28 +38,19 @@ class BackendCaseBase(TransactionCase):
 
             name = fields.Char()
 
-        cls.AgnosticBinding = AgnosticBinding
-        cls.loader.update_registry((SeBackendFake, AgnosticBinding))
+        self.AgnosticBinding = AgnosticBinding
+        self.loader.update_registry((SeBackendFake, AgnosticBinding))
         # ->/ Load fake models
 
-        cls.se_backend = (
-            cls.env[SeBackendFake._name].create({"name": "Fake SE"}).se_backend_id
+        self.se_backend = (
+            self.env[SeBackendFake._name].create({"name": "Fake SE"}).se_backend_id
         )
-        cls.backend = cls.env.ref("shopinvader.backend_1")
-        cls.backend.se_backend_id = cls.se_backend
-        cls.prod_export = cls.env.ref("shopinvader.ir_exp_shopinvader_variant")
-        cls.categ_export = cls.env.ref("shopinvader.ir_exp_shopinvader_category")
-        cls.ir_model_model = cls.env["ir.model"]
-        cls.variant_model = cls.ir_model_model._get("shopinvader.variant")
-        cls.categ_model = cls.ir_model_model._get("shopinvader.category")
-        cls.agnostic_model = cls.ir_model_model._get(cls.AgnosticBinding._name)
-        cls.lang_en = cls.backend.lang_ids
-        cls.lang_fr = _install_lang_odoo(cls.env, "base.lang_fr")
+        self.backend.se_backend_id = self.se_backend
+        self.agnostic_model = self.ir_model_model._get(self.AgnosticBinding._name)
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        super().tearDownClass()
+    def tearDown(self):
+        self.loader.restore_registry()
+        super().tearDown()
 
 
 class TestBackend(BackendCaseBase):

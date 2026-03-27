@@ -169,8 +169,8 @@ class CommonCase(TransactionCase, CommonMixin):
         _rest_controllers_per_module["shopinvader"] = []
 
     def setUp(self):
-        TransactionCase.setUp(self)
-        CommonMixin.setUp(self)
+        super().setUp()
+        self.setUpComponentRegistryReady()
 
         shopinvader_response.set_testmode(True)
 

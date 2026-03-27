@@ -6,8 +6,9 @@ from functools import wraps
 
 from odoo import exceptions
 from odoo.osv import expression
+from odoo.tools import str2bool
 
-from odoo.addons.base_rest.components.service import to_bool, to_int
+from odoo.addons.base_rest.components.service import to_int
 from odoo.addons.component.core import Component
 
 
@@ -111,7 +112,7 @@ class UsersService(Component):
             "email": {"type": "string", "required": True},
             "can_manage_users": {
                 "type": "boolean",
-                "coerce": to_bool,
+                "coerce": str2bool,
                 "nullable": True,
             },
             "parent_id": {
