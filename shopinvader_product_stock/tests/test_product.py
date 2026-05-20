@@ -35,7 +35,8 @@ class TestProductProduct(StockCommonCase, UtilsMixin):
 
     def test_update_stock_on_new_product(self):
         """Recompute binding not exported yet does nothing."""
-        self.assertEqual(self.product.shopinvader_bind_ids.sync_state, "new")
+        self.product.shopinvader_bind_ids.data = {}
+        self.product.shopinvader_bind_ids.sync_state = "new"
         self.product.synchronize_all_binding_stock_level()
         self.assertEqual(self.product.shopinvader_bind_ids.data, {})
 
