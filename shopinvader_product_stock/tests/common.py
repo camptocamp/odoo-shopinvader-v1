@@ -41,26 +41,31 @@ class StockCommonCase(TestBindingIndexBaseFake, JobMixin):
             cls.shopinvader_backend.with_context(
                 queue_job__no_delay=True
             ).bind_all_product()
-        cls.index = cls.env["se.index"].create(
+        cls.loc_supplier = cls.env.ref("stock.stock_location_suppliers")
+        cls.picking_type_in = cls.env.ref("stock.picking_type_in")
+
+    def setUp(self):
+        super().setUp()
+        self.index = self.env["se.index"].create(
             {
                 "name": "test-product-index",
-                "backend_id": cls.backend_specific.se_backend_id.id,
-                "exporter_id": ref("shopinvader.ir_exp_shopinvader_variant").id,
-                "lang_id": ref("base.lang_en").id,
-                "model_id": ref("shopinvader.model_shopinvader_variant").id,
+                "backend_id": self.backend_specific.se_backend_id.id,
+                "exporter_id": self.env.ref(
+                    "shopinvader.ir_exp_shopinvader_variant"
+                ).id,
+                "lang_id": self.env.ref("base.lang_en").id,
+                "model_id": self.env.ref("shopinvader.model_shopinvader_variant").id,
             }
         )
-        cls.shopinvader_backend.write(
+        self.shopinvader_backend.write(
             {
-                "se_backend_id": cls.backend_specific.se_backend_id.id,
-                "warehouse_ids": [(6, 0, cls.warehouse_1.ids)],
-                "product_stock_field_id": ref(
+                "se_backend_id": self.backend_specific.se_backend_id.id,
+                "warehouse_ids": [(6, 0, self.warehouse_1.ids)],
+                "product_stock_field_id": self.env.ref(
                     "stock.field_product_product__qty_available"
                 ).id,
             }
         )
-        cls.loc_supplier = cls.env.ref("stock.stock_location_suppliers")
-        cls.picking_type_in = cls.env.ref("stock.picking_type_in")
 
     def _add_stock_to_product(self, product, location, qty):
         """Set the stock quantity of the product.
