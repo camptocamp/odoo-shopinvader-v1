@@ -18,6 +18,9 @@ class ShopinvaderVariant(models.Model):
     )
     def _compute_variant_media_ids(self):
         for variant in self:
-            variant.variant_media_ids = variant.record_id.variant_media_ids.filtered(
-                "media_id.active"
-            )
+            variant.variant_media_ids = variant._get_media_relations()
+
+    def _get_media_relations(self):
+        return self.record_id.variant_media_ids.filtered(
+            lambda r: r.media_id.active and r.media_id.backend_id.is_public
+        )
