@@ -14,6 +14,9 @@ class TestShopinvaderImageCase(ProductCommonCase, ProductImageCaseMixin):
     def setUpClass(cls):
         super().setUpClass()
         cls._setup_base_image_data()
+        # Ensure the storage backend is public so images are exported
+        cls.storage_backend = cls.logo_image.backend_id
+        cls.storage_backend.is_public = True
         cls.logo = cls.env["product.image.relation"].create(
             {"product_tmpl_id": cls.template.id, "image_id": cls.logo_image.id}
         )

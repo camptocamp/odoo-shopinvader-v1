@@ -173,3 +173,28 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
         random_image.invalidate_recordset()
         random_image.file_id.invalidate_recordset()
         self.assertTrue(variant.with_context(foo=1)._images_must_recompute())
+
+    def test_non_public_excluded(self):
+        """Images on a non-public backend are excluded from export."""
+        variant = self.shopinvader_variant
+        # With public backend, images are included
+        variant._compute_images_stored()
+        self.assertEqual(len(variant.images), 2)
+        # Mark the backend as non-public
+        self.storage_backend.is_public = False
+        variant.invalidate_recordset()
+        variant._compute_images_stored()
+        self.assertEqual(len(variant.images), 0)
+
+    def test_mixed_public_non_public_images(self):
+        """Only images on public backends are included."""
+        variant = self.shopinvader_variant
+        private_backend = self.storage_backend.copy(
+            {"name": "Private Backend", "is_public": False}
+        )
+        # Move black_image to private backend
+        self.black_image.file_id.backend_id = private_backend
+        variant.invalidate_recordset()
+        variant._compute_images_stored()
+        # Only 1 image (logo) remains, black is excluded
+        self.assertEqual(len(variant.images), 1)
