@@ -8,12 +8,12 @@ from unittest import mock
 
 from odoo import fields
 from odoo.exceptions import MissingError
-from odoo.tests import RecordCapturer, TransactionCase
+from odoo.tests import RecordCapturer
 
 from odoo.addons.base_rest.controllers.main import RestController
 from odoo.addons.base_rest.core import _rest_controllers_per_module
 from odoo.addons.base_rest.tests.common import BaseRestCase, RegistryMixin
-from odoo.addons.component.tests.common import ComponentMixin
+from odoo.addons.component.tests.common import ComponentMixin, TransactionComponentCase
 from odoo.addons.queue_job.job import Job
 from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.shopinvader.models.track_external_mixin import TrackExternalMixin
@@ -137,7 +137,7 @@ class CommonMixin(RegistryMixin, ComponentMixin, UtilsMixin):
             self._perform_job(job)
 
 
-class CommonCase(TransactionCase, CommonMixin):
+class CommonCase(TransactionComponentCase, CommonMixin):
     # by default disable tracking suite-wise, it's a time saver :)
     tracking_disable = True
 
@@ -170,7 +170,6 @@ class CommonCase(TransactionCase, CommonMixin):
 
     def setUp(self):
         super().setUp()
-        self.setUpComponentRegistryReady()
 
         shopinvader_response.set_testmode(True)
 
