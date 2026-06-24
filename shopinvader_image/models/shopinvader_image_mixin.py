@@ -106,11 +106,16 @@ class ShopinvaderImageMixin(models.AbstractModel):
         self.ensure_one()
         return self.display_name
 
+    def _get_image_relations(self):
+        return self[self._image_field].filtered(
+            lambda r: r.image_id.active and r.image_id.backend_id.is_public
+        )
+
     def _get_image_data_for_record(self):
         self.ensure_one()
         res = []
         resizes = self._resize_scales()
-        for image_relation in self[self._image_field]:
+        for image_relation in self._get_image_relations():
             url_key = self._get_image_url_key(image_relation)
             image_data = {}
             for resize in resizes:
