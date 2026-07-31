@@ -189,10 +189,21 @@ class TestShopinvaderImage(TestShopinvaderImageCase):
     def test_mixed_public_non_public_images(self):
         """Only images on public backends are included."""
         variant = self.shopinvader_variant
+        # `directory_path` must differ from `storage_backend`'s (empty): both are
+        # filesystem backends resolving to the same root otherwise, so swapping
+        # `backend_id` below would write and then immediately delete the very
+        # same physical file, destroying it instead of moving it.
         private_backend = self.storage_backend.copy(
-            {"name": "Private Backend", "is_public": False}
+            {"name": "Private Backend", "is_public": False, "directory_path": "private"}
         )
-        # Move black_image to private backend
+        # Move black_image to private backend.
+        # `backend_id` triggers a real file move (`_swap_backend`), which is not
+        # undone by the test rollback since it happens on the storage adapter, not
+        # in the DB. Move it back on cleanup or other tests sharing `black_image`
+        # will find its file physically gone from `storage_backend`.
+        self.addCleanup(
+            setattr, self.black_image.file_id, "backend_id", self.storage_backend
+        )
         self.black_image.file_id.backend_id = private_backend
         variant.invalidate_recordset()
         variant._compute_images_stored()
