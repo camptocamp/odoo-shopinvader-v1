@@ -17,6 +17,7 @@ class ShopinvaderPartner(models.Model):
     state = fields.Selection(
         selection="_selection_state",
         default=STATE_ACTIVE,
+        string="Validation State",
     )
 
     def _selection_state(self):
