@@ -16,6 +16,7 @@ class ProductProductEventListener(Component):
     @skip_if(
         lambda self, record, **kwargs: not record.product_tmpl_id.
         shopinvader_bind_ids
+        or self.env.context.get("shopinvader_skip_variant_auto_bind")
     )
     # fmt: on
     def on_record_create(self, record, fields=None):
@@ -24,11 +25,15 @@ class ProductProductEventListener(Component):
         In case of the related product.template has been binded, we have to
         bind every new product.product (checked with the skip_if(...).
         By default, they shouldn't be binded (force active = False)
+        Disabled by the context key `shopinvader_skip_variant_auto_bind`
+        or per backend by `auto_bind_new_variants`.
         :param record: product.template recordset
         :param fields: list of str
         :return:
         """
-        shopinv_products = record.mapped("product_tmpl_id.shopinvader_bind_ids")
+        shopinv_products = record.mapped(
+            "product_tmpl_id.shopinvader_bind_ids"
+        ).filtered("backend_id.auto_bind_new_variants")
         shopinv_variants = self._launch_shopinvader_variant_creation(shopinv_products)
         # If at least 1 is True, force False
         if any(shopinv_variants.mapped("active")):

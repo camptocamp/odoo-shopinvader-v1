@@ -76,6 +76,12 @@ class ShopinvaderBackend(models.Model):
         help="If checked, use the specific shopinvader display name for "
         "products instead of the original product name.",
     )
+    auto_bind_new_variants = fields.Boolean(
+        default=True,
+        help="When enabled, a binding is automatically created for every new "
+        "variant of a product already bound to this backend "
+        "(eg: when an attribute is added). Such bindings are created inactive.",
+    )
     category_root_binding_level = fields.Integer(
         default=0,
         help="Define the starting level for root categories when auto-binding."
