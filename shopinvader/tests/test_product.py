@@ -480,11 +480,44 @@ class ProductCase(ProductCommonCase):
         product.product should have a shopinvader.variant.
         :return: bool
         """
+        product_tmpl = self._create_bound_template()
+        self.assertTrue(product_tmpl.shopinvader_bind_ids)
+        product_product = product_tmpl.product_variant_ids
+        self.assertEqual(len(product_product.shopinvader_bind_ids), 1)
+        self.assertFalse(product_product.shopinvader_bind_ids.active)
+        # Then we add some products attributes (to create some variants)
+        attr = self._add_color_attribute(product_tmpl)
+        self.assertEqual(len(attr), len(product_tmpl.product_variant_ids))
+        self.assertEqual(
+            len(attr),
+            len(product_tmpl.shopinvader_bind_ids.shopinvader_variant_ids),
+        )
+        return True
+
+    def test_create_product_binding4_disabled_on_backend(self):
+        """New variants are not bound when the backend disables it."""
+        self.backend.auto_bind_new_variants = False
+        product_tmpl = self._create_bound_template()
+        self.assertTrue(product_tmpl.shopinvader_bind_ids)
+        self.assertFalse(product_tmpl.product_variant_ids.shopinvader_bind_ids)
+        attr = self._add_color_attribute(product_tmpl)
+        self.assertEqual(len(attr), len(product_tmpl.product_variant_ids))
+        self.assertFalse(product_tmpl.product_variant_ids.shopinvader_bind_ids)
+
+    def test_create_product_binding4_disabled_by_context(self):
+        """New variants are not bound when the context key is set."""
+        self.env = self.env(
+            context=dict(self.env.context, shopinvader_skip_variant_auto_bind=True)
+        )
+        product_tmpl = self._create_bound_template()
+        self.assertTrue(product_tmpl.shopinvader_bind_ids)
+        self.assertFalse(product_tmpl.product_variant_ids.shopinvader_bind_ids)
+        attr = self._add_color_attribute(product_tmpl)
+        self.assertEqual(len(attr), len(product_tmpl.product_variant_ids))
+        self.assertFalse(product_tmpl.product_variant_ids.shopinvader_bind_ids)
+
+    def _create_bound_template(self):
         backend = self.backend
-        color_attribute = self.env.ref("product.product_attribute_2")
-        white_attr = self.env.ref("product.product_attribute_value_3")
-        black_attr = self.env.ref("product.product_attribute_value_4")
-        attr = white_attr | black_attr
         product_tmpl_obj = self.env["product.template"].with_context(active_test=False)
         lang = self.env["res.lang"]._lang_get(self.env.user.lang)
         product_values = {
@@ -501,12 +534,13 @@ class ProductCase(ProductCommonCase):
                 )
             ],
         }
-        product_tmpl = product_tmpl_obj.create(product_values)
-        self.assertTrue(product_tmpl.shopinvader_bind_ids)
-        product_product = product_tmpl.product_variant_ids
-        self.assertEqual(len(product_product.shopinvader_bind_ids), 1)
-        self.assertFalse(product_product.shopinvader_bind_ids.active)
-        # Then we add some products attributes (to create some variants)
+        return product_tmpl_obj.create(product_values)
+
+    def _add_color_attribute(self, product_tmpl):
+        color_attribute = self.env.ref("product.product_attribute_2")
+        white_attr = self.env.ref("product.product_attribute_value_3")
+        black_attr = self.env.ref("product.product_attribute_value_4")
+        attr = white_attr | black_attr
         product_tmpl.write(
             {
                 "attribute_line_ids": [
@@ -521,12 +555,7 @@ class ProductCase(ProductCommonCase):
                 ]
             }
         )
-        self.assertEqual(len(attr), len(product_tmpl.product_variant_ids))
-        self.assertEqual(
-            len(attr),
-            len(product_tmpl.shopinvader_bind_ids.shopinvader_variant_ids),
-        )
-        return True
+        return attr
 
     def test_editing_product_with_sale_manager_user(self):
         # test that product can still be edited without issue

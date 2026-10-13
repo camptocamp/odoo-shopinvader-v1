@@ -135,6 +135,7 @@
                         <page name="products" string="Products">
                             <group>
                                 <field name="use_shopinvader_product_name" />
+                                <field name="auto_bind_new_variants" />
                             </group>
                         </page>
                         <page name="localization" string="Localization">
